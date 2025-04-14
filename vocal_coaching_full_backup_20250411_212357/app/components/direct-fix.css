@@ -1,0 +1,269 @@
+/* Ultra-specific selectors for the music disc */
+.relative.w-full.h-96 {
+  width: 260px !important;
+  height: 260px !important;
+  max-width: 80vw !important;
+  max-height: 80vw !important;
+  margin: 0 auto !important;
+}
+
+.absolute.top-1\/2.left-1\/2.w-96.h-96 {
+  width: 100% !important;
+  height: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+}
+
+/* Ultra-realistic vinyl record styling */
+.disc-image-container {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Add vinyl texture and grain */
+.disc-image-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-size: 150px;
+  opacity: 0.07;
+  z-index: 5;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* Add circular reflection */
+.disc-image-container::after {
+  content: '';
+  position: absolute;
+  top: -70%;
+  left: -70%;
+  right: -70%;
+  bottom: -70%;
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%),
+    radial-gradient(circle at 70% 70%, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 40%);
+  z-index: 4;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* Enhance the vinyl surface with concentric circle shadows */
+.disc-image-container > div:first-child {
+  filter: contrast(1.45) brightness(1.05) !important;
+}
+
+/* Make image look pressed into vinyl with embossing effect */
+.disc-image-container img {
+  filter: saturate(0.92) contrast(1.12) !important;
+}
+
+/* Direct fixes for specific elements */
+
+/* Refined mini-player animations */
+@keyframes fadeInMiniPlayer {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* For minibar removal animation - slower and smoother */
+.mini-player-exit {
+  animation: fadeOutMiniPlayer 0.6s ease-in-out forwards !important;
+  pointer-events: none !important;
+}
+
+@keyframes fadeOutMiniPlayer {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+}
+
+/* Fix SVG visibility within buttons - MORE AGGRESSIVE */
+#fixed-fallback-minibar button svg,
+button svg,
+.w-8.h-8.rounded-full.bg-\[\#C8A97E\].flex.items-center.justify-center svg {
+  display: none !important;
+}
+
+/* Ensure music section has proper spacing */
+.music-section {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* Add clearfix to ensure proper flow */
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Make the fixed fallback minibar more elegant for mobile */
+#fixed-fallback-minibar {
+  animation: fadeInMiniPlayer 0.4s ease-out !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(200, 169, 126, 0.2) !important;
+  border: none !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  
+  /* Create a stacking context to contain backdrop-filter effects */
+  isolation: isolate !important;
+  /* Force a new context for the element to fully isolate it */
+  contain: layout style paint !important;
+  /* Better compatibility for older browsers */
+  transform: translate3d(-50%, 0, 0) !important;
+  will-change: transform, opacity !important;
+  transition: transform 0.3s ease, opacity 0.3s ease !important;
+  z-index: 9900 !important;
+}
+
+/* MEGA FIX: Remove all backdrop filters from entire site except mini-player */
+html, body, div, header, nav, main, section, article, aside, footer, button, a,
+.md\:hidden, .bg-black\/40, .backdrop-blur-lg, .fixed, .inset-0, 
+.mobile-menu-container, #mobile-navigation-menu, .navbar-menu, 
+.navbar-toggle, .menu-container, .motion-div, .motion-nav {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Total backdrop ban override */
+[style*="backdrop-filter"]:not(#fixed-fallback-minibar) {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Force no blur on the mobile menu */
+.mobile-menu-container,
+#mobile-navigation-menu,
+html.mobile-menu-open body,
+html.mobile-menu-open body * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+}
+
+/* Special handling for header background */
+header {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Ensure mobile menu can't be scrolled */
+html.mobile-menu-open {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
+html.mobile-menu-open body {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+  touch-action: none !important;
+}
+
+/* Mini-player specific styling - ONLY element allowed to have backdrop filter */
+#fixed-fallback-minibar {
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+#fixed-fallback-minibar:hover {
+  transform: translate3d(-50%, -2px, 0) !important;
+}
+
+/* Improve minibar appearance on small screens */
+@media (max-width: 640px) {
+  #fixed-fallback-minibar {
+    bottom: 16px !important;
+    padding: 10px 16px !important;
+  }
+  
+  /* Force larger play button on mobile */
+  #fixed-fallback-minibar button {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  
+  /* Ensure pause bars are visibly separate on mobile */
+  #fixed-fallback-minibar button > div {
+    min-width: 18px !important;
+  }
+}
+
+/* Make the pause button more elegant */
+#fixed-fallback-minibar button {
+  transition: background-color 0.2s ease, transform 0.2s ease !important;
+  position: relative !important;
+}
+
+#fixed-fallback-minibar button:hover {
+  background-color: #d3b78e !important;
+}
+
+#fixed-fallback-minibar button span {
+  display: inline-block !important;
+  transform: translateY(1px) !important;
+}
+
+/* Video play button enhancement */
+.video-play-button {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transform: scale(1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.video-play-button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.video-play-button:active {
+  transform: scale(0.98);
+}
+
+.video-play-triangle {
+  display: block !important;
+  border-style: solid !important;
+  position: relative;
+  z-index: 5;
+}
+
+/* Remove previous mute button styling */
+.video-preview-mute-button svg,
+.video-preview-mute-button {
+  display: none !important;
+}
+
+/* Add new text-based icon styling */
+.video-mute-icon {
+  font-size: 24px !important;
+  line-height: 1 !important;
+  color: white !important;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.8) !important;
+  filter: grayscale(1) !important; /* Makes the emoji appear white */
+}
+
+/* Add transition for mute button visibility */
+.video-preview button {
+  transition: opacity 0.3s ease !important;
+} 
