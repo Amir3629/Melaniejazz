@@ -263,7 +263,6 @@ export default function GallerySection() {
           {/* Image container with smooth transitions */}
           <div 
             className="relative w-full max-w-6xl mx-auto transition-all duration-700 ease-in-out" 
-            onClick={(e) => e.stopPropagation()}
             style={{ opacity: bgOpacity }}
           >
             <div className="relative w-full flex items-center justify-center overflow-hidden">

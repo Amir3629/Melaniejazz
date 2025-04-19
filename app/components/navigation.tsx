@@ -571,7 +571,9 @@ export default function Navigation() {
     const isMobile = window.innerWidth < 768;
     const headerHeight = isMobile ? 70 : 80;
     const elementRect = element.getBoundingClientRect();
-    const scrollPosition = elementRect.top + window.pageYOffset - headerHeight;
+    // Use 70px offset for contact section, 50px for others
+    const additionalOffset = id === 'contact' ? 90 : 50;
+    const scrollPosition = elementRect.top + window.pageYOffset - headerHeight + additionalOffset;
 
     // Simple, immediate scroll with custom easing
     const start = window.pageYOffset;

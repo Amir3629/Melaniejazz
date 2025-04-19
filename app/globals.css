@@ -1517,3 +1517,13 @@ body.modal-open {
 
 /* END OF SIMPLIFIED MODAL STYLES */
 
+/* Ensure booking success notification is always on top */
+#booking-success-modal {
+  z-index: 9999 !important; /* Use a very high z-index and !important to override */
+}
+
+/* Ensure the check icon within the success notification is always visible */
+#booking-success-modal .lucide-check {
+  display: inline-block !important; /* Ensure it's not 'none' */
+}
+

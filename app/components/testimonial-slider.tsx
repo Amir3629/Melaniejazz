@@ -125,7 +125,7 @@ export default function TestimonialSlider() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
-              className="bg-black/30 rounded-xl p-4 sm:p-6 backdrop-blur-sm min-h-[320px] sm:h-[280px] flex items-center"
+              className="bg-black/30 rounded-xl p-4 sm:p-6 backdrop-blur-sm h-[360px] flex items-center"
             >
                 <div className="flex flex-col items-center justify-between text-center w-full h-full">
                 <div className="relative w-16 h-16 sm:w-14 sm:h-14 rounded-full overflow-hidden mb-4 sm:mb-2 border-2 border-[#C8A97E]/20 shrink-0">
@@ -139,8 +139,8 @@ export default function TestimonialSlider() {
                     onError={() => setImageError(true)}
                   />
                 </div>
-                <div className="max-w-2xl mx-auto mb-4 sm:mb-3 flex-1 flex items-center justify-center overflow-y-auto scrollbar-thin scrollbar-thumb-[#C8A97E]/40 scrollbar-track-transparent hover:scrollbar-thumb-[#C8A97E]/60">
-                  <p className="text-gray-300 text-base sm:text-lg italic px-2 sm:px-4 w-full" style={{ textAlign: 'center' }}>"{testimonials[page].content}"</p>
+                <div className="max-w-2xl mx-auto mb-4 sm:mb-3 flex-1 flex items-center justify-center h-[180px] px-1 sm:px-4">
+                  <p className="text-gray-300 text-base sm:text-lg italic w-full" style={{ textAlign: 'center' }}>"{testimonials[page].content}"</p>
                 </div>
                 <div className="flex flex-col items-center mt-auto pt-2 shrink-0 w-full">
                   <cite className="text-[#C8A97E] font-medium not-italic text-base sm:text-lg">

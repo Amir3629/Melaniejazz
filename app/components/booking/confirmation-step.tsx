@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import LegalDocumentModal from '../legal-document-modal'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
+import { createPortal } from 'react-dom'
 
 // Service types
 type ServiceType = 'gesangsunterricht' | 'vocal-coaching' | 'professioneller-gesang' | null
@@ -376,19 +377,20 @@ export default function ConfirmationStep({ formData, serviceType, onChange, onCl
   }
   
   return (
-    <div className="py-4 space-y-6 animate-in fade-in duration-500 max-w-4xl mx-auto">
+    <div className="space-y-6">
+      <div className="py-4 space-y-6 animate-in fade-in duration-500 w-full mx-auto">
       <div className="space-y-4">
         <h3 className="text-xl font-semibold text-white mb-4">
           {t('booking.bookingSummary', 'Buchung bestätigen')}
         </h3>
         
-        <div className="bg-[#1A1A1A] rounded-lg p-4 md:p-8 border border-gray-800 shadow-lg">
+          <div className="bg-[#1A1A1A] rounded-lg p-8 px-10 border border-gray-800 shadow-lg w-full mx-auto">
           {/* Service Type */}
           <div className="mb-4 pb-3 border-b border-gray-800">
             <h4 className="text-lg font-medium text-white mb-2">
               {t('booking.selectedService', 'Ausgewählter Dienst')}
             </h4>
-            <p className="text-[#C8A97E] font-medium">{getServiceName()}</p>
+              <p className="text-[#C8A97E] font-medium break-words">{getServiceName()}</p>
           </div>
           
           {/* Personal Information */}
@@ -396,19 +398,19 @@ export default function ConfirmationStep({ formData, serviceType, onChange, onCl
             <h4 className="text-lg font-medium text-white mb-2">
               {t('booking.personalInfo', 'Persönliche Informationen')}
             </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-5 w-full">
               <div>
                 <p className="text-gray-400 text-sm">{t('booking.name', 'Name')}:</p>
-                <p className="text-white font-medium">{formData.name || 'N/A'}</p>
+                  <p className="text-white font-medium break-words">{formData.name || 'N/A'}</p>
               </div>
-              <div>
+                <div className="w-full">
                 <p className="text-gray-400 text-sm">{t('booking.email', 'E-Mail')}:</p>
-                <p className="text-white font-medium">{formData.email || 'N/A'}</p>
+                  <p className="text-white font-medium break-words">{formData.email || 'N/A'}</p>
               </div>
               <div>
                 <p className="text-gray-400 text-sm">{t('booking.phone', 'Telefon')}:</p>
-                <p className="text-white font-medium">{formData.phone || 'N/A'}</p>
-              </div>
+                  <p className="text-white font-medium break-words">{formData.phone || 'N/A'}</p>
+                </div>
             </div>
           </div>
           
@@ -422,35 +424,31 @@ export default function ConfirmationStep({ formData, serviceType, onChange, onCl
                 {formData.eventType && (
                   <div>
                     <p className="text-gray-400 text-sm">{t('booking.eventType', 'Art der Veranstaltung')}:</p>
-                    <p className="text-white font-medium">{getEventTypeName()}</p>
+                      <p className="text-white font-medium break-words">{getEventTypeName()}</p>
                   </div>
                 )}
                 {formData.performanceType && (
                   <div>
                     <p className="text-gray-400 text-sm">{t('booking.performanceType', 'Auftrittsart')}:</p>
-                    <p className="text-white font-medium">
-                      {formData.performanceType === 'solo' 
-                        ? t('booking.solo', 'Solo') 
-                        : t('booking.withBand', 'Mit Band')}
-                    </p>
+                      <p className="text-white font-medium break-words">{getPerformanceTypeName()}</p>
                   </div>
                 )}
                 {formData.eventDate && (
                   <div>
                     <p className="text-gray-400 text-sm">{t('booking.eventDate', 'Datum der Veranstaltung')}:</p>
-                    <p className="text-white font-medium">{formatDate(formData.eventDate)}</p>
+                      <p className="text-white font-medium break-words">{formatDate(formData.eventDate)}</p>
                   </div>
                 )}
                 {formData.guestCount && (
                   <div>
                     <p className="text-gray-400 text-sm">{t('booking.guestCount', 'Anzahl der Gäste')}:</p>
-                    <p className="text-white font-medium">{formData.guestCount}</p>
+                      <p className="text-white font-medium break-words">{formData.guestCount}</p>
                   </div>
                 )}
                 {formData.jazzStandards && (
                   <div className="col-span-2">
                     <p className="text-gray-400 text-sm">{t('booking.jazzStandards', 'Jazz Standards')}:</p>
-                    <p className="text-white font-medium">{formData.jazzStandards}</p>
+                      <p className="text-white font-medium break-words">{formData.jazzStandards}</p>
                   </div>
                 )}
               </div>
@@ -537,7 +535,7 @@ export default function ConfirmationStep({ formData, serviceType, onChange, onCl
               <h4 className="text-lg font-medium text-white mb-2">
                 {t('booking.additionalInfo', 'Zusätzliche Informationen')}
               </h4>
-              <p className="text-white whitespace-pre-line">{formData.message}</p>
+                <p className="text-white whitespace-pre-line break-words">{formData.message}</p>
             </div>
           )}
         </div>
@@ -569,7 +567,7 @@ export default function ConfirmationStep({ formData, serviceType, onChange, onCl
           )}
         </AnimatePresence>
         
-        <div className="space-y-3 bg-[#121212] rounded-lg p-4 border border-gray-800 shadow-lg">
+          <div className="space-y-5 bg-[#121212] rounded-lg p-8 px-10 border border-gray-800 shadow-lg w-full mx-auto">
           <div className="flex items-start">
             <div className="flex items-center h-5">
               <input
@@ -625,7 +623,7 @@ export default function ConfirmationStep({ formData, serviceType, onChange, onCl
             type="button"
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="py-3 px-10 w-full md:w-auto md:min-w-[200px] bg-[#C8A97E] text-black font-medium rounded-lg hover:bg-[#D4AF37] transition-colors flex items-center justify-center"
+              className="py-2.5 px-8 w-auto min-w-[180px] bg-[#C8A97E] text-black font-medium rounded-lg hover:bg-[#D4AF37] transition-colors flex items-center justify-center"
           >
             {isSubmitting ? (
               <>
@@ -642,6 +640,7 @@ export default function ConfirmationStep({ formData, serviceType, onChange, onCl
               </>
             )}
           </button>
+          </div>
         </div>
       </div>
       
@@ -649,6 +648,7 @@ export default function ConfirmationStep({ formData, serviceType, onChange, onCl
       <AnimatePresence>
         {showSuccessNotification && (
           <motion.div
+            id="booking-success-modal"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -697,7 +697,11 @@ export default function ConfirmationStep({ formData, serviceType, onChange, onCl
         )}
       </AnimatePresence>
       
-      {/* Legal Document Modals */}
+      {/* Legal Document Modals - Rendered in a portal */}
+      {typeof window !== 'undefined' && createPortal(
+        <>
+          <AnimatePresence mode="wait">
+            {showAGB && (
       <LegalDocumentModal 
         isOpen={showAGB} 
         onClose={() => setShowAGB(false)}
@@ -707,7 +711,11 @@ export default function ConfirmationStep({ formData, serviceType, onChange, onCl
           <AGBContent />
         </div>
       </LegalDocumentModal>
+            )}
+          </AnimatePresence>
       
+          <AnimatePresence mode="wait">
+            {showDatenschutz && (
       <LegalDocumentModal 
         isOpen={showDatenschutz} 
         onClose={() => setShowDatenschutz(false)}
@@ -717,6 +725,11 @@ export default function ConfirmationStep({ formData, serviceType, onChange, onCl
           <DatenschutzContent />
         </div>
       </LegalDocumentModal>
+            )}
+          </AnimatePresence>
+        </>,
+        document.body
+      )}
     </div>
   )
 } 

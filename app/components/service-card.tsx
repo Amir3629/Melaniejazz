@@ -33,6 +33,7 @@ export default function ServiceCard({
   delay = 0,
   link
 }: ServiceCardProps) {
+  const [isExpanded, setIsExpanded] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [isTouched, setIsTouched] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
@@ -43,7 +44,9 @@ export default function ServiceCard({
   }
 
   const handleMouseLeave = () => {
-    setIsHovered(false)
+    if (!isExpanded) {
+      setIsHovered(false)
+    }
   }
 
   const handleTouchStart = () => {
@@ -51,7 +54,16 @@ export default function ServiceCard({
   }
 
   const handleTouchEnd = () => {
-    setIsTouched(false)
+    if (!isExpanded) {
+      setIsTouched(false)
+    }
+  }
+
+  const toggleExpand = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setIsExpanded(!isExpanded)
+    setIsHovered(!isExpanded)
+    setIsTouched(!isExpanded)
   }
 
   // Animation variants for the card
@@ -101,7 +113,7 @@ export default function ServiceCard({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       variants={cardVariants}
-      animate={(isHovered || isTouched) ? "expanded" : "collapsed"}
+      animate={(isHovered || isTouched || isExpanded) ? "expanded" : "collapsed"}
       style={{
         borderRadius: "0.75rem",
         WebkitTransform: "translateZ(0)",
@@ -125,11 +137,12 @@ export default function ServiceCard({
     >
       {/* Arrow indicator */}
       <motion.div
-        className="absolute bottom-4 right-4 text-[#C8A97E]"
+        className="absolute bottom-4 right-4 text-[#C8A97E] cursor-pointer z-50"
+        onClick={toggleExpand}
         animate={{
           y: [0, 4, 0],
           opacity: [0.6, 1, 0.6],
-          rotate: (isHovered || isTouched) ? 180 : 0
+          rotate: (isHovered || isTouched || isExpanded) ? 180 : 0
         }}
         transition={{
           y: {

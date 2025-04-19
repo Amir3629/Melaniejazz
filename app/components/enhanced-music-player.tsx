@@ -23,9 +23,6 @@ export default function EnhancedMusicPlayer() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   
-  // Add a test marker in the top right corner
-  const [testMarker, setTestMarker] = useState('blue');
-
   // Track details
   const track = {
     title: "Blues for John",
@@ -128,9 +125,6 @@ export default function EnhancedMusicPlayer() {
           } else {
             setShowMiniPlayer(shouldShow);
           }
-          
-          // Update marker color
-          setTestMarker(shouldShow ? 'green' : 'orange');
         }
       }
     };
@@ -508,12 +502,11 @@ export default function EnhancedMusicPlayer() {
       {isPlaying && showMiniPlayer && (
           <div 
           id="fixed-fallback-minibar"
-          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-3 bg-black/95 rounded-full shadow-lg"
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between gap-3 px-5 py-3 bg-black/95 rounded-full shadow-lg"
             style={{ 
             boxShadow: '0 4px 15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(200, 169, 126, 0.2)',
               maxWidth: '90%',
-            width: 'auto',
-            minWidth: '180px',
+            width: '180px',
             animation: 'fadeInMiniPlayer 0.4s ease-out',
             transition: 'opacity 0.3s ease, transform 0.3s ease',
             isolation: 'isolate',
@@ -526,9 +519,9 @@ export default function EnhancedMusicPlayer() {
           }}
           onClick={() => sectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
         >
-          <div className="flex-1 text-white text-sm font-medium truncate">{track.title}</div>
+          <div className="flex-1 text-white text-sm font-medium truncate text-center">{track.title}</div>
           <button
-            className="w-9 h-9 rounded-full bg-[#C8A97E] flex items-center justify-center shrink-0"
+            className="w-8 h-8 rounded-full bg-[#C8A97E] shrink-0 relative flex items-center justify-center"
             style={{
               transition: 'transform 0.2s ease',
               boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
@@ -540,30 +533,15 @@ export default function EnhancedMusicPlayer() {
               handlePlay();
             }}
           >
-            {/* Mobile-optimized pause icon with absolute positioning */}
-            <div style={{ 
-              position: 'relative',
-              width: '18px',
-              height: '14px'
-            }}>
-              <div style={{ 
-                position: 'absolute',
-                left: '2px',
-                width: '5px',
-                height: '14px', 
-                backgroundColor: 'black', 
-                borderRadius: '1px'
-              }}></div>
-              <div style={{ 
-                position: 'absolute',
-                right: '2px',
-                width: '5px',
-                height: '14px', 
-                backgroundColor: 'black', 
-                borderRadius: '1px'
-              }}></div>
-            </div>
-            </button>
+            {isPlaying ? (
+              <div className="flex gap-1.5">
+                <div className="w-[3px] h-3 bg-black rounded-[1px]"></div>
+                <div className="w-[3px] h-3 bg-black rounded-[1px]"></div>
+              </div>
+            ) : (
+              <div className="w-0 h-0 ml-0.5 border-t-[6px] border-t-transparent border-l-[9px] border-l-black border-b-[6px] border-b-transparent" />
+            )}
+          </button>
           </div>
         )}
       
@@ -573,19 +551,6 @@ export default function EnhancedMusicPlayer() {
           {error}
         </div>
       )}
-      
-      {/* Test marker */}
-      <div style={{ 
-        position: 'absolute', 
-        top: '10px', 
-        right: '10px', 
-        width: '12px', 
-        height: '12px', 
-        backgroundColor: testMarker,
-        border: '2px solid white',
-        borderRadius: '50%',
-        zIndex: 9999
-      }}></div>
       
       {/* Animation keyframes */}
       <style jsx global>{`

@@ -79,9 +79,9 @@ export default function LegalDocumentModal({
                   <h2 className="text-xl font-semibold text-white">{title}</h2>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className="absolute top-4 right-4 p-1.5 rounded-lg transition-colors bg-transparent hover:bg-[#1A1A1A]/50 z-50 w-8 h-8 flex items-center justify-center"
                   >
-                    <X size={24} />
+                    <span style={{color: "#C8A97E", fontSize: "20px", fontWeight: "bold"}}>×</span>
                   </button>
                 </div>
 
