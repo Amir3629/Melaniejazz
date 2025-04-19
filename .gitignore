@@ -1,34 +1,63 @@
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Dependencies
+node_modules/
+.next/
+.vercel/
 
-# testing
-/coverage
+# Build outputs
+build/
+dist/
+out/
 
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
+# Cache and logs
+.cache/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env*.local
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# vercel
-.vercel
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts 
-.vercel
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Backup files
+*.backup
+*.bak
+*.zip
+*.tar.gz
+vocal_coaching_backup.zip
+BACKUP_2024_APRIL.tar.gz
+vocal-coaching-backup-2025-03-20-20-05-26.zip
+
+# Large media files
+*.mp4
+*.mov
+*.avi
+*.wmv
+*.flv
+*.mp3
+*.wav
+*.ogg
+
+# Temporary files
+temp/
+tmp/
+temp_extraction/
+temp_exclude/
