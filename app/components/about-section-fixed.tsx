@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useTranslation } from 'react-i18next'
 import Image from "next/image"
 import { ChevronDown } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { getImagePath } from '../../utils/image-path'
+import { useIsMobile } from '../../hooks/use-mobile'
 
 // Line-by-line reveal component
 const LineReveal = ({ text, delay = 0, visible = false }: { text: string, delay?: number, visible: boolean }) => {
@@ -29,6 +30,7 @@ export default function AboutSectionFixed() {
   const [isExpanded, setIsExpanded] = useState(false)
   const detailsRef = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
+  const isMobile = useIsMobile()
 
   const imagePath = getImagePath('/images/about/profile.jpg')
 
