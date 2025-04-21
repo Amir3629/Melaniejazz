@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Mic, Music, Star, Sparkles } from 'lucide-react';
+import { Mic, Music, Star, Beaker } from 'lucide-react';
 
 export default function FeaturesSection() {
   const { t } = useTranslation();
@@ -25,7 +25,7 @@ export default function FeaturesSection() {
       description: "Deine Stimme ist klüger als gedacht"
     },
     {
-      icon: <Sparkles className="w-10 h-10 text-[#C8A97E]" />,
+      icon: <Beaker className="w-10 h-10 text-[#C8A97E]" />,
       title: "Stimmliche Alchemie",
       description: "Die 4-Uhr-Wahrheiten des stimmlichen Erfolgs"
     }
