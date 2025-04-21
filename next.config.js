@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  output: process.env.NODE_ENV === 'production' ? 'export' : undefined,
+  output: 'export',
   images: {
-    unoptimized: process.env.NODE_ENV === 'production',
+    unoptimized: true,
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -21,8 +21,8 @@ const nextConfig = {
       }
     ],
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/vocal-coachingg' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/vocal-coachingg/' : '',
+  basePath: process.env.NODE_ENV === 'production' ? '/JazzBerlin' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/JazzBerlin/' : '',
   trailingSlash: true,
   webpack: (config) => {
     config.module.rules.push({
@@ -37,7 +37,7 @@ const nextConfig = {
     return config
   },
   publicRuntimeConfig: {
-    basePath: process.env.NODE_ENV === 'production' ? '/vocal-coachingg' : '',
+    basePath: process.env.NODE_ENV === 'production' ? '/JazzBerlin' : '',
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
