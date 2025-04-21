@@ -4,7 +4,7 @@ export function getImagePath(path: string): string {
   
   // Add the production prefix if in production
   return process.env.NODE_ENV === 'production'
-    ? `/MelJazzBerlin/${cleanPath}`
+    ? `/vocal-coaching/${cleanPath}`
     : `/${cleanPath}`
 }
 
