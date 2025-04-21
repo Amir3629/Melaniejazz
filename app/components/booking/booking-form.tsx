@@ -10,6 +10,7 @@ import WorkshopForm from './workshop-form'
 import ConfirmationStep from './confirmation-step'
 import SubmitButton from './submit-button'
 import { useRouter, useSearchParams } from 'next/navigation'
+import LegalDocumentModal from '../legal-document-modal'
 import { ServiceType, FormData } from '@/app/types/booking'
 import PersonalInfoStep from './personal-info-step'
 

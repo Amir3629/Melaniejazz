@@ -164,7 +164,7 @@ export default function SimpleMusicPlayer() {
         });
       }
     }
-  }, [currentTrackIndex, currentTrack.file, isPlaying]);
+  }, [currentTrackIndex, currentTrack.file]);
   
   return (
     <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 max-w-md mx-auto">

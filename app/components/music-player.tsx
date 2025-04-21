@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Music } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
@@ -188,7 +188,7 @@ export default function MusicPlayer() {
     // Remove any duplicate indices that might have been added
     const uniqueIndices = Array.from(new Set(indices));
     setVisibleDiscs(uniqueIndices);
-  }, [currentSongIndex, dragOffset, isDragging, isTransitioningDiscs]);
+  }, [currentSongIndex, dragOffset, isDragging, isTransitioningDiscs, songs.length]);
 
   // Set player ready after a short delay
   useEffect(() => {
@@ -224,9 +224,13 @@ export default function MusicPlayer() {
 
   // Auto-hide mini player when music is paused
   useEffect(() => {
-    if (!isPlaying && showMiniPlayer && miniPlayerTimeout) {
-      clearTimeout(miniPlayerTimeout);
+    if (!isPlaying && showMiniPlayer) {
+      // Clear any existing timeout
+      if (miniPlayerTimeout) {
+        clearTimeout(miniPlayerTimeout);
+      }
       
+      // Set a new timeout to hide the mini player after 3 seconds
       const timeout = setTimeout(() => {
         setShowMiniPlayer(false);
       }, 3000);
@@ -239,7 +243,7 @@ export default function MusicPlayer() {
         clearTimeout(miniPlayerTimeout);
       }
     };
-  }, [isPlaying, showMiniPlayer, miniPlayerTimeout]);
+  }, [isPlaying, showMiniPlayer]);
 
   // Show tutorial animation on first load
   useEffect(() => {
@@ -281,26 +285,32 @@ export default function MusicPlayer() {
   // Handle YouTube player messages
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (
-        event.source === videoRef.current?.contentWindow &&
-        event.data &&
-        typeof event.data === 'string'
-      ) {
-        try {
-          const data = JSON.parse(event.data);
-          if (data.event === 'onStateChange' && data.info === 0) {
-            // Video ended
+      try {
+        const data = JSON.parse(event.data);
+        if (data.event === "onStateChange") {
+          // YouTube states: -1 (unstarted), 0 (ended), 1 (playing), 2 (paused), 3 (buffering)
+          if (data.info === 1) {
+            setIsPlaying(true);
+          } else if (data.info === 2) {
+            setIsPlaying(false);
+          } else if (data.info === 0) {
+            // Video ended, play next
             playNextSong();
           }
-        } catch (error) {
-          console.error('Error parsing message:', error);
+        } else if (data.event === "onReady") {
+          // Player is ready
+          setPlayerReady(true);
         }
+      } catch (e) {
+        // Not a JSON message or not from YouTube
       }
     };
 
     window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, [playNextSong]);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []);
 
   // Spinning animation with slow start
   useEffect(() => {
@@ -346,19 +356,6 @@ export default function MusicPlayer() {
     }
   }, [currentlyPlaying, isPlaying])
 
-  // Define playNextSong before using it in useEffect
-  const playNextSong = useCallback(() => {
-    setCurrentSongIndex((prevIndex) => (prevIndex + 1) % songs.length);
-    setIsPlaying(true);
-  }, []);
-
-  // Remove unnecessary songs.length dependency
-  useEffect(() => {
-    if (currentSongIndex === -1) {
-      setCurrentSongIndex(0);
-    }
-  }, [currentSongIndex]);
-
   const handlePlayPause = (trackIndex: number) => {
     if (currentSongIndex === trackIndex && isPlaying) {
       audioRef.current?.pause();
@@ -403,6 +400,32 @@ export default function MusicPlayer() {
     e.stopPropagation();
     handlePlayPause(currentSongIndex);
   }
+
+  const playNextSong = () => {
+    if (!playerReady || isTransitioning) return;
+    
+    setIsTransitioning(true);
+    setIsPlaying(false);
+    
+    // Wait for transition animation
+    setTimeout(() => {
+      setCurrentSongIndex((prevIndex) => 
+        prevIndex === songs.length - 1 ? 0 : prevIndex + 1
+      );
+      setProgress(0);
+      
+      // Wait a bit more before starting the new song
+      setTimeout(() => {
+        setIsTransitioning(false);
+        if (videoRef.current) {
+          // Load and play the new video
+          const nextIndex = currentSongIndex === songs.length - 1 ? 0 : currentSongIndex + 1;
+          const message = `{"event":"command","func":"loadVideoById","args":"${songs[nextIndex].youtubeId}"}`;
+          videoRef.current.contentWindow?.postMessage(message, '*');
+        }
+      }, 800);
+    }, 500);
+  };
 
   const playPreviousSong = () => {
     if (!playerReady || isTransitioning) return;

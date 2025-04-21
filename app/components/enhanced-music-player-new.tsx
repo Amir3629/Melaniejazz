@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Play, Pause } from "lucide-react";
@@ -80,19 +80,9 @@ export default function EnhancedMusicPlayer() {
     };
   }, [isPlaying]);
 
-  // Wrap handlePlay in useCallback
-  const handlePlay = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.play();
-      setIsPlaying(true);
-    }
-  }, []);
-
   // Create audio element
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
-    const currentAudioRef = audioRef.current;
     
     // Create separate audio instance
     const audioEl = new Audio();
@@ -107,8 +97,6 @@ export default function EnhancedMusicPlayer() {
     }
     
     // Add event listeners
-    audioEl.addEventListener('play', handlePlay);
-    
     audioEl.addEventListener('ended', () => {
       setIsPlaying(false);
       setShowMiniPlayer(false);
@@ -126,11 +114,46 @@ export default function EnhancedMusicPlayer() {
     return () => {
       // Clean up
       audioEl.pause();
-      audioEl.removeEventListener('play', handlePlay);
       audioEl.removeEventListener('ended', () => {});
       audioEl.removeEventListener('error', () => {});
     };
-  }, [handlePlay]);
+  }, []);
+
+  // Play/pause handler
+  const handlePlay = () => {
+    if (!audioRef.current) return;
+    
+    try {
+      if (isPlaying) {
+        // Pause the audio
+        audioRef.current.pause();
+        setIsPlaying(false);
+        setShowMiniPlayer(false);
+      } else {
+        // Stop all other media
+        window.dispatchEvent(new Event(MEDIA_STOP_EVENT));
+        
+        // Reset and play
+        audioRef.current.currentTime = 0;
+        
+        const playPromise = audioRef.current.play();
+        
+        if (playPromise) {
+          playPromise
+            .then(() => {
+              setIsPlaying(true);
+            })
+            .catch(err => {
+              console.error("Failed to play audio:", err);
+              setError("Failed to play audio. Please try again.");
+            });
+        }
+      }
+    } catch (err) {
+      console.error("Exception in play handler:", err);
+      setError("Failed to play audio. Please try again.");
+    }
+  };
 
   // Create scrolling mini-player with DOM
   useEffect(() => {
@@ -247,7 +270,15 @@ export default function EnhancedMusicPlayer() {
         }, 300);
       }
     }
-  }, [isPlaying, showMiniPlayer, handlePlay, track.title]);
+    
+    // Clean up on unmount
+    return () => {
+      const miniPlayer = document.getElementById('scroll-mini-player');
+      if (miniPlayer && miniPlayer.parentNode) {
+        miniPlayer.parentNode.removeChild(miniPlayer);
+      }
+    };
+  }, [isPlaying, showMiniPlayer, track.title]);
 
   return (
     <div className="relative w-full py-24 overflow-hidden" ref={sectionRef}>

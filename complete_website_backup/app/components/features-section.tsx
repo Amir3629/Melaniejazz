@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
-import { Mic, Music, Star, Sparkles } from 'lucide-react';
+import { useTranslation } from '../i18n/client';
+import { Mic, Music, Star, Flask } from 'lucide-react';
 
 export default function FeaturesSection() {
   const { t } = useTranslation();
@@ -25,7 +25,7 @@ export default function FeaturesSection() {
       description: "Deine Stimme ist klüger als gedacht"
     },
     {
-      icon: <Sparkles className="w-10 h-10 text-[#C8A97E]" />,
+      icon: <Flask className="w-10 h-10 text-[#C8A97E]" />,
       title: "Stimmliche Alchemie",
       description: "Die 4-Uhr-Wahrheiten des stimmlichen Erfolgs"
     }
@@ -50,12 +50,12 @@ export default function FeaturesSection() {
               transition={{ duration: 0.8, delay: index * 0.2 }}
               className="bg-[#101010] p-6 rounded-lg border border-gray-800 hover:border-[#C8A97E] transition-colors duration-300"
             >
-              <div className="flex flex-col items-center justify-center text-center w-full">
-                <div className="mb-4 flex justify-center">
+              <div className="flex flex-col items-center text-center">
+                <div className="mb-4">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3 text-center w-full">{feature.title}</h3>
-                <p className="text-gray-400 text-center w-full">{feature.description}</p>
+                <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
+                <p className="text-gray-400">{feature.description}</p>
               </div>
             </motion.div>
           ))}

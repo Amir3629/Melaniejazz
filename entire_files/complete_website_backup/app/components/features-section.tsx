@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '../i18n/client';
 import { Mic, Music, Star, Flask } from 'lucide-react';
 
 export default function FeaturesSection() {

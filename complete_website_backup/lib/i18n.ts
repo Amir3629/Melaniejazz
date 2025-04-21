@@ -17,16 +17,8 @@ export const updateDocumentLanguage = (lng: string) => {
   document.documentElement.dir = lng === 'ar' ? 'rtl' : 'ltr';
 };
 
-// Define types for translations
-type TranslationType = typeof translationEN | typeof translationDE;
-type TranslationsType = {
-  [key: string]: {
-    translation: TranslationType;
-  };
-};
-
 // Function to get all translations
-export const getAllTranslations = (): TranslationsType => {
+export const getAllTranslations = () => {
   return {
     en: { translation: translationEN },
     de: { translation: translationDE }
@@ -40,9 +32,9 @@ export const applyTranslations = (lng: string) => {
   
   elements.forEach(element => {
     const key = element.getAttribute('data-i18n');
-    if (key && translations[lng as keyof TranslationsType]?.translation) {
+    if (key && translations[lng]?.translation) {
       const parts = key.split('.');
-      let translation: any = translations[lng as keyof TranslationsType].translation;
+      let translation = translations[lng].translation;
       
       for (const part of parts) {
         if (translation[part]) {

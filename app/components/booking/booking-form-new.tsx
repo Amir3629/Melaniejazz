@@ -12,6 +12,38 @@ import SubmitButton from './submit-button'
 import { useRouter } from 'next/navigation'
 import { ServiceType, BookingFormData } from '@/app/types/booking'
 
+// Form data interface
+interface FormData {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  
+  // Live Singing fields
+  eventType?: 'wedding' | 'corporate' | 'private' | 'other';
+  eventDate?: string;
+  guestCount?: string;
+  jazzStandards?: string;
+  performanceType?: 'solo' | 'band';
+  
+  // Vocal Coaching fields
+  sessionType?: '1:1' | 'group' | 'online';
+  skillLevel?: 'beginner' | 'intermediate' | 'advanced';
+  focusArea?: string[];
+  preferredDate?: string;
+  preferredTime?: string;
+  
+  // Workshop fields
+  workshopTheme?: string;
+  groupSize?: string;
+  preferredDates?: string[];
+  workshopDuration?: string;
+  
+  // Legal
+  termsAccepted: boolean;
+  privacyAccepted: boolean;
+}
+
 export default function BookingForm() {
   const { t } = useTranslation()
   const router = useRouter()

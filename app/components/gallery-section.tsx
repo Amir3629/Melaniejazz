@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Dialog } from "@/app/components/ui/dialog"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
@@ -137,81 +137,74 @@ export default function GallerySection() {
     }, 700) // Match the transition duration
   }
 
-  // Wrap handlePrev in useCallback
-  const handlePrev = useCallback(() => {
-    if (selectedImage === null) return;
+  const handlePrev = () => {
+    if (selectedImage === null) return
     
     // Apply smooth fade transition
-    const imageElement = document.getElementById('gallery-modal-image');
+    const imageElement = document.getElementById('gallery-modal-image')
     if (imageElement) {
-      imageElement.classList.remove('opacity-100');
-      imageElement.classList.add('opacity-0');
+      imageElement.classList.remove('opacity-100')
+      imageElement.classList.add('opacity-0')
       
       setTimeout(() => {
-        const currentIndex = images.findIndex(img => img.src === selectedImage.src);
-        const prevIndex = (currentIndex - 1 + images.length) % images.length;
+        const currentIndex = images.findIndex(img => img.src === selectedImage.src)
+        const prevIndex = (currentIndex - 1 + images.length) % images.length
         
         // Preload the next image
-        const nextImg = new Image();
-        nextImg.src = images[prevIndex].src;
+        const nextImg = new Image()
+        nextImg.src = images[prevIndex].src
         nextImg.onload = () => {
-          setSelectedImage(images[prevIndex]);
-        };
-      }, 150);
+          setSelectedImage(images[prevIndex])
+        }
+      }, 150) // Half the transition duration for quicker response
     } else {
-      const currentIndex = images.findIndex(img => img.src === selectedImage.src);
-      const prevIndex = (currentIndex - 1 + images.length) % images.length;
-      setSelectedImage(images[prevIndex]);
+      const currentIndex = images.findIndex(img => img.src === selectedImage.src)
+      const prevIndex = (currentIndex - 1 + images.length) % images.length
+      setSelectedImage(images[prevIndex])
     }
-  }, [selectedImage]);
+  }
 
-  // Wrap handleNext in useCallback
-  const handleNext = useCallback(() => {
-    if (selectedImage === null) return;
+  const handleNext = () => {
+    if (selectedImage === null) return
     
     // Apply smooth fade transition
-    const imageElement = document.getElementById('gallery-modal-image');
+    const imageElement = document.getElementById('gallery-modal-image')
     if (imageElement) {
-      imageElement.classList.remove('opacity-100');
-      imageElement.classList.add('opacity-0');
+      imageElement.classList.remove('opacity-100')
+      imageElement.classList.add('opacity-0')
       
       setTimeout(() => {
-        const currentIndex = images.findIndex(img => img.src === selectedImage.src);
-        const nextIndex = (currentIndex + 1) % images.length;
+        const currentIndex = images.findIndex(img => img.src === selectedImage.src)
+        const nextIndex = (currentIndex + 1) % images.length
         
         // Preload the next image
-        const nextImg = new Image();
-        nextImg.src = images[nextIndex].src;
+        const nextImg = new Image()
+        nextImg.src = images[nextIndex].src
         nextImg.onload = () => {
-          setSelectedImage(images[nextIndex]);
-        };
-      }, 150);
+          setSelectedImage(images[nextIndex])
+        }
+      }, 150) // Half the transition duration for quicker response
     } else {
-      const currentIndex = images.findIndex(img => img.src === selectedImage.src);
-      const nextIndex = (currentIndex + 1) % images.length;
-      setSelectedImage(images[nextIndex]);
+      const currentIndex = images.findIndex(img => img.src === selectedImage.src)
+      const nextIndex = (currentIndex + 1) % images.length
+      setSelectedImage(images[nextIndex])
     }
-  }, [selectedImage]);
+  }
 
-  // Wrap handleKeyDown in useCallback
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      setSelectedImage(null);
-    } else if (e.key === 'ArrowRight') {
-      handleNext();
-    } else if (e.key === 'ArrowLeft') {
-      handlePrev();
-    }
-  }, [handleNext, handlePrev]);
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (!selectedImage) return
+    if (e.key === 'ArrowRight') handleNext()
+    if (e.key === 'ArrowLeft') handlePrev()
+    if (e.key === 'Escape') handleClose()
+  }
 
   useEffect(() => {
-    if (selectedImage !== null) {
-      document.addEventListener('keydown', handleKeyDown);
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-      };
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      document.body.classList.remove('overflow-hidden')
     }
-  }, [selectedImage, handleKeyDown]);
+  }, [selectedImage])
 
   // Add a useEffect to handle image transitions
   useEffect(() => {
