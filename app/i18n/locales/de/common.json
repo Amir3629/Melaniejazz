@@ -1,0 +1,21 @@
+{
+  "features": {
+    "title": "Funktionen",
+    "vocal_coaching": {
+      "title": "Gesangsunterricht",
+      "description": "Professionelles Stimmtraining mit der Complete Vocal Technique"
+    },
+    "performance": {
+      "title": "Auftritte",
+      "description": "Live-Auftritte und Event-Entertainment"
+    },
+    "workshops": {
+      "title": "Workshops",
+      "description": "Gruppenworkshops und Masterclasses"
+    },
+    "innovation": {
+      "title": "Innovation",
+      "description": "Moderne Lehrmethoden und Technologie"
+    }
+  }
+} 
