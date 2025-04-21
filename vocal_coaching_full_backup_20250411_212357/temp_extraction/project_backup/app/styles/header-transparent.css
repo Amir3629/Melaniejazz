@@ -1,0 +1,27 @@
+/* Force header transparency */
+header,
+[class*="header"],
+[class*="nav-header"],
+[role="navigation"],
+header.nav-header:not(.scrolled) {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+header.nav-header.scrolled,
+header.scrolled,
+.header-solid {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* Transition settings */
+header {
+  transition: background-color 0.4s ease-in-out, 
+              box-shadow 0.4s ease-in-out,
+              backdrop-filter 0.4s ease-in-out !important;
+} 

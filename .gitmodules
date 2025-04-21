@@ -1,0 +1,3 @@
+[submodule "mobile-version"]
+	path = mobile-version
+	url = https://github.com/Amir3629/mobile-version.git

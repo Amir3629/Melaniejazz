@@ -1,0 +1,737 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { Play, Pause, Music } from "lucide-react";
+import { getAudioPath } from "@/app/utils/paths";
+import "./direct-fix.css";  // Direct CSS fix import
+import "./mini-player-fix.css";  // Mini player fix
+import { createScrollingMiniPlayer } from "./MiniplFix/minipl";
+
+// Add event system for media coordination
+const MEDIA_STOP_EVENT = 'stopAllMedia';
+
+export default function EnhancedMusicPlayer() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showMiniPlayer, setShowMiniPlayer] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false); // Add state to track image loading
+  
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null); // Add ref for image
+  
+  const track = {
+    title: "Blues for John",
+    artist: "Melvo Jazz",
+    file: "/audio/AUDIO-2025-03-19-16-15-29",
+    youtubeId: "hFdMHvB6-Jk",
+    image: "/123.png" // Use the local image directly
+  };
+
+  // Get YouTube thumbnail URL - use higher quality image
+  const getYouTubeThumbnail = (youtubeId: string) => {
+    // Use the highest quality thumbnail available
+    return `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
+  };
+
+  // Add a test marker in the top right corner
+  const [testMarker, setTestMarker] = useState('red');
+
+  // Add additional states for smoother transitions
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Add a preloaded state
+  const [isPreloaded, setIsPreloaded] = useState(false);
+
+  const [miniPlayerInstance, setMiniPlayerInstance] = useState<any>(null);
+
+  useEffect(() => {
+    // Listen for stop events from other media players
+    const handleMediaStop = () => {
+      if (isPlaying) {
+        setIsPlaying(false);
+        if (audioRef.current) {
+          audioRef.current.pause();
+        }
+      }
+    };
+
+    window.addEventListener(MEDIA_STOP_EVENT, handleMediaStop);
+    return () => window.removeEventListener(MEDIA_STOP_EVENT, handleMediaStop);
+  }, [isPlaying]);
+
+  useEffect(() => {
+    // Change the test marker color to confirm updates
+    setTestMarker('red');
+  }, []);
+
+  // Create a separate audio loader/player system independent of UI
+  // This will completely replace the current approach
+  // Add a local audio control object for more direct control
+  useEffect(() => {
+    // Create a separate audio instance that's disconnected from React state
+    const audioEl = new Audio();
+    audioEl.src = "/audio/AUDIO-2025-03-19-16-15-29.mp3";
+    audioEl.volume = 1.0;
+    audioEl.preload = "auto";
+    
+    // Store in local variable to avoid ref issues
+    const audioRefValue = audioRef.current;
+    
+    // Directly set the ref using a workaround
+    if (audioRef && audioRef.current === null) {
+      // @ts-ignore - we need to set this directly
+      audioRef.current = audioEl;
+    }
+    
+    // Add event listeners to the audio element
+    audioEl.addEventListener('ended', handleEnded);
+    audioEl.addEventListener('error', (e) => {
+      console.error("Audio error:", e);
+      setError("Failed to play audio. Please try again.");
+      setIsPlaying(false);
+      setIsLoading(false);
+    });
+    
+    // Load the audio
+    audioEl.load();
+    
+    return () => {
+      // Clean up
+      audioEl.pause();
+      audioEl.removeEventListener('ended', handleEnded);
+      audioEl.removeEventListener('error', () => {});
+    };
+  }, []);
+
+  // Handle scroll to show/hide mini player - SIMPLIFIED
+  useEffect(() => {
+    // Update mini player visibility when play state changes
+    if (!isPlaying) {
+      // Always hide mini player when not playing
+      setShowMiniPlayer(false);
+    }
+    
+    // Update test marker to pink to confirm this change
+    setTestMarker('pink');
+  }, [isPlaying]);
+
+  // Add scroll detection to show/hide mini player with enhanced reliability
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!isPlaying) {
+        setShowMiniPlayer(false);
+        return;
+      }
+      
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        
+        // Show mini player only when scrolled away from music section
+        const shouldShow = rect.bottom < 0 || rect.top > window.innerHeight;
+        setShowMiniPlayer(shouldShow);
+        
+        // This helps debug the state
+        console.log('Scroll detection:', { 
+          shouldShow, 
+          rectTop: rect.top, 
+          rectBottom: rect.bottom,
+          windowHeight: window.innerHeight
+        });
+      }
+    };
+    
+    // Check immediately
+    handleScroll();
+    
+    // Add scroll listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isPlaying]);
+
+  // Preload audio completely before playback
+  useEffect(() => {
+    if (audioRef.current) {
+      const audioEl = audioRef.current;
+      
+      // Preload audio completely
+      audioEl.preload = "auto";
+      
+      // Set canplaythrough event
+      const handleCanPlayThrough = () => {
+        console.log("Audio fully loaded and can play without buffering");
+        setIsPreloaded(true);
+      };
+      
+      audioEl.addEventListener('canplaythrough', handleCanPlayThrough);
+      
+      return () => {
+        audioEl.removeEventListener('canplaythrough', handleCanPlayThrough);
+      };
+    }
+  }, []);
+
+  // Fix the preloading image code that's causing the error
+  useEffect(() => {
+    // Preload the image using the browser's native Image constructor
+    if (typeof window !== 'undefined') {
+      // Don't use the imported Next.js Image component for preloading
+      const preloadImage = new window.Image();
+      preloadImage.src = track.image;
+      
+      // Store the image reference
+      imageRef.current = preloadImage;
+      
+      preloadImage.onload = () => {
+        console.log("Image preloaded successfully");
+        setImageLoaded(true); // Mark image as loaded
+      };
+      
+      preloadImage.onerror = () => {
+        console.error("Failed to preload image");
+        // Fall back to default image
+        preloadImage.src = "/123.png";
+      };
+    }
+    
+    // Preload the audio
+    if (audioRef.current) {
+      audioRef.current.load();
+    }
+  }, [track.image]);
+
+  // Update test marker to purple to confirm this change
+  useEffect(() => {
+    // Change the test marker color to confirm updates
+    setTestMarker('purple');
+  }, []);
+
+  // Add a synchronous rendering trick to prevent flash
+  useEffect(() => {
+    // Force synchronous image loading
+    if (typeof window !== 'undefined') {
+      // Create an overlapping invisible image to ensure there's always one present
+      const containerEl = document.querySelector('.disc-image-container') as HTMLElement;
+      if (containerEl) {
+        // Add a hardware-accelerated background image as backup
+        const bgImage = track.image;
+        containerEl.style.backgroundImage = `url(${bgImage})`;
+        containerEl.style.backgroundSize = 'cover';
+        containerEl.style.backgroundPosition = 'center';
+        containerEl.style.transform = 'translateZ(0)';
+        
+        // This forces the browser to keep the image in memory and rendered
+        console.log('Added hardware-accelerated backup image');
+      }
+    }
+  }, [track.image]);
+
+  // Add a direct DOM manipulation approach for play/pause
+  const handlePlay = () => {
+    if (!audioRef.current) return;
+    
+    // Don't use state transitions at all - work directly with the DOM
+    try {
+      const btnElement = document.querySelector('.play-btn-icon') as HTMLElement;
+      const loadingIndicator = document.querySelector('.loading-indicator') as HTMLElement;
+      const pauseIcon = document.querySelector('.pause-icon') as HTMLElement;
+      const playIcon = document.querySelector('.play-icon') as HTMLElement;
+      
+      // Ensure the disc remains visible regardless of state change
+      const discImage = document.querySelector('.disc-image-container') as HTMLElement;
+      if (discImage) {
+        discImage.style.visibility = 'visible';
+        discImage.style.opacity = '1';
+      }
+      
+      if (isPlaying) {
+        // For pause - update the UI first, then pause the audio
+        if (pauseIcon && playIcon) {
+          pauseIcon.style.display = 'none';
+          playIcon.style.display = 'block';
+        }
+        
+        // After UI is updated, actually pause audio
+        audioRef.current.pause();
+        setIsPlaying(false);
+        setShowMiniPlayer(false);
+      } else {
+        // For play - first show loading without changing state
+        if (loadingIndicator && pauseIcon && playIcon) {
+          loadingIndicator.style.display = 'block';
+          pauseIcon.style.display = 'none';
+          playIcon.style.display = 'none';
+        }
+        
+        // Stop all other media
+      window.dispatchEvent(new Event(MEDIA_STOP_EVENT));
+        
+        // Reset audio position and load
+        audioRef.current.currentTime = 0;
+        
+        // Try to play without updating state yet
+          const playPromise = audioRef.current.play();
+          
+        if (playPromise) {
+            playPromise
+              .then(() => {
+              // Only after audio is confirmed playing, update UI directly
+              if (loadingIndicator && pauseIcon && playIcon) {
+                loadingIndicator.style.display = 'none';
+                pauseIcon.style.display = 'block';
+                playIcon.style.display = 'none';
+              }
+              
+              // And after all that is done, update React state
+              setTimeout(() => {
+                setIsPlaying(true);
+              }, 200);
+              })
+              .catch(err => {
+          console.error("Failed to play audio:", err);
+              if (loadingIndicator && pauseIcon && playIcon) {
+                loadingIndicator.style.display = 'none';
+                pauseIcon.style.display = 'none';
+                playIcon.style.display = 'block';
+              }
+                setError("Failed to play audio. Please try again.");
+            });
+        }
+      }
+    } catch (err) {
+      console.error("Exception in play handler:", err);
+      setError("Failed to play audio. Please try again.");
+    }
+  };
+
+  // Handle audio ended
+  const handleEnded = () => {
+    setIsPlaying(false);
+    setShowMiniPlayer(false);
+  };
+
+  // Handle audio error
+  const handleError = (e: React.SyntheticEvent<HTMLAudioElement, Event>) => {
+    console.error("Audio error:", e);
+    setError("Failed to play audio. Please try again.");
+    setIsPlaying(false);
+    setIsLoading(false);
+    setShowMiniPlayer(false);
+  };
+
+  // Scroll to music section when mini player is clicked
+  const scrollToMusicSection = () => {
+    // Removed auto-scrolling behavior
+    console.log("Mini player clicked");
+  };
+
+  // Direct DOM fix using refs and useEffect
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    // Direct DOM manipulation to ensure proper display
+    const fixStyles = () => {
+      if (containerRef.current) {
+        const container = containerRef.current;
+        
+        // Don't need to manually set dimensions since parent container handles aspect ratio
+        Object.assign(container.style, {
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0
+        });
+        
+        // Make sure child elements maintain circular shape
+        const discElements = container.querySelectorAll('div');
+        discElements.forEach(el => {
+          if (el.style.borderRadius !== '50%' && el.style.borderRadius !== undefined) {
+            el.style.borderRadius = '50%';
+          }
+          if (el.style.overflow !== 'hidden' && el.style.overflow !== undefined) {
+            el.style.overflow = 'hidden';
+          }
+        });
+        
+        console.log('Enhanced DOM manipulation applied to ensure circular disc');
+      }
+    };
+    
+    // Apply fixes after mounting
+    fixStyles();
+    
+    // Also apply on window resize
+    window.addEventListener('resize', fixStyles);
+    return () => window.removeEventListener('resize', fixStyles);
+  }, []);
+
+  // Update and force the mini player to be visible when debugging
+  useEffect(() => {
+    // Update test marker to blue to confirm these new changes
+    setTestMarker('blue');
+    
+    // Always hide mini player when not playing
+    if (!isPlaying) {
+      setShowMiniPlayer(false);
+    }
+  }, [isPlaying]);
+
+  // Handle our scrolling mini-player
+  useEffect(() => {
+    // Only run in browser
+    if (typeof window === 'undefined') return;
+    
+    // If playing and should show mini-player
+    if (isPlaying && showMiniPlayer) {
+      // Find the container - start with any parent element that will scroll with the page
+      const container = document.querySelector('#__next') || 
+                       document.querySelector('main') || 
+                       document.body;
+      
+      if (container) {
+        // Create mini-player
+        const instance = createScrollingMiniPlayer(
+          container,
+          track.title,
+          isPlaying,
+          handlePlay
+        );
+        
+        // Store instance for later updates
+        setMiniPlayerInstance(instance);
+        
+        // Update indicator
+        setTestMarker('green');
+      }
+    } else if (miniPlayerInstance) {
+      // Remove mini-player if it exists
+      miniPlayerInstance.remove();
+      setMiniPlayerInstance(null);
+      
+      // Update indicator
+      setTestMarker('orange');
+    }
+    
+    // Cleanup on unmount or deps change
+    return () => {
+      if (miniPlayerInstance) {
+        miniPlayerInstance.remove();
+      }
+    };
+  }, [isPlaying, showMiniPlayer, track.title]);
+  
+  // Update play state of mini-player when play state changes
+  useEffect(() => {
+    if (miniPlayerInstance) {
+      miniPlayerInstance.updatePlayState(isPlaying);
+    }
+  }, [isPlaying, miniPlayerInstance]);
+
+  return (
+    <div className="relative w-full py-24 overflow-hidden" ref={sectionRef}>
+      <div className="absolute inset-0 bg-black/95 backdrop-blur-xl z-0"></div>
+      
+      <div className="relative z-10 flex flex-col items-center">
+        <h2 className="text-3xl font-bold text-white mb-6">Meine Musik</h2>
+        <div className="w-16 h-1 bg-[#C8A97E] mb-12"></div>
+        
+        {/* Single Disc Container - Perfect Circle Fix */}
+        <div style={{
+          width: '260px',
+          maxWidth: '80vw',
+          margin: '0 auto',
+          marginBottom: '1rem',
+          position: 'relative',
+          transition: 'all 0.3s ease'
+        }}>
+          {/* This creates a perfect square regardless of width */}
+          <div style={{
+            paddingTop: '100%',
+            position: 'relative',
+            overflow: 'hidden',
+            borderRadius: '50%'
+          }}>
+            <div 
+              ref={containerRef}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
+              }}
+            >
+          {/* Main Vinyl Disc */}
+          <motion.div 
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7)',
+                  willChange: 'transform'
+                }}
+            onClick={handlePlay}
+          >
+            {/* Main disc */}
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  boxShadow: '0 0 30px rgba(0, 0, 0, 0.5)'
+                }}>
+              {/* Main disc image background - spinning only when playing */}
+              <motion.div 
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      borderRadius: '50%',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      willChange: 'transform',
+                      backfaceVisibility: 'hidden',
+                      transformStyle: 'preserve-3d'
+                    }}
+                initial={false}
+                animate={{ 
+                  rotate: isPlaying ? 360 : 0,
+                  opacity: 1 // Always keep opacity at 1
+                }}
+                transition={{ 
+                  duration: 40, 
+                  ease: "linear", 
+                  repeat: isPlaying ? Infinity : 0,
+                  repeatType: "loop",
+                  type: "tween",
+                  opacity: { duration: 0 } // Instant opacity transition
+                }}
+              >
+                <div 
+                  className="disc-image-container"
+                  style={{
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden',
+                    opacity: 1,
+                    visibility: 'visible'
+                }}
+              >
+                <Image 
+                  src={track.image}
+                  alt={track.title}
+                  fill
+                  sizes="(max-width: 768px) 80vw, 260px"
+                  style={{ 
+                    objectFit: 'cover', 
+                    objectPosition: 'center',
+                    transform: 'scale(1.2)',
+                    width: '100%',
+                    height: '100%',
+                    visibility: 'visible', // Ensure visibility
+                    opacity: 1, // Force full opacity
+                    transition: 'none' // Disable transitions that might cause flash
+                  }}
+                  className="opacity-100"
+                  priority
+                  unoptimized
+                  onError={(e) => {
+                    console.error("Image failed to load:", track.image);
+                    const imgElement = e.currentTarget as HTMLImageElement;
+                    imgElement.src = "/123.png";
+                  }}
+                />
+                </div>
+              </motion.div>
+              
+              {/* Inner disc with grooves - spinning only when playing */}
+              <motion.div 
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      borderRadius: '50%',
+                      backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                      backdropFilter: 'blur(0)',
+                      opacity: 1, // Always visible
+                      visibility: 'visible' // Always visible
+                    }}
+                    initial={false}
+                    animate={{ 
+                      rotate: isPlaying ? 360 : 0,
+                      opacity: 1 // Always keep opacity at 1
+                    }}
+                transition={{ 
+                  duration: 40, 
+                  ease: "linear", 
+                  repeat: isPlaying ? Infinity : 0,
+                      repeatType: "loop",
+                      type: "tween",
+                      opacity: { duration: 0 } // Instant opacity transition
+                }}
+              >
+                {/* Vinyl grooves */}
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
+                      borderRadius: '50%'
+                    }}>
+                      <div style={{ position: 'absolute', inset: '15px', borderRadius: '50%', border: '1px solid rgba(68, 68, 68, 0.7)' }}></div>
+                      <div style={{ position: 'absolute', inset: '30px', borderRadius: '50%', border: '1px solid rgba(68, 68, 68, 0.7)' }}></div>
+                      <div style={{ position: 'absolute', inset: '45px', borderRadius: '50%', border: '1px solid rgba(68, 68, 68, 0.7)' }}></div>
+                      <div style={{ position: 'absolute', inset: '60px', borderRadius: '50%', border: '1px solid rgba(68, 68, 68, 0.7)' }}></div>
+                      <div style={{ position: 'absolute', inset: '75px', borderRadius: '50%', border: '1px solid rgba(68, 68, 68, 0.7)' }}></div>
+                </div>
+                
+                {/* Center button */}
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
+                      margin: 'auto',
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '50%',
+                      backgroundColor: 'black',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      zIndex: 5 // Make sure button is above content
+                    }}>
+                  <motion.button
+                    className="play-btn-icon"
+                    style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '50%',
+                      backgroundColor: 'black',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'background-color 0.3s',
+                      opacity: 1
+                    }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handlePlay}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {isLoading || isTransitioning ? (
+                      <div 
+                        className="loading-indicator" 
+                        style={{ 
+                          width: '20px', 
+                          height: '20px', 
+                          borderRadius: '50%',
+                          border: '2px solid #C8A97E',
+                          borderTopColor: 'transparent',
+                          animation: 'spin 1s linear infinite',
+                          opacity: 1
+                        }}
+                      ></div>
+                    ) : isPlaying ? (
+                      <Pause 
+                        className="pause-icon w-5 h-5 text-[#C8A97E]" 
+                        style={{ opacity: 1 }} 
+                      />
+                    ) : (
+                      <Play 
+                        className="play-icon w-6 h-6 text-[#C8A97E] ml-0.5" 
+                        style={{ opacity: 1 }} 
+                      />
+                    )}
+                  </motion.button>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Track title and artist */}
+        <div className="text-center mt-8 mb-4">
+          <h3 className="text-xl font-medium text-white mb-1">{track.title}</h3>
+          <p className="text-sm text-[#C8A97E]">{track.artist}</p>
+        </div>
+      </div>
+      
+      {/* Add a container for the mini-player that scrolls with the page */}
+      <div id="mini-player-container" className="relative w-full">
+        {/* Mini-player will be attached here via DOM */}
+      </div>
+      
+      {/* Show any error messages */}
+      {error && (
+        <div className="text-red-500 mt-4 text-center">
+          {error}
+        </div>
+      )}
+      
+      {/* Add the test marker to the component - will change color when scrolling */}
+      <div style={{ position: 'absolute', top: '10px', right: '10px', width: '10px', height: '10px', backgroundColor: testMarker, borderRadius: '50%' }}></div>
+
+      {/* Add a style tag to prevent flash */}
+      <style jsx global>{`
+        .play-btn-icon {
+          transition: opacity 0.3s ease;
+        }
+        
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        
+        /* Prevent image flash */
+        .disc-image-container {
+          visibility: visible !important;
+          opacity: 1 !important;
+          transition: none !important;
+          transform: translateZ(0);
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+          -webkit-transform: translateZ(0) scale(1.0, 1.0);
+          transform: translateZ(0) scale(1.0, 1.0);
+        }
+        
+        .disc-image-container img {
+          visibility: visible !important;
+          opacity: 1 !important;
+          transition: none !important;
+          will-change: transform;
+          transform: translateZ(0);
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+          -webkit-transform: translateZ(0) scale(1.0, 1.0);
+          transform: translateZ(0) scale(1.0, 1.0);
+        }
+        
+        /* Eliminate any flicker during state changes */
+        * {
+          -webkit-transform: translateZ(0);
+          -webkit-backface-visibility: hidden;
+          -webkit-perspective: 1000;
+        }
+        
+        /* Update test marker */
+        .test-marker {
+          background-color: orange !important;
+        }
+      `}</style>
+    </div>
+  );
+} 
+
+

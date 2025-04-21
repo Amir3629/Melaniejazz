@@ -1,0 +1,75 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Overlay all other CSS with !important flags */
+body .mini-player-container,
+.mini-player-container,
+div.mini-player-container,
+#fixed-mini-player {
+  position: absolute !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 50 !important;
+  animation: fadeInUp 0.5s ease-out !important;
+  transition: all 0.3s ease-in-out !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  width: 180px !important;
+  max-width: 85% !important;
+  padding: 8px 16px 8px 12px !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+  backdrop-filter: blur(10px) !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(200, 169, 126, 0.3) !important;
+  transform: none !important;
+  left: auto !important;
+  top: auto !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  /* Add additional global resets */
+  float: none !important;
+  clear: none !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  /* Force GPU acceleration */
+  will-change: transform !important;
+  transform: translateZ(0) !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+.mini-player-container.hiding,
+#fixed-mini-player.hiding {
+  animation: fadeOutDown 0.3s ease-in forwards !important;
+}
+
+@media screen and (max-width: 768px) {
+  body .mini-player-container,
+  .mini-player-container,
+  div.mini-player-container,
+  #fixed-mini-player {
+    bottom: 16px !important;
+    right: 16px !important;
+    width: 160px !important;
+  }
+} 

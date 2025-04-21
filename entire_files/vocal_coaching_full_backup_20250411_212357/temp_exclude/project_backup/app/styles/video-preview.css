@@ -1,0 +1,66 @@
+/* Video preview container styling */
+.video-preview-container {
+  position: relative;
+  width: 100%;
+  max-width: 120px;
+  margin: 0 auto;
+  aspect-ratio: 3/4;
+  background-color: black;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+/* Video element styling */
+.video-element {
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  transform: scale(0.95); /* Slightly scale down to avoid edges getting cut off */
+}
+
+/* Video wrapper for centering */
+.video-wrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0a0a0a;
+}
+
+/* Ensures video is not stretched or zoomed excessively */
+@supports (object-fit: contain) {
+  .video-element {
+    object-fit: contain;
+  }
+}
+
+/* For Safari compatibility */
+@media not all and (min-resolution:.001dpcm) { 
+  @supports (-webkit-appearance:none) {
+    .video-element {
+      max-height: 100%;
+      max-width: 100%;
+      width: auto;
+      margin: 0 auto;
+    }
+  }
+}
+
+/* Fallback for older browsers */
+@supports not (aspect-ratio: 3/4) {
+  .video-preview-container {
+    height: 320px; /* Fallback height */
+  }
+}
+
+/* Target Firefox specifically */
+@-moz-document url-prefix() {
+  .video-element {
+    max-height: 100%;
+    width: auto;
+  }
+} 
