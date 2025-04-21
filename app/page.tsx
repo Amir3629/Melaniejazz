@@ -26,7 +26,7 @@ import FlipCards from './components/flip-cards'
 import AboutSectionFixed from "@/app/components/about-section-fixed"
 import { AppImage, RegularImg } from '@/app/components/ui/image'
 import MusicSection from '@/app/components/music-section'
-import { getImagePath } from '../utils/image-path'
+import { getImagePath } from '../../utils/image-path'
 
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false)
