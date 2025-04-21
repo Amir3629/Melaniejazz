@@ -375,7 +375,32 @@ export default function MusicPlayer() {
     }
   }, [miniPlayerTimeout])
 
-  // Fix playNextSong dependency
+  const playNextSong = () => {
+    if (!playerReady || isTransitioning) return;
+    
+    setIsTransitioning(true);
+    setIsPlaying(false);
+    
+    // Wait for transition animation
+    setTimeout(() => {
+      setCurrentSongIndex((prevIndex) => 
+        prevIndex === songs.length - 1 ? 0 : prevIndex + 1
+      );
+      setProgress(0);
+      
+      // Wait a bit more before starting the new song
+      setTimeout(() => {
+        setIsTransitioning(false);
+        if (videoRef.current) {
+          // Load and play the new video
+          const nextIndex = currentSongIndex === songs.length - 1 ? 0 : currentSongIndex + 1;
+          const message = `{"event":"command","func":"loadVideoById","args":"${songs[nextIndex].youtubeId}"}`;
+          videoRef.current.contentWindow?.postMessage(message, '*');
+        }
+      }, 800);
+    }, 500);
+  };
+
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.addEventListener('ended', playNextSong)
@@ -431,32 +456,6 @@ export default function MusicPlayer() {
     e.stopPropagation();
     handlePlayPause(currentSongIndex);
   }
-
-  const playNextSong = () => {
-    if (!playerReady || isTransitioning) return;
-    
-    setIsTransitioning(true);
-    setIsPlaying(false);
-    
-    // Wait for transition animation
-    setTimeout(() => {
-      setCurrentSongIndex((prevIndex) => 
-        prevIndex === songs.length - 1 ? 0 : prevIndex + 1
-      );
-      setProgress(0);
-      
-      // Wait a bit more before starting the new song
-      setTimeout(() => {
-        setIsTransitioning(false);
-        if (videoRef.current) {
-          // Load and play the new video
-          const nextIndex = currentSongIndex === songs.length - 1 ? 0 : currentSongIndex + 1;
-          const message = `{"event":"command","func":"loadVideoById","args":"${songs[nextIndex].youtubeId}"}`;
-          videoRef.current.contentWindow?.postMessage(message, '*');
-        }
-      }, 800);
-    }, 500);
-  };
 
   const playPreviousSong = () => {
     if (!playerReady || isTransitioning) return;
