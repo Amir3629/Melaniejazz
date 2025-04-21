@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Dialog } from "@/app/components/ui/dialog"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
@@ -191,20 +191,25 @@ export default function GallerySection() {
     }
   }
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (!selectedImage) return
-    if (e.key === 'ArrowRight') handleNext()
-    if (e.key === 'ArrowLeft') handlePrev()
-    if (e.key === 'Escape') handleClose()
-  }
+  // Wrap handleKeyDown in useCallback
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setSelectedImage(null);
+    } else if (e.key === 'ArrowRight') {
+      handleNext();
+    } else if (e.key === 'ArrowLeft') {
+      handlePrev();
+    }
+  }, [handleNext, handlePrev]);
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown)
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-      document.body.classList.remove('overflow-hidden')
+    if (selectedImage !== null) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+      };
     }
-  }, [selectedImage])
+  }, [selectedImage, handleKeyDown]);
 
   // Add a useEffect to handle image transitions
   useEffect(() => {

@@ -119,41 +119,24 @@ export default function EnhancedMusicPlayer() {
     };
   }, []);
 
-  // Play/pause handler
+  // Wrap handlePlay in useCallback
   const handlePlay = useCallback(() => {
-    if (!audioRef.current) return;
-    
-    try {
-      if (isPlaying) {
-        // Pause the audio
-        audioRef.current.pause();
-        setIsPlaying(false);
-        setShowMiniPlayer(false);
-      } else {
-        // Stop all other media
-        window.dispatchEvent(new Event(MEDIA_STOP_EVENT));
-        
-        // Reset and play
-        audioRef.current.currentTime = 0;
-        
-        const playPromise = audioRef.current.play();
-        
-        if (playPromise) {
-          playPromise
-            .then(() => {
-              setIsPlaying(true);
-            })
-            .catch(err => {
-              console.error("Failed to play audio:", err);
-              setError("Failed to play audio. Please try again.");
-            });
-        }
-      }
-    } catch (err) {
-      console.error("Exception in play handler:", err);
-      setError("Failed to play audio. Please try again.");
+    if (audioRef.current) {
+      audioRef.current.play();
+      setIsPlaying(true);
     }
-  }, [isPlaying]);
+  }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.addEventListener('play', handlePlay);
+    }
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.removeEventListener('play', handlePlay);
+      }
+    };
+  }, [handlePlay]);
 
   // Create scrolling mini-player with DOM
   useEffect(() => {
@@ -279,15 +262,6 @@ export default function EnhancedMusicPlayer() {
       }
     };
   }, [isPlaying, showMiniPlayer, track.title]);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.addEventListener('ended', handlePlay)
-      return () => {
-        audioRef.current?.removeEventListener('ended', handlePlay)
-      }
-    }
-  }, [handlePlay])
 
   return (
     <div className="relative w-full py-24 overflow-hidden" ref={sectionRef}>

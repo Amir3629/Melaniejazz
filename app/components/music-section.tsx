@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Play, Pause } from 'lucide-react'
@@ -37,7 +37,8 @@ export default function MusicSection() {
   const [playerReady, setPlayerReady] = useState(false)
   const playerRef = useRef<any>(null)
   
-  const musicTracks: MusicTrack[] = [
+  // Wrap musicTracks in useMemo
+  const musicTracks = useMemo(() => [
     {
       id: 1,
       title: "Piano Composition",
@@ -80,7 +81,7 @@ export default function MusicSection() {
       artist: "Melvo Jazz",
       youtubeId: "QgZKO_f5FlM"
     }
-  ]
+  ], []);
 
   // Get YouTube thumbnail URL
   const getYouTubeThumbnail = (videoId: string) => {

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Play, Pause, Music } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
@@ -224,13 +224,9 @@ export default function MusicPlayer() {
 
   // Auto-hide mini player when music is paused
   useEffect(() => {
-    if (!isPlaying && showMiniPlayer) {
-      // Clear any existing timeout
-      if (miniPlayerTimeout) {
-        clearTimeout(miniPlayerTimeout);
-      }
+    if (!isPlaying && showMiniPlayer && miniPlayerTimeout) {
+      clearTimeout(miniPlayerTimeout);
       
-      // Set a new timeout to hide the mini player after 3 seconds
       const timeout = setTimeout(() => {
         setShowMiniPlayer(false);
       }, 3000);
@@ -243,7 +239,7 @@ export default function MusicPlayer() {
         clearTimeout(miniPlayerTimeout);
       }
     };
-  }, [isPlaying, showMiniPlayer]);
+  }, [isPlaying, showMiniPlayer, miniPlayerTimeout]);
 
   // Show tutorial animation on first load
   useEffect(() => {
@@ -356,26 +352,8 @@ export default function MusicPlayer() {
     }
   }, [currentlyPlaying, isPlaying])
 
-  // Fix songs.length dependency
-  useEffect(() => {
-    if (currentSongIndex === -1 && songs?.length > 0) {
-      setCurrentSongIndex(0)
-    }
-  }, [currentSongIndex, songs])
-
-  // Fix miniPlayerTimeout dependency
-  useEffect(() => {
-    if (miniPlayerTimeout) {
-      clearTimeout(miniPlayerTimeout)
-    }
-    return () => {
-      if (miniPlayerTimeout) {
-        clearTimeout(miniPlayerTimeout)
-      }
-    }
-  }, [miniPlayerTimeout])
-
-  const playNextSong = () => {
+  // Wrap playNextSong in useCallback
+  const playNextSong = useCallback(() => {
     if (!playerReady || isTransitioning) return;
     
     setIsTransitioning(true);
@@ -399,18 +377,46 @@ export default function MusicPlayer() {
         }
       }, 800);
     }, 500);
-  };
+  }, [playerReady, isTransitioning, currentSongIndex, songs]);
 
+  // Fix the useEffect with audioRef
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.addEventListener('ended', playNextSong)
+    const currentAudioRef = audioRef.current;
+    if (currentAudioRef) {
+      currentAudioRef.addEventListener('ended', playNextSong);
     }
     return () => {
-      if (audioRef.current) {
-        audioRef.current.removeEventListener('ended', playNextSong)
+      if (currentAudioRef) {
+        currentAudioRef.removeEventListener('ended', playNextSong);
       }
+    };
+  }, [playNextSong]);
+
+  // Fix miniPlayerTimeout useEffect
+  useEffect(() => {
+    if (!isPlaying && showMiniPlayer && miniPlayerTimeout) {
+      clearTimeout(miniPlayerTimeout);
+      
+      const timeout = setTimeout(() => {
+        setShowMiniPlayer(false);
+      }, 3000);
+      
+      setMiniPlayerTimeout(timeout);
     }
-  }, [playNextSong])
+    
+    return () => {
+      if (miniPlayerTimeout) {
+        clearTimeout(miniPlayerTimeout);
+      }
+    };
+  }, [isPlaying, showMiniPlayer, miniPlayerTimeout]);
+
+  // Remove unnecessary songs.length dependency
+  useEffect(() => {
+    if (currentSongIndex === -1) {
+      setCurrentSongIndex(0);
+    }
+  }, [currentSongIndex]);
 
   const handlePlayPause = (trackIndex: number) => {
     if (currentSongIndex === trackIndex && isPlaying) {
