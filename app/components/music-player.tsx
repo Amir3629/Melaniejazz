@@ -352,7 +352,7 @@ export default function MusicPlayer() {
     }
   }, [currentlyPlaying, isPlaying])
 
-  // Wrap playNextSong in useCallback
+  // Fix playNextSong callback dependencies
   const playNextSong = useCallback(() => {
     if (!playerReady || isTransitioning) return;
     
@@ -377,7 +377,7 @@ export default function MusicPlayer() {
         }
       }, 800);
     }, 500);
-  }, [playerReady, isTransitioning, currentSongIndex, songs]);
+  }, [playerReady, isTransitioning, currentSongIndex]);
 
   // Fix the useEffect with audioRef
   useEffect(() => {

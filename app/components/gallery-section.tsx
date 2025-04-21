@@ -137,59 +137,61 @@ export default function GallerySection() {
     }, 700) // Match the transition duration
   }
 
-  const handlePrev = () => {
-    if (selectedImage === null) return
+  // Wrap handlePrev in useCallback
+  const handlePrev = useCallback(() => {
+    if (selectedImage === null) return;
     
     // Apply smooth fade transition
-    const imageElement = document.getElementById('gallery-modal-image')
+    const imageElement = document.getElementById('gallery-modal-image');
     if (imageElement) {
-      imageElement.classList.remove('opacity-100')
-      imageElement.classList.add('opacity-0')
+      imageElement.classList.remove('opacity-100');
+      imageElement.classList.add('opacity-0');
       
       setTimeout(() => {
-        const currentIndex = images.findIndex(img => img.src === selectedImage.src)
-        const prevIndex = (currentIndex - 1 + images.length) % images.length
+        const currentIndex = images.findIndex(img => img.src === selectedImage.src);
+        const prevIndex = (currentIndex - 1 + images.length) % images.length;
         
         // Preload the next image
-        const nextImg = new Image()
-        nextImg.src = images[prevIndex].src
+        const nextImg = new Image();
+        nextImg.src = images[prevIndex].src;
         nextImg.onload = () => {
-          setSelectedImage(images[prevIndex])
-        }
-      }, 150) // Half the transition duration for quicker response
+          setSelectedImage(images[prevIndex]);
+        };
+      }, 150);
     } else {
-      const currentIndex = images.findIndex(img => img.src === selectedImage.src)
-      const prevIndex = (currentIndex - 1 + images.length) % images.length
-      setSelectedImage(images[prevIndex])
+      const currentIndex = images.findIndex(img => img.src === selectedImage.src);
+      const prevIndex = (currentIndex - 1 + images.length) % images.length;
+      setSelectedImage(images[prevIndex]);
     }
-  }
+  }, [selectedImage, images]);
 
-  const handleNext = () => {
-    if (selectedImage === null) return
+  // Wrap handleNext in useCallback
+  const handleNext = useCallback(() => {
+    if (selectedImage === null) return;
     
     // Apply smooth fade transition
-    const imageElement = document.getElementById('gallery-modal-image')
+    const imageElement = document.getElementById('gallery-modal-image');
     if (imageElement) {
-      imageElement.classList.remove('opacity-100')
-      imageElement.classList.add('opacity-0')
+      imageElement.classList.remove('opacity-100');
+      imageElement.classList.add('opacity-0');
       
       setTimeout(() => {
-        const currentIndex = images.findIndex(img => img.src === selectedImage.src)
-        const nextIndex = (currentIndex + 1) % images.length
+        const currentIndex = images.findIndex(img => img.src === selectedImage.src);
+        const nextIndex = (currentIndex + 1) % images.length;
         
         // Preload the next image
-        const nextImg = new Image()
-        nextImg.src = images[nextIndex].src
+        const nextImg = new Image();
+        nextImg.src = images[nextIndex].src;
         nextImg.onload = () => {
-          setSelectedImage(images[nextIndex])
-        }
-      }, 150) // Half the transition duration for quicker response
+          setSelectedImage(images[nextIndex]);
+        };
+      }, 150);
     } else {
-      const currentIndex = images.findIndex(img => img.src === selectedImage.src)
-      const nextIndex = (currentIndex + 1) % images.length
-      setSelectedImage(images[nextIndex])
+      const currentIndex = images.findIndex(img => img.src === selectedImage.src);
+      const nextIndex = (currentIndex + 1) % images.length;
+      setSelectedImage(images[nextIndex]);
     }
-  }
+  }, [selectedImage, images]);
 
   // Wrap handleKeyDown in useCallback
   const handleKeyDown = useCallback((e: KeyboardEvent) => {

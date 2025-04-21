@@ -80,9 +80,19 @@ export default function EnhancedMusicPlayer() {
     };
   }, [isPlaying]);
 
+  // Wrap handlePlay in useCallback
+  const handlePlay = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.play();
+      setIsPlaying(true);
+    }
+  }, []);
+
   // Create audio element
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    
+    const currentAudioRef = audioRef.current;
     
     // Create separate audio instance
     const audioEl = new Audio();
@@ -97,6 +107,8 @@ export default function EnhancedMusicPlayer() {
     }
     
     // Add event listeners
+    audioEl.addEventListener('play', handlePlay);
+    
     audioEl.addEventListener('ended', () => {
       setIsPlaying(false);
       setShowMiniPlayer(false);
@@ -114,27 +126,9 @@ export default function EnhancedMusicPlayer() {
     return () => {
       // Clean up
       audioEl.pause();
+      audioEl.removeEventListener('play', handlePlay);
       audioEl.removeEventListener('ended', () => {});
       audioEl.removeEventListener('error', () => {});
-    };
-  }, []);
-
-  // Wrap handlePlay in useCallback
-  const handlePlay = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.play();
-      setIsPlaying(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.addEventListener('play', handlePlay);
-    }
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.removeEventListener('play', handlePlay);
-      }
     };
   }, [handlePlay]);
 
