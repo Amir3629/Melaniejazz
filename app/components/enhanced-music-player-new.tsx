@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Play, Pause } from "lucide-react";
@@ -120,7 +120,7 @@ export default function EnhancedMusicPlayer() {
   }, []);
 
   // Play/pause handler
-  const handlePlay = () => {
+  const handlePlay = useCallback(() => {
     if (!audioRef.current) return;
     
     try {
@@ -153,7 +153,7 @@ export default function EnhancedMusicPlayer() {
       console.error("Exception in play handler:", err);
       setError("Failed to play audio. Please try again.");
     }
-  };
+  }, [isPlaying]);
 
   // Create scrolling mini-player with DOM
   useEffect(() => {
@@ -279,6 +279,15 @@ export default function EnhancedMusicPlayer() {
       }
     };
   }, [isPlaying, showMiniPlayer, track.title]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.addEventListener('ended', handlePlay)
+      return () => {
+        audioRef.current?.removeEventListener('ended', handlePlay)
+      }
+    }
+  }, [handlePlay])
 
   return (
     <div className="relative w-full py-24 overflow-hidden" ref={sectionRef}>

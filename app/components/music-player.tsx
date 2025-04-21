@@ -356,6 +356,37 @@ export default function MusicPlayer() {
     }
   }, [currentlyPlaying, isPlaying])
 
+  // Fix songs.length dependency
+  useEffect(() => {
+    if (currentSongIndex === -1 && songs?.length > 0) {
+      setCurrentSongIndex(0)
+    }
+  }, [currentSongIndex, songs])
+
+  // Fix miniPlayerTimeout dependency
+  useEffect(() => {
+    if (miniPlayerTimeout) {
+      clearTimeout(miniPlayerTimeout)
+    }
+    return () => {
+      if (miniPlayerTimeout) {
+        clearTimeout(miniPlayerTimeout)
+      }
+    }
+  }, [miniPlayerTimeout])
+
+  // Fix playNextSong dependency
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.addEventListener('ended', playNextSong)
+    }
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.removeEventListener('ended', playNextSong)
+      }
+    }
+  }, [playNextSong])
+
   const handlePlayPause = (trackIndex: number) => {
     if (currentSongIndex === trackIndex && isPlaying) {
       audioRef.current?.pause();
