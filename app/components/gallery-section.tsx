@@ -163,7 +163,7 @@ export default function GallerySection() {
       const prevIndex = (currentIndex - 1 + images.length) % images.length;
       setSelectedImage(images[prevIndex]);
     }
-  }, [selectedImage, images]);
+  }, [selectedImage]);
 
   // Wrap handleNext in useCallback
   const handleNext = useCallback(() => {
@@ -191,7 +191,7 @@ export default function GallerySection() {
       const nextIndex = (currentIndex + 1) % images.length;
       setSelectedImage(images[nextIndex]);
     }
-  }, [selectedImage, images]);
+  }, [selectedImage]);
 
   // Wrap handleKeyDown in useCallback
   const handleKeyDown = useCallback((e: KeyboardEvent) => {

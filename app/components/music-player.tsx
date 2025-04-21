@@ -188,7 +188,7 @@ export default function MusicPlayer() {
     // Remove any duplicate indices that might have been added
     const uniqueIndices = Array.from(new Set(indices));
     setVisibleDiscs(uniqueIndices);
-  }, [currentSongIndex, dragOffset, isDragging, isTransitioningDiscs, songs.length]);
+  }, [currentSongIndex, dragOffset, isDragging, isTransitioningDiscs]);
 
   // Set player ready after a short delay
   useEffect(() => {
@@ -281,32 +281,26 @@ export default function MusicPlayer() {
   // Handle YouTube player messages
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.event === "onStateChange") {
-          // YouTube states: -1 (unstarted), 0 (ended), 1 (playing), 2 (paused), 3 (buffering)
-          if (data.info === 1) {
-            setIsPlaying(true);
-          } else if (data.info === 2) {
-            setIsPlaying(false);
-          } else if (data.info === 0) {
-            // Video ended, play next
+      if (
+        event.source === videoRef.current?.contentWindow &&
+        event.data &&
+        typeof event.data === 'string'
+      ) {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.event === 'onStateChange' && data.info === 0) {
+            // Video ended
             playNextSong();
           }
-        } else if (data.event === "onReady") {
-          // Player is ready
-          setPlayerReady(true);
+        } catch (error) {
+          console.error('Error parsing message:', error);
         }
-      } catch (e) {
-        // Not a JSON message or not from YouTube
       }
     };
 
     window.addEventListener('message', handleMessage);
-    return () => {
-      window.removeEventListener('message', handleMessage);
-    };
-  }, []);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [playNextSong]);
 
   // Spinning animation with slow start
   useEffect(() => {
@@ -352,64 +346,11 @@ export default function MusicPlayer() {
     }
   }, [currentlyPlaying, isPlaying])
 
-  // Fix playNextSong callback dependencies
+  // Define playNextSong before using it in useEffect
   const playNextSong = useCallback(() => {
-    if (!playerReady || isTransitioning) return;
-    
-    setIsTransitioning(true);
-    setIsPlaying(false);
-    
-    // Wait for transition animation
-    setTimeout(() => {
-      setCurrentSongIndex((prevIndex) => 
-        prevIndex === songs.length - 1 ? 0 : prevIndex + 1
-      );
-      setProgress(0);
-      
-      // Wait a bit more before starting the new song
-      setTimeout(() => {
-        setIsTransitioning(false);
-        if (videoRef.current) {
-          // Load and play the new video
-          const nextIndex = currentSongIndex === songs.length - 1 ? 0 : currentSongIndex + 1;
-          const message = `{"event":"command","func":"loadVideoById","args":"${songs[nextIndex].youtubeId}"}`;
-          videoRef.current.contentWindow?.postMessage(message, '*');
-        }
-      }, 800);
-    }, 500);
-  }, [playerReady, isTransitioning, currentSongIndex]);
-
-  // Fix the useEffect with audioRef
-  useEffect(() => {
-    const currentAudioRef = audioRef.current;
-    if (currentAudioRef) {
-      currentAudioRef.addEventListener('ended', playNextSong);
-    }
-    return () => {
-      if (currentAudioRef) {
-        currentAudioRef.removeEventListener('ended', playNextSong);
-      }
-    };
-  }, [playNextSong]);
-
-  // Fix miniPlayerTimeout useEffect
-  useEffect(() => {
-    if (!isPlaying && showMiniPlayer && miniPlayerTimeout) {
-      clearTimeout(miniPlayerTimeout);
-      
-      const timeout = setTimeout(() => {
-        setShowMiniPlayer(false);
-      }, 3000);
-      
-      setMiniPlayerTimeout(timeout);
-    }
-    
-    return () => {
-      if (miniPlayerTimeout) {
-        clearTimeout(miniPlayerTimeout);
-      }
-    };
-  }, [isPlaying, showMiniPlayer, miniPlayerTimeout]);
+    setCurrentSongIndex((prevIndex) => (prevIndex + 1) % songs.length);
+    setIsPlaying(true);
+  }, []);
 
   // Remove unnecessary songs.length dependency
   useEffect(() => {

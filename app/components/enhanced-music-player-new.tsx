@@ -247,15 +247,7 @@ export default function EnhancedMusicPlayer() {
         }, 300);
       }
     }
-    
-    // Clean up on unmount
-    return () => {
-      const miniPlayer = document.getElementById('scroll-mini-player');
-      if (miniPlayer && miniPlayer.parentNode) {
-        miniPlayer.parentNode.removeChild(miniPlayer);
-      }
-    };
-  }, [isPlaying, showMiniPlayer, track.title]);
+  }, [isPlaying, showMiniPlayer, handlePlay, track.title]);
 
   return (
     <div className="relative w-full py-24 overflow-hidden" ref={sectionRef}>

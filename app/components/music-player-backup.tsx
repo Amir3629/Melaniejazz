@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Play, Pause, Music } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
@@ -107,7 +107,7 @@ export default function MusicPlayer() {
     }
     
     setVisibleDiscs(indices);
-  }, [currentSongIndex, dragOffset, isDragging, songs.length]);
+  }, [currentSongIndex, dragOffset, isDragging]);
 
   // Set player ready after a short delay
   useEffect(() => {
@@ -162,7 +162,7 @@ export default function MusicPlayer() {
         clearTimeout(miniPlayerTimeout);
       }
     };
-  }, [isPlaying, showMiniPlayer]);
+  }, [isPlaying, showMiniPlayer, miniPlayerTimeout]);
 
   // Show tutorial animation on first load
   useEffect(() => {
@@ -201,7 +201,7 @@ export default function MusicPlayer() {
     }
   }, [playerReady, tutorialControls, notificationControls]);
 
-  // Handle YouTube player messages
+  // Handle YouTube player messages with playNextSong in dependencies
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       try {
@@ -229,7 +229,7 @@ export default function MusicPlayer() {
     return () => {
       window.removeEventListener('message', handleMessage);
     };
-  }, []);
+  }, [playNextSong]);
 
   // Spinning animation with slow start
   useEffect(() => {
@@ -248,19 +248,8 @@ export default function MusicPlayer() {
     }
   }, [isPlaying, discControls]);
 
-  const togglePlay = () => {
-    if (!playerReady) return;
-    
-    setIsPlaying(!isPlaying);
-    if (videoRef.current) {
-      const message = !isPlaying 
-        ? '{"event":"command","func":"playVideo","args":""}' 
-        : '{"event":"command","func":"pauseVideo","args":""}';
-      videoRef.current.contentWindow?.postMessage(message, '*');
-    }
-  };
-
-  const playNextSong = () => {
+  // Define playNextSong with useCallback
+  const playNextSong = useCallback(() => {
     if (!playerReady || isTransitioning) return;
     
     setIsTransitioning(true);
@@ -284,7 +273,7 @@ export default function MusicPlayer() {
         }
       }, 800);
     }, 500);
-  };
+  }, [playerReady, isTransitioning, currentSongIndex, videoRef]);
 
   const playPreviousSong = () => {
     if (!playerReady || isTransitioning) return;
