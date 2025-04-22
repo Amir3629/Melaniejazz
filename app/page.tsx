@@ -1,41 +1,29 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import Image from "next/image"
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
-import { ChevronDown, MapPin, Mail, Phone, Clock, Instagram, Facebook, Youtube, Trophy, Users, Users2 } from "lucide-react"
+import { motion, useScroll, useTransform } from "framer-motion"
 import { Button } from "@/app/components/ui/button"
 import TestimonialSlider from "@/app/components/testimonial-slider"
 import Navigation from "@/app/components/navigation"
 import EnhancedMusicPlayer from "@/app/components/enhanced-music-player"
 import VideoPreview from "@/app/components/video-preview"
-import { Music, Mic, Theater, BookOpen } from "lucide-react"
-import ParallaxBackground from "@/app/components/parallax-background"
-import AboutSectionNew from "@/app/components/about-section-new"
-import Certifications from "@/app/components/certifications"
+import { Music, Mic, Theater, Users2 } from "lucide-react"
 import GallerySection from "@/app/components/gallery-section"
-import MusicNotes from "@/app/components/music-notes-animation"
 import ContactForm from "@/app/components/contact-form"
 import BookingForm from '@/app/components/booking-form'
 import Collaborations from "@/app/components/collaborations"
 import ServiceCard from "@/app/components/service-card"
-import ServicesSection from "./components/services-section"
-import MusicPlayer from "@/app/components/music-player"
-import SimpleMusicPlayer from "@/app/components/simple-music-player"
 import FlipCards from './components/flip-cards'
 import AboutSectionFixed from "@/app/components/about-section-fixed"
 import { AppImage, RegularImg } from '@/app/components/ui/image'
-import MusicSection from '@/app/components/music-section'
 import { getImagePath } from '@/utils/image-path'
 
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(false)
   const heroRef = useRef<HTMLDivElement>(null)
   const parallaxRef = useRef<HTMLDivElement>(null)
-  const levelDropdownRef = useRef<HTMLDivElement>(null)
-  const serviceDropdownRef = useRef<HTMLDivElement>(null)
-  
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false)
+
   const { scrollYProgress } = useScroll({
     target: parallaxRef,
     offset: ["start start", "end start"],
@@ -44,79 +32,9 @@ export default function Home() {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
 
-  const [isLevelOpen, setIsLevelOpen] = useState(false)
-  const [isServiceOpen, setIsServiceOpen] = useState(false)
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-    level: "",
-    service: ""
-  })
-
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false)
-
-  const levels = [
-    { value: "beginner", label: "Anfänger" },
-    { value: "intermediate", label: "Fortgeschritten" },
-    { value: "advanced", label: "Profi" }
-  ]
-
-  const services = [
-    { value: "private", label: "Private Gesangsstunden" },
-    { value: "jazz", label: "Jazz Improvisation" },
-    { value: "performance", label: "Aufführungs Coaching" },
-    { value: "piano", label: "Piano/Vocal-Koordination" }
-  ]
-
   useEffect(() => {
     setIsLoaded(true)
   }, [])
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (levelDropdownRef.current && !levelDropdownRef.current.contains(event.target as Node)) {
-        setIsLevelOpen(false)
-      }
-      if (serviceDropdownRef.current && !serviceDropdownRef.current.contains(event.target as Node)) {
-        setIsServiceOpen(false)
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id)
-    if (element) {
-      element.scrollIntoView({ 
-        behavior: "smooth",
-        block: "start" 
-      })
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle form submission
-    console.log(formData)
-  }
-
-  useEffect(() => {
-    // Verify that all sections are properly rendered
-    const sections = ['hero', 'services', 'about', 'references', 'testimonials', 'contact'];
-    
-    // Silent check for section existence
-    sections.forEach(id => {
-      const element = document.getElementById(id);
-      if (!element) {
-        console.error(`Section with id "${id}" not found!`);
-      }
-    });
-  }, [isLoaded]);
 
   useEffect(() => {
     // Prevent automatic scrolling back to top
