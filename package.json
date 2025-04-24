@@ -9,6 +9,7 @@
     "skipcheck": "set NODE_OPTIONS=--max-old-space-size=4096 && next build --no-lint",
     "start": "next start",
     "lint": "next lint",
+    "export": "next export",
     "check-images": "node scripts/check-images.js",
     "verify-assets": "node scripts/verify-assets.js",
     "predeploy": "npm run verify-assets && npm run build",
