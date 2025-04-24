@@ -2,8 +2,10 @@
 
 import { usePathname } from 'next/navigation'
 import Navigation from "@/app/components/navigation"
+import { Suspense } from 'react'
+import Link from "next/link"
 
-export default function AGBPage() {
+function AGBContent() {
   const pathname = usePathname()
   const isModal = pathname !== '/agb'
 
@@ -30,5 +32,13 @@ export default function AGBPage() {
         </div>
       </main>
     </div>
+  )
+}
+
+export default function AGBPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-white">Loading...</div>}>
+      <AGBContent />
+    </Suspense>
   )
 } 

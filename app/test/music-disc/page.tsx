@@ -1,10 +1,11 @@
 "use client"
 
-import TestMusicDisc from "@/app/components/test-music-disc"
-import TestEnhancedMusicPlayer from "@/app/components/test-enhanced-music-player"
+import { Suspense } from 'react'
+import TestMusicDisc from '@/app/test/music-disc/components/test-music-disc'
+import TestEnhancedMusicPlayer from '@/app/test/music-disc/components/test-enhanced-music-player'
 import Link from "next/link"
 
-export default function MusicDiscTestPage() {
+function MusicDiscContent() {
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
       <div className="container mx-auto px-4 pt-16 pb-32">
@@ -33,7 +34,29 @@ export default function MusicDiscTestPage() {
           <p className="text-gray-400 text-center mb-8">Based on the original component but with fixed dimensions</p>
           <TestEnhancedMusicPlayer />
         </div>
+
+        {/* Player section */}
+        <div className="mb-16 p-4 border border-gray-800 rounded-lg">
+          <h2 className="text-2xl text-white text-center mb-6">Music Player</h2>
+          <p className="text-gray-400 text-center mb-8">Test the full music player experience</p>
+          <div className="flex justify-center">
+            <Link 
+              href="/test/music-disc/player/1" 
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Open Player
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
+  )
+}
+
+export default function MusicDiscPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-white">Loading music disc test page...</div>}>
+      <MusicDiscContent />
+    </Suspense>
   )
 } 

@@ -1,14 +1,14 @@
-import React from 'react'
-import Link from 'next/link'
-import { Metadata } from 'next'
+"use client"
+
+import { Suspense } from 'react'
+import Link from "next/link"
 import { CheckCircle, Calendar, ArrowLeft } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
 
-export const metadata: Metadata = {
-  title: 'Booking Successful | Melanie Becker Vocal Coaching',
-  description: 'Your booking request has been successfully submitted.',
-}
-
-export default function BookingSuccessPage() {
+function SuccessContent() {
+  const searchParams = useSearchParams()
+  const orderId = searchParams?.get('orderId')
+  
   return (
     <div className="container mx-auto px-4 py-24">
       <div className="max-w-2xl mx-auto text-center">
@@ -59,7 +59,21 @@ export default function BookingSuccessPage() {
           <ArrowLeft className="w-5 h-5 mr-2" />
           Return to Homepage
         </Link>
+        
+        {orderId && (
+          <p className="mt-4 text-gray-400">
+            Order ID: {orderId}
+          </p>
+        )}
       </div>
     </div>
+  )
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-white">Loading booking success page...</div>}>
+      <SuccessContent />
+    </Suspense>
   )
 } 

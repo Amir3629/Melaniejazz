@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"
 import { useRouter } from "next/navigation"
 
@@ -8,20 +8,11 @@ interface PaymentFormProps {
   orderId: string
 }
 
-interface PayPalOrderData {
-  orderID: string
-}
-
-interface PayPalOrder {
-  id: string
-  status: string
-  [key: string]: unknown
-}
-
 export default function PaymentForm({ orderId }: PaymentFormProps) {
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(true)
 
-  const handlePaymentSuccess = async (data: PayPalOrderData) => {
+  const handlePaymentSuccess = async (data: any) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/capture-paypal-order`, {
         method: "POST",
@@ -58,7 +49,7 @@ export default function PaymentForm({ orderId }: PaymentFormProps) {
         }}>
           <PayPalButtons
             style={{ layout: "vertical" }}
-            createOrder={(_, actions) => {
+            createOrder={(data, actions) => {
               return actions.order.create({
                 intent: "CAPTURE",
                 purchase_units: [
@@ -75,7 +66,7 @@ export default function PaymentForm({ orderId }: PaymentFormProps) {
             onApprove={async (data, actions) => {
               if (actions.order) {
                 const order = await actions.order.capture()
-                await handlePaymentSuccess(data)
+                await handlePaymentSuccess(order)
               }
             }}
           />

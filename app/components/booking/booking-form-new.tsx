@@ -10,7 +10,7 @@ import LiveSingingFormStep from './live-singing-form'
 import ConfirmationStep from './confirmation-step'
 import SubmitButton from './submit-button'
 import { useRouter } from 'next/navigation'
-import { ServiceType, BookingFormData } from '@/app/types/booking'
+import { ServiceType } from '@/app/types/booking'
 
 // Form data interface
 interface FormData {
@@ -52,7 +52,7 @@ export default function BookingForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   
   // Initialize form data with empty values
-  const [formData, setFormData] = useState<BookingFormData>({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     phone: '',
@@ -67,7 +67,7 @@ export default function BookingForm() {
   }
   
   // Handle form data changes
-  const handleFormChange = (data: Partial<BookingFormData>) => {
+  const handleFormChange = (data: Partial<FormData>) => {
     setFormData(prev => ({ ...prev, ...data }))
   }
   

@@ -1,14 +1,21 @@
 "use client"
 
+import { Suspense } from 'react'
+import Link from "next/link"
 import Navigation from "@/app/components/navigation"
 
-export default function ImpressumPage() {
+function ImpressumContent() {
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
       <Navigation />
       
       <main className="pt-32 pb-20 px-4">
         <div className="max-w-4xl mx-auto">
+          <div className="mb-8">
+            <Link href="/" className="text-blue-400 hover:text-blue-300 underline">
+              Back to Homepage
+            </Link>
+          </div>
           <h1 className="text-4xl font-bold mb-8">Impressum</h1>
           
           <div className="space-y-8 text-gray-300">
@@ -67,5 +74,13 @@ export default function ImpressumPage() {
         </div>
       </main>
     </div>
+  )
+}
+
+export default function ImpressumPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-white">Loading...</div>}>
+      <ImpressumContent />
+    </Suspense>
   )
 } 

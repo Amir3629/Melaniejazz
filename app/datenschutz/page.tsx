@@ -2,8 +2,10 @@
 
 import { usePathname } from 'next/navigation'
 import Navigation from "@/app/components/navigation"
+import { Suspense } from 'react'
+import Link from "next/link"
 
-export default function DatenschutzPage() {
+function DatenschutzContent() {
   const pathname = usePathname()
   const isModal = pathname !== '/datenschutz'
 
@@ -30,5 +32,13 @@ export default function DatenschutzPage() {
         </div>
       </main>
     </div>
+  )
+}
+
+export default function DatenschutzPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-white">Loading...</div>}>
+      <DatenschutzContent />
+    </Suspense>
   )
 } 

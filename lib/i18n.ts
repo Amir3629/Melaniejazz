@@ -6,6 +6,13 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 import translationEN from '../public/locales/en/common.json'
 import translationDE from '../public/locales/de/common.json'
 
+// Define proper types for translations
+type TranslationsType = {
+  [key: string]: { 
+    translation: any 
+  }
+}
+
 // Function to get all translatable elements
 export const getTranslatableElements = () => {
   return document.querySelectorAll('[data-i18n]');
@@ -18,7 +25,7 @@ export const updateDocumentLanguage = (lng: string) => {
 };
 
 // Function to get all translations
-export const getAllTranslations = () => {
+export const getAllTranslations = (): TranslationsType => {
   return {
     en: { translation: translationEN },
     de: { translation: translationDE }
@@ -34,7 +41,7 @@ export const applyTranslations = (lng: string) => {
     const key = element.getAttribute('data-i18n');
     if (key && translations[lng]?.translation) {
       const parts = key.split('.');
-      let translation = translations[lng].translation;
+      let translation: any = translations[lng].translation;
       
       for (const part of parts) {
         if (translation[part]) {
