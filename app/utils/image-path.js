@@ -12,10 +12,10 @@ export function getImagePath(imagePath) {
   
   // For development, ensure paths are correct
   if (isDevelopment) {
-    // Remove /vocal-coaching prefix if it exists
-    if (normalizedPath.startsWith('/vocal-coaching/')) {
+    // Remove /JazzBerlin prefix if it exists
+    if (normalizedPath.startsWith('/JazzBerlin/')) {
       // If path is already using the production prefix, strip it and continue processing
-      return getImagePath(normalizedPath.replace('/vocal-coaching', ''));
+      return getImagePath(normalizedPath.replace('/JazzBerlin', ''));
     }
     
     // Check if path is for a gallery image or background image
@@ -55,9 +55,9 @@ export function getImagePath(imagePath) {
     return normalizedPath;
   }
   
-  // For production, add the /vocal-coaching prefix if needed
-  if (!isDevelopment && !normalizedPath.startsWith('/vocal-coaching/') && normalizedPath.startsWith('/')) {
-    return `/vocal-coaching${normalizedPath}`;
+  // For production, add the /JazzBerlin prefix if needed
+  if (!isDevelopment && !normalizedPath.startsWith('/JazzBerlin/') && normalizedPath.startsWith('/')) {
+    return `/JazzBerlin${normalizedPath}`;
   }
   
   return normalizedPath;

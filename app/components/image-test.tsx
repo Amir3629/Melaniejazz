@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
-import { getImagePath } from '../../utils/image-path'
+import { cn } from "@/lib/utils"
+import { getImagePath } from "../utils/image-path"
 
 const images = [
   {

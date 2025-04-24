@@ -11,7 +11,7 @@ import type { Metadata, Viewport } from "next"
 import { Inter, Playfair_Display, Cormorant_Garamond, Montserrat, Roboto } from "next/font/google"
 import RootClient from "./components/root-client"
 import { MediaProvider } from "./components/media-context"
-import { getImagePath } from '../../utils/image-path'
+import { getImagePath } from './utils/image-path'
 import HtmlMeta from "./components/html-meta"
 
 // Optimize font loading with display swap
