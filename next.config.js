@@ -35,15 +35,7 @@ const nextConfig = {
     optimizeCss: true,
   },
   // Include all page extensions
-  pageExtensions: ['tsx', 'ts', 'jsx', 'js', 'mdx'],
-  exportPathMap: async function () {
-    return {
-      '/': { page: '/' },
-      // Manually define paths to avoid issues with _not-found
-      // Add other pages as needed
-      '/404': { page: '/404' },
-    };
-  },
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js', 'mdx']
 }
 
 module.exports = nextConfig

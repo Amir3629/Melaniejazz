@@ -1,5 +1,10 @@
 export const dynamic = 'force-dynamic';
 
+// Generate static params for all supported locales
+export function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'de' }]
+}
+
 // Use a simple component that doesn't require any client-side navigation hooks
 export default function NotFound() {
   return (
