@@ -1,10 +1,6 @@
-"use client"
-
-import { Suspense } from 'react'
 import Link from "next/link"
 
-// Use a simple component that doesn't require any client-side navigation hooks
-function NotFoundContent() {
+export default function NotFound() {
   return (
     <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
       <div className="text-center">
@@ -15,13 +11,5 @@ function NotFoundContent() {
         </Link>
       </div>
     </div>
-  )
-}
-
-export default function NotFound() {
-  return (
-    <Suspense fallback={<div className="text-center text-white">Loading 404 page...</div>}>
-      <NotFoundContent />
-    </Suspense>
   )
 } 
