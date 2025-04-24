@@ -4,6 +4,7 @@ const isProd = process.env.NODE_ENV === 'production';
 
 const nextConfig = {
   reactStrictMode: true,
+  output: 'export',
   basePath: isProd ? '/JazzBerlin' : '',
   assetPrefix: isProd ? '/JazzBerlin/' : '',
   trailingSlash: true,
@@ -29,6 +30,7 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  skipTrailingSlashRedirect: true,
   experimental: {
     optimizeCss: true,
   },
