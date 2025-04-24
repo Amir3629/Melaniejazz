@@ -34,6 +34,16 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
   },
+  // Exclude problematic pages from the build
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js', 'mdx'],
+  exportPathMap: async function () {
+    return {
+      '/': { page: '/' },
+      // Manually define paths to avoid issues with _not-found
+      // Add other pages as needed
+      '/404': { page: '/not-found' },
+    };
+  },
 }
 
 module.exports = nextConfig
