@@ -5,8 +5,8 @@ const isProd = process.env.NODE_ENV === 'production';
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
-  basePath: isProd ? '/JazzBerlin' : '',
-  assetPrefix: isProd ? '/JazzBerlin/' : '',
+  basePath: isProd ? '/vocal-coaching' : '',
+  assetPrefix: isProd ? '/vocal-coaching/' : '',
   trailingSlash: true,
   images: {
     remotePatterns: [
@@ -34,14 +34,14 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
   },
-  // Exclude problematic pages from the build
+  // Include all page extensions
   pageExtensions: ['tsx', 'ts', 'jsx', 'js', 'mdx'],
   exportPathMap: async function () {
     return {
       '/': { page: '/' },
       // Manually define paths to avoid issues with _not-found
       // Add other pages as needed
-      '/404': { page: '/not-found' },
+      '/404': { page: '/404' },
     };
   },
 }
