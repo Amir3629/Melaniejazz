@@ -1,63 +1,12 @@
-let userConfig = undefined
-try {
-  userConfig = await import('./v0-user-next.config')
-} catch (e) {
-  // ignore error
-}
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  basePath: process.env.NODE_ENV === 'production' ? '/MelJazzBerlin' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/MelJazzBerlin/' : '',
-  trailingSlash: true,
-  compress: true,
-  poweredByHeader: false,
-  reactStrictMode: true,
-  optimizeFonts: true,
-  swcMinify: true,
+  // output: 'export', // No longer needed for Vercel default deployment
+  // basePath: '/JazzBerlin', // Remove for Vercel
+  // assetPrefix: '/JazzBerlin/', // Remove for Vercel
   images: {
-    unoptimized: true,
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
+    unoptimized: true, // Keep for now, can be removed if Vercel image optimization works
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: false
-  },
-  experimental: {
-    webpackBuildWorker: true,
-    parallelServerBuildTraces: true,
-    parallelServerCompiles: true,
-  },
-}
+  // Optional: Add other configurations here
+};
 
-mergeConfig(nextConfig, userConfig)
-
-function mergeConfig(nextConfig, userConfig) {
-  if (!userConfig) {
-    return
-  }
-
-  for (const key in userConfig) {
-    if (
-      typeof nextConfig[key] === 'object' &&
-      !Array.isArray(nextConfig[key])
-    ) {
-      nextConfig[key] = {
-        ...nextConfig[key],
-        ...userConfig[key],
-      }
-    } else {
-      nextConfig[key] = userConfig[key]
-    }
-  }
-}
-
-export default nextConfig
+export default nextConfig; 

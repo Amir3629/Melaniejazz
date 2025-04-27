@@ -1,11 +1,11 @@
 "use client"
 
-import { Suspense } from 'react'
+import React, { Suspense } from 'react'
 import Link from "next/link"
 import { CheckCircle, Calendar, ArrowLeft } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 
-function SuccessContent() {
+const SuccessContent = () => {
   const searchParams = useSearchParams()
   const orderId = searchParams?.get('orderId')
   
@@ -70,10 +70,12 @@ function SuccessContent() {
   )
 }
 
-export default function SuccessPage() {
+const SuccessPage = () => {
   return (
     <Suspense fallback={<div className="text-center text-white">Loading booking success page...</div>}>
       <SuccessContent />
     </Suspense>
   )
-} 
+}
+
+export default SuccessPage 
