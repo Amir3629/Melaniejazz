@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import React from 'react'
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Play, Pause, Music } from "lucide-react";
@@ -8,7 +9,7 @@ import { Play, Pause, Music } from "lucide-react";
 // Add event system for media coordination
 const MEDIA_STOP_EVENT = 'stopAllMedia';
 
-export default function TestEnhancedMusicPlayer() {
+const TestEnhancedMusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -212,3 +213,5 @@ export default function TestEnhancedMusicPlayer() {
     </div>
   );
 } 
+
+export default TestEnhancedMusicPlayer;

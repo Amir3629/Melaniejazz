@@ -25,7 +25,7 @@ interface LiveSingingFormProps {
   onChange: (data: Partial<FormData>) => void;
 }
 
-export default function LiveSingingForm({ formData, onChange }: LiveSingingFormProps) {
+const LiveSingingForm = ({ formData, onChange }: LiveSingingFormProps) => {
   const { t } = useTranslation()
   
   // Handle checkbox changes for music preferences
@@ -278,3 +278,5 @@ export default function LiveSingingForm({ formData, onChange }: LiveSingingFormP
     </div>
   )
 } 
+
+export default LiveSingingForm;

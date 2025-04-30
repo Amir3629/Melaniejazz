@@ -1,6 +1,7 @@
 ﻿"use client"
 
 import { useState, useRef, useEffect } from "react"
+import React from 'react'
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { Check, ChevronDown } from "lucide-react"
@@ -22,7 +23,7 @@ interface ServiceCardProps {
   link?: string
 }
 
-export default function ServiceCard({
+const ServiceCard = ({
   title,
   subtitle,
   description,
@@ -32,7 +33,7 @@ export default function ServiceCard({
   icon,
   delay = 0,
   link
-}: ServiceCardProps) {
+}: ServiceCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [isTouched, setIsTouched] = useState(false)
@@ -60,10 +61,16 @@ export default function ServiceCard({
   }
 
   const toggleExpand = (e: React.MouseEvent) => {
+    e.preventDefault()
     e.stopPropagation()
-    setIsExpanded(!isExpanded)
-    setIsHovered(!isExpanded)
-    setIsTouched(!isExpanded)
+    
+    // Toggle the expanded state
+    const newExpandedState = !isExpanded
+    setIsExpanded(newExpandedState)
+    
+    // Set hover and touch states to match
+    setIsHovered(newExpandedState)
+    setIsTouched(newExpandedState)
   }
 
   // Animation variants for the card
@@ -125,6 +132,7 @@ export default function ServiceCard({
         transformOrigin: "center center",
         willChange: "transform, height",
         position: "relative",
+        cursor: "pointer",
         ...(image && {
           backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('${image}')`,
           backgroundSize: 'cover',
@@ -134,6 +142,7 @@ export default function ServiceCard({
           isolation: 'isolate'
         })
       }}
+      onClick={toggleExpand}
     >
       {/* Arrow indicator */}
       <motion.div
@@ -346,3 +355,6 @@ export default function ServiceCard({
   )
 } 
 
+
+
+export default ServiceCard;

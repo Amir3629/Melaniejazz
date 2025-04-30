@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import React from 'react'
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
@@ -72,7 +73,7 @@ const testimonials = [
   }
 ];
 
-export default function TestimonialSlider() {
+const TestimonialSlider = () => {
   const [page, setPage] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const [imageError, setImageError] = useState(false)
@@ -172,3 +173,5 @@ export default function TestimonialSlider() {
     </section>
   )
 } 
+
+export default TestimonialSlider;

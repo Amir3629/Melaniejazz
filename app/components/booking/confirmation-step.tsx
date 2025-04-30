@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Check, BookOpen, Target, Info, Clock, AlertCircle, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import LegalDocumentModal from '../legal-document-modal'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { createPortal } from 'react-dom'
@@ -123,7 +122,7 @@ const AnimatedText = ({ text }: { text: string }) => {
   );
 };
 
-export default function ConfirmationStep({ formData, serviceType, onChange, onClose }: ConfirmationStepProps) {
+const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: ConfirmationStepProps) => {
   const { t } = useTranslation()
   const router = useRouter()
   const [showAGB, setShowAGB] = useState(false)
@@ -702,29 +701,115 @@ export default function ConfirmationStep({ formData, serviceType, onChange, onCl
         <>
           <AnimatePresence mode="wait">
             {showAGB && (
-      <LegalDocumentModal 
-        isOpen={showAGB} 
-        onClose={() => setShowAGB(false)}
-        title={t('booking.termsAndConditions', 'AGB')}
-      >
-        <div className="p-1 legal-agb">
+              <motion.div 
+                className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-auto"
+                style={{ position: 'fixed', isolation: 'isolate' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowAGB(false)}
+              >
+                {/* Backdrop */}
+                <motion.div 
+                  className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                />
+                
+                {/* Modal Container */}
+                <div className="relative w-full h-full flex items-center justify-center p-4 z-[99999]">
+                  <motion.div 
+                    className="relative w-full max-w-2xl bg-[#0A0A0A] rounded-xl border border-[#C8A97E]/20 shadow-2xl"
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ 
+                      opacity: 1, 
+                      y: 0, 
+                      scale: 1
+                    }}
+                    exit={{
+                      opacity: 0,
+                      y: 20,
+                      scale: 0.95
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {/* Modal Header */}
+                    <div className="flex items-center justify-between px-6 pt-2.5 pb-0.5 border-b border-[#C8A97E]/20">
+                      <h2 className="text-2xl font-semibold text-white pt-1.5 mt-0.5">{t('booking.termsAndConditions', 'AGB')}</h2>
+                      <button
+                        onClick={() => setShowAGB(false)}
+                        className="absolute right-5 top-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors"
+                      >
+                        <X className="w-5 h-5 text-[#C8A97E] hover:text-[#B69A6E] transition-colors" />
+                      </button>
+                    </div>
+                    
+                    {/* Modal Content */}
+                    <div className="px-5 pt-3 pb-6 overflow-y-auto max-h-[calc(85vh-80px)] custom-scrollbar">
           <AGBContent />
         </div>
-      </LegalDocumentModal>
+                  </motion.div>
+                </div>
+              </motion.div>
             )}
           </AnimatePresence>
       
           <AnimatePresence mode="wait">
             {showDatenschutz && (
-      <LegalDocumentModal 
-        isOpen={showDatenschutz} 
-        onClose={() => setShowDatenschutz(false)}
-        title={t('booking.privacyPolicy', 'Datenschutzerklärung')}
-      >
-        <div className="p-1 legal-datenschutz">
+              <motion.div 
+                className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-auto"
+                style={{ position: 'fixed', isolation: 'isolate' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowDatenschutz(false)}
+              >
+                {/* Backdrop */}
+                <motion.div 
+                  className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                />
+                
+                {/* Modal Container */}
+                <div className="relative w-full h-full flex items-center justify-center p-4 z-[99999]">
+                  <motion.div 
+                    className="relative w-full max-w-2xl bg-[#0A0A0A] rounded-xl border border-[#C8A97E]/20 shadow-2xl"
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ 
+                      opacity: 1, 
+                      y: 0, 
+                      scale: 1
+                    }}
+                    exit={{
+                      opacity: 0,
+                      y: 20,
+                      scale: 0.95
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {/* Modal Header */}
+                    <div className="flex items-center justify-between px-6 pt-2.5 pb-0.5 border-b border-[#C8A97E]/20">
+                      <h2 className="text-2xl font-semibold text-white pt-1.5 mt-0.5">{t('booking.privacyPolicy', 'Datenschutzerklärung')}</h2>
+                      <button
+                        onClick={() => setShowDatenschutz(false)}
+                        className="absolute right-5 top-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors"
+                      >
+                        <X className="w-5 h-5 text-[#C8A97E] hover:text-[#B69A6E] transition-colors" />
+                      </button>
+                    </div>
+                    
+                    {/* Modal Content */}
+                    <div className="px-5 pt-3 pb-6 overflow-y-auto max-h-[calc(85vh-80px)] custom-scrollbar">
           <DatenschutzContent />
         </div>
-      </LegalDocumentModal>
+                  </motion.div>
+                </div>
+              </motion.div>
             )}
           </AnimatePresence>
         </>,
@@ -733,3 +818,5 @@ export default function ConfirmationStep({ formData, serviceType, onChange, onCl
     </div>
   )
 } 
+
+export default ConfirmationStep;

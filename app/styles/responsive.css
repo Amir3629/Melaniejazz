@@ -270,10 +270,32 @@ select {
   footer .grid {
     grid-template-columns: 1fr;
     gap: 2rem;
+    row-gap: 1.5rem;
   }
 
   .social-links {
     justify-content: center;
+  }
+  
+  footer .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  footer h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+  }
+  
+  footer .legal-links {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  footer button, 
+  footer a {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
   }
 }
 
@@ -429,3 +451,46 @@ select {
   margin: 0 auto;
   padding: 1.5rem;
 } 
+
+/* START: Copied Footer Responsive Styles from melvocal-coaching-main */
+
+/* Responsive Footer */
+@media only screen and (max-width: 767px) {
+  footer {
+    text-align: center;
+  }
+
+  footer .grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    row-gap: 1.5rem; /* Combined from globals.css copy */
+  }
+
+  .social-links {
+    justify-content: center;
+  }
+  
+  /* Copied from globals.css */
+  footer .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  footer h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+  }
+  
+  footer .legal-links {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  footer button, 
+  footer a {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* END: Copied Footer Responsive Styles from melvocal-coaching-main */ 

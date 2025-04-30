@@ -66,7 +66,7 @@ const songs: Song[] = [
   }
 ];
 
-export default function MusicPlayer() {
+const MusicPlayer = () => {
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -875,3 +875,5 @@ export default function MusicPlayer() {
     </div>
   );
 } 
+
+export default MusicPlayer;

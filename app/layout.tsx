@@ -67,14 +67,9 @@ export const metadata: Metadata = {
     ],
     shortcut: { url: getImagePath('/images/logo/ml-logo.PNG'), sizes: '196x196' },
     apple: { url: getImagePath('/images/logo/ml-logo.PNG'), sizes: '180x180' },
-    other: [
-      {
-        url: getImagePath('/favicon/site.webmanifest'),
-        rel: 'manifest'
-      }
-    ]
+    other: []
   },
-  manifest: getImagePath('/favicon/site.webmanifest'),
+  // manifest: getImagePath('/favicon/site.webmanifest'),
   // Add language metadata
   metadataBase: new URL('https://meljazz.com'),
   alternates: {

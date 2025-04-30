@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useRef } from "react";
+import React from 'react'
 import Image from "next/image";
 import { Play, Pause } from "lucide-react";
 
-export default function TestMusicDisc() {
+const TestMusicDisc = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -151,3 +152,5 @@ export default function TestMusicDisc() {
     </section>
   );
 } 
+
+export default TestMusicDisc;

@@ -1,9 +1,10 @@
 "use client"
 
 import { useState, useEffect } from 'react'
+import React from 'react'
 import Image from 'next/image'
 
-export default function TestMusicDisc() {
+const TestMusicDisc = () => {
   const [isRotating, setIsRotating] = useState(false)
   const [rotation, setRotation] = useState(0)
 
@@ -33,11 +34,11 @@ export default function TestMusicDisc() {
         style={{ transform: `rotate(${rotation}deg)` }}
       >
         <Image 
-          src="/images/album-cover.jpg" 
-          alt="Album Cover"
-          fill
-          priority
-          className="object-cover"
+          src="images/album-cover.jpg" 
+          alt="Album cover"
+          width={250}
+          height={250}
+          className="rounded-full"
           onError={(e) => {
             // Fallback for missing image
             const target = e.target as HTMLImageElement;
@@ -56,3 +57,5 @@ export default function TestMusicDisc() {
     </div>
   )
 } 
+
+export default TestMusicDisc;

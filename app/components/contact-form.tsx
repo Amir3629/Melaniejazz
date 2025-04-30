@@ -1,13 +1,14 @@
 "use client"
 
 import { useState, useRef } from "react"
+import React from 'react'
 import { motion } from "framer-motion"
 import { MapPin, Clock, Mail, Send } from "lucide-react"
 import Image from "next/image"
 import SuccessMessage from "./success-message"
 import { getImagePath } from '../../utils/image-path'
 
-export default function ContactForm() {
+const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -221,3 +222,5 @@ export default function ContactForm() {
     </>
   )
 } 
+
+export default ContactForm;

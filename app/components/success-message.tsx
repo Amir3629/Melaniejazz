@@ -1,6 +1,7 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
+import React from 'react'
 import { Check } from "lucide-react"
 import { useEffect } from "react"
 import TranslatedText from "./TranslatedText"
@@ -39,7 +40,7 @@ const containerVariants = {
   },
 };
 
-export default function SuccessMessage({ isOpen, onClose, title, message }: SuccessMessageProps) {
+const SuccessMessage = ({ isOpen, onClose, title, message }: SuccessMessageProps) => {
   useEffect(() => {
     if (isOpen) {
       const timer = setTimeout(() => {
@@ -136,3 +137,5 @@ export default function SuccessMessage({ isOpen, onClose, title, message }: Succ
     </AnimatePresence>
   )
 } 
+
+export default SuccessMessage;

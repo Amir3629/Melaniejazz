@@ -12,7 +12,7 @@ export type LanguageContextType = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
-export function useLanguage() {
+export const useLanguage = () => {
   const context = useContext(LanguageContext)
   if (!context) {
     throw new Error('useLanguage must be used within a LanguageProvider')
@@ -20,7 +20,7 @@ export function useLanguage() {
   return context
 }
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
+export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
   const { i18n } = useTranslation()
   const [currentLang, setCurrentLang] = useState<string>('de')
   const [isLoading, setIsLoading] = useState(false)
@@ -82,7 +82,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
-export default function LanguageSwitcher() {
+const LanguageSwitcher = () => {
   const { currentLang, toggleLanguage, isLoading } = useLanguage()
   const { t } = useTranslation()
 
@@ -100,3 +100,5 @@ export default function LanguageSwitcher() {
     </button>
   )
 } 
+
+export default LanguageSwitcher;

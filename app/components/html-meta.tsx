@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from 'react'
+import React from 'react'
 import { usePathname } from 'next/navigation'
 import { useLanguage } from './language-switcher'
 
@@ -8,7 +9,7 @@ import { useLanguage } from './language-switcher'
  * HtmlMeta component adds dynamic meta tags and fixes accessibility issues
  * This component should be included in the RootLayout to ensure proper HTML attributes
  */
-export default function HtmlMeta() {
+const HtmlMeta = () => {
   const pathname = usePathname()
   const { currentLang } = useLanguage()
   
@@ -84,3 +85,5 @@ export default function HtmlMeta() {
   // This component doesn't render anything visually
   return null
 } 
+
+export default HtmlMeta;

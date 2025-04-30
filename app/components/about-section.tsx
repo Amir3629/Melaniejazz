@@ -1,12 +1,13 @@
 "use client"
 
 import { useState } from 'react'
+import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import Image from 'next/image'
 import { Mic, Users, Music } from 'lucide-react'
 
-export default function AboutSection() {
+const AboutSection = () => {
   const [isExpanded, setIsExpanded] = useState(false)
   const { t } = useTranslation()
 
@@ -54,10 +55,11 @@ export default function AboutSection() {
             className="w-full lg:w-1/2 aspect-[3/4] relative rounded-lg overflow-hidden"
           >
             <Image
-              src="/images/about/about-image.jpg"
-              alt="Melanie Wainwright"
+              src="images/about/about-image.jpg"
+              alt="Melanie Vocal Coach"
               fill
               className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
               priority
             />
           </motion.div>
@@ -174,3 +176,5 @@ export default function AboutSection() {
     </section>
   )
 } 
+
+export default AboutSection;

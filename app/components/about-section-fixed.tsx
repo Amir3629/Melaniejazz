@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import Image from "next/image"
 import { ChevronDown } from "lucide-react"
@@ -25,7 +26,7 @@ const LineReveal = ({ text, delay = 0, visible = false }: { text: string, delay?
   )
 }
 
-export default function AboutSectionFixed() {
+const AboutSectionFixed = () => {
   const [isExpanded, setIsExpanded] = useState(false)
   const detailsRef = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
@@ -265,3 +266,5 @@ export default function AboutSectionFixed() {
     </>
   )
 } 
+
+export default AboutSectionFixed;

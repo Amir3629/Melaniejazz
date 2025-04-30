@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useState, useEffect } from "react"
+import React from 'react'
 import { motion, AnimatePresence } from "framer-motion"
 import { VolumeX, Volume2, Play, Pause } from "lucide-react"
 import { useMedia } from "./media-context"
@@ -9,7 +10,7 @@ import { getImagePath } from '../../utils/image-path'
 // Add event system for media coordination
 const MEDIA_STOP_EVENT = 'stopAllMedia'
 
-export default function VideoPreview() {
+const VideoPreview = () => {
   const { currentlyPlaying, setCurrentlyPlaying, stopAllMedia } = useMedia()
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -185,3 +186,5 @@ export default function VideoPreview() {
     </div>
   )
 }
+
+export default VideoPreview;

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import React from 'react'
 import { motion } from "framer-motion"
 import { Music } from "lucide-react"
 
@@ -10,7 +11,7 @@ interface Note {
   delay: number
 }
 
-export default function MusicNotes() {
+const MusicNotes = () => {
   const [notes, setNotes] = useState<Note[]>([])
 
   useEffect(() => {
@@ -59,3 +60,5 @@ export default function MusicNotes() {
     </div>
   )
 } 
+
+export default MusicNotes;

@@ -1,17 +1,23 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+import React from 'react'
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Play, Pause } from "lucide-react";
 import { getAudioPath } from "@/app/utils/paths";
 import "./direct-fix.css";
 import { useMedia } from "./media-context";
+// import getConfig from 'next/config';
 
 // Add event system for media coordination
 const MEDIA_STOP_EVENT = 'stopAllMedia';
 
-export default function EnhancedMusicPlayer() {
+// Get the basePath from runtime config
+// const { publicRuntimeConfig } = getConfig() || { publicRuntimeConfig: { basePath: '' } };
+// const basePath = publicRuntimeConfig.basePath || '';
+
+const EnhancedMusicPlayer = () => {
   const { currentlyPlaying, setCurrentlyPlaying, stopAllMedia } = useMedia();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -19,16 +25,24 @@ export default function EnhancedMusicPlayer() {
   const [showMiniPlayer, setShowMiniPlayer] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   
+  // --- DEBUG STATE ---
+  const [debugDot1Color, setDebugDot1Color] = useState("red"); // isPlaying
+  const [debugDot2Color, setDebugDot2Color] = useState("red"); // shouldShow based on scroll
+  const [debugDot3Color, setDebugDot3Color] = useState("red"); // showMiniPlayer state
+  // --- END DEBUG STATE ---
+  
   const audioRef = useRef<HTMLAudioElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   
-  // Track details
+  // --- CONSOLE LOG --- //
+  console.log(`EnhancedMusicPlayer Render - isPlaying: ${isPlaying}, showMiniPlayer: ${showMiniPlayer}`);
+
+  // Track details (Explicitly prefix paths)
   const track = {
     title: "Blues for John",
     artist: "Melvo Jazz",
-    file: "/audio/AUDIO-2025-03-19-16-15-29",
-    image: "/123.png"
+    image: `/JazzBerlin/123.PNG` // Explicit prefix
   };
 
   // Listen for global stop events
@@ -48,6 +62,9 @@ export default function EnhancedMusicPlayer() {
     // Listen for media context changes
     if (currentlyPlaying === 'video' && isPlaying) {
       setIsPlaying(false);
+      // --- DEBUG ---
+      setDebugDot1Color("red");
+      // --- END DEBUG ---
       if (audioRef.current) {
         audioRef.current.pause();
       }
@@ -56,80 +73,51 @@ export default function EnhancedMusicPlayer() {
     return () => window.removeEventListener(MEDIA_STOP_EVENT, handleMediaStop);
   }, [isPlaying, currentlyPlaying]);
 
-  // Handle mini-player visibility
+  // Handle mini-player visibility (Simplified state setting)
   useEffect(() => {
-    // Only run in browser
+    console.log("Mini-player visibility Effect RUNS"); // --- CONSOLE LOG --- //
+    // --- DEBUG ---
+    setDebugDot1Color(isPlaying ? "lime" : "red");
+    setDebugDot3Color(showMiniPlayer ? "lime" : "red");
+    // --- END DEBUG ---
     if (typeof window === 'undefined') return;
     
-    let animationFrameId: number | null = null;
-    let isAnimatingOut = false;
-    
     const handleScroll = () => {
+      if (!sectionRef.current) return; // Check if sectionRef is available
+
+      const rect = sectionRef.current.getBoundingClientRect();
+      // Show when the top of the section is scrolled way above the viewport
+      const shouldShowCondition = rect.top < -300; 
+      // --- DEBUG ---
+      setDebugDot2Color(shouldShowCondition ? "lime" : "red");
+      // --- END DEBUG ---
+
+      // --- CONSOLE LOG --- //
+      console.log(`handleScroll - isPlaying: ${isPlaying}, current showMiniPlayer: ${showMiniPlayer}, shouldShow: ${shouldShowCondition}, rect.top: ${rect.top}`);
+      
       if (!isPlaying) {
+        // If not playing or section isn't mounted, ensure mini player is hidden
+        if(showMiniPlayer) {
+           console.log("Setting showMiniPlayer to FALSE (not playing)"); // --- CONSOLE LOG --- //
         setShowMiniPlayer(false);
+           // --- DEBUG ---
+           setDebugDot3Color("red");
+           // --- END DEBUG ---
+        }
         return;
       }
       
-      // Always check if music section is in viewport
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        
-        // Show mini player when scrolled past half of the music section
-        const shouldShow = rect.top < -300;
-        
-        // If we're already animating out, don't interrupt
-        if (isAnimatingOut) return;
-        
-        if (shouldShow !== showMiniPlayer) {
-          // If hiding, start smooth exit animation
-          if (showMiniPlayer && !shouldShow) {
-            const minibar = document.getElementById('fixed-fallback-minibar');
-            if (minibar) {
-              // Set flag to prevent interruption
-              isAnimatingOut = true;
-              
-              // Smoother animation with JS for more consistent exit
-              const duration = 600; // ms - slightly faster for better responsiveness
-              const startTime = performance.now();
-              
-              // Prevent clicks during animation
-              minibar.style.pointerEvents = 'none';
-              
-              const animateExit = (currentTime: number) => {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                // Use cubic ease-out curve for natural motion
-                const easeValue = 1 - Math.pow(1 - progress, 3);
-                
-                // Apply transition
-                minibar.style.opacity = `${1 - easeValue}`;
-                minibar.style.transform = `translate(-50%, ${easeValue * 20}px)`;
-                
-                if (progress < 1) {
-                  // Continue animation with high priority
-                  animationFrameId = requestAnimationFrame(animateExit);
-                } else {
-                  // Animation complete
-                  setShowMiniPlayer(false);
-                  isAnimatingOut = false;
-                  animationFrameId = null;
+      // Only update state if it changes
+      if (shouldShowCondition !== showMiniPlayer) {
+        console.log(`Setting showMiniPlayer to: ${shouldShowCondition}`); // --- CONSOLE LOG --- //
+        setShowMiniPlayer(shouldShowCondition);
+        // --- DEBUG ---
+        setDebugDot3Color(shouldShowCondition ? "lime" : "red");
+        // --- END DEBUG ---
                 }
               };
               
-              // Start animation with high priority
-              animationFrameId = requestAnimationFrame(animateExit);
-            } else {
-              setShowMiniPlayer(false);
-            }
-          } else {
-            setShowMiniPlayer(shouldShow);
-          }
-        }
-      }
-    };
-    
-    // Throttled scroll handler for better performance
+    // Optimization: Throttle scroll handler
     let ticking = false;
     const scrollListener = () => {
       if (!ticking) {
@@ -141,57 +129,63 @@ export default function EnhancedMusicPlayer() {
       }
     };
     
-    // Run immediately
+    // Run immediately and add listener
     handleScroll();
-    
-    // Add optimized scroll event listener
     window.addEventListener('scroll', scrollListener, { passive: true });
     
     // Clean up
     return () => {
+      console.log("Mini-player visibility Effect CLEANUP"); // --- CONSOLE LOG --- //
       window.removeEventListener('scroll', scrollListener);
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
     };
+  // Dependencies now only include isPlaying and showMiniPlayer to re-evaluate if state needs changing
   }, [isPlaying, showMiniPlayer]);
 
-  // Create audio element
+  // Create audio element and set source with explicit prefix
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
-    // Create separate audio instance
     const audioEl = new Audio();
-    audioEl.src = "/audio/AUDIO-2025-03-19-16-15-29.mp3";
+    audioEl.src = `/JazzBerlin/audio/AUDIO-2025-03-19-16-15-29.mp3`; // Explicit prefix
     audioEl.volume = 1.0;
     audioEl.preload = "auto";
     
-    // Directly set the ref
     if (audioRef && audioRef.current === null) {
-      // @ts-ignore - we need to set this directly
+      // @ts-ignore
       audioRef.current = audioEl;
     }
     
-    // Add event listeners
-    audioEl.addEventListener('ended', () => {
+    const endedHandler = () => {
       setIsPlaying(false);
       setShowMiniPlayer(false);
-    });
-    
-    audioEl.addEventListener('error', () => {
-      setError("Failed to play audio. Please try again.");
+      // --- DEBUG ---
+      setDebugDot1Color("red");
+      setDebugDot3Color("red");
+      // --- END DEBUG ---
+    };
+    const errorHandler = (e: Event | string) => {
+      console.error("Audio Error:", e);
+      setError("Failed to load or play audio."); 
       setIsPlaying(false);
       setIsLoading(false);
-    });
+      // --- DEBUG ---
+      setDebugDot1Color("red");
+      // --- END DEBUG ---
+    };
+
+    audioEl.addEventListener('ended', endedHandler);
+    audioEl.addEventListener('error', errorHandler);
     
-    // Load the audio
+    const canPlayHandler = () => console.log("Audio can play through.");
+    audioEl.addEventListener('canplaythrough', canPlayHandler);
+
     audioEl.load();
     
     return () => {
-      // Clean up
       audioEl.pause();
-      audioEl.removeEventListener('ended', () => {});
-      audioEl.removeEventListener('error', () => {});
+      audioEl.removeEventListener('ended', endedHandler);
+      audioEl.removeEventListener('error', errorHandler);
+      audioEl.removeEventListener('canplaythrough', canPlayHandler);
     };
   }, []);
 
@@ -203,93 +197,65 @@ export default function EnhancedMusicPlayer() {
         audioRef.current.pause();
         setIsPlaying(false);
         setShowMiniPlayer(false);
+        // --- DEBUG ---
+        setDebugDot1Color("red");
+        setDebugDot3Color("red");
+        // --- END DEBUG ---
       }
     }
   }, [currentlyPlaying, isPlaying]);
 
   // Play/pause handler
   const handlePlay = () => {
+    console.log("handlePlay called"); // --- CONSOLE LOG --- //
     if (!audioRef.current) return;
     
-    try {
       if (isPlaying) {
-        // Pause the audio
+      console.log("Pausing audio"); // --- CONSOLE LOG --- //
         audioRef.current.pause();
-        setCurrentlyPlaying(null);
-        
-        // Add consistent exit animation for the minibar
-        const minibar = document.getElementById('fixed-fallback-minibar');
-        if (minibar) {
-          // Smooth animation with consistent timing
-          const duration = 600; // ms - match scroll handler duration
-          const startTime = performance.now();
-          let animationFrameId: number | null = null;
-          
-          // Prevent clicks during animation
-          minibar.style.pointerEvents = 'none';
-          
-          const animateExit = (currentTime: number) => {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            
-            // Use cubic ease-out curve for natural motion
-            const easeValue = 1 - Math.pow(1 - progress, 3);
-            
-            // Apply transition
-            minibar.style.opacity = `${1 - easeValue}`;
-            minibar.style.transform = `translate(-50%, ${easeValue * 20}px)`;
-            
-            if (progress < 1) {
-              // Continue animation with high priority
-              animationFrameId = requestAnimationFrame(animateExit);
-            } else {
-              // Animation complete
         setIsPlaying(false);
-        setShowMiniPlayer(false);
-              if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
-              }
-            }
-          };
-          
-          // Start animation with high priority
-          animationFrameId = requestAnimationFrame(animateExit);
+      setShowMiniPlayer(false); // Ensure mini player hides on manual pause
+      // --- DEBUG ---
+      setDebugDot1Color("red");
+      setDebugDot3Color("red");
+      // --- END DEBUG ---
       } else {
-          setIsPlaying(false);
-          setShowMiniPlayer(false);
-        }
-      } else {
-        // Stop all other media through the context
+      console.log("Playing audio"); // --- CONSOLE LOG --- //
         stopAllMedia();
-        
-        // Update media context
         setCurrentlyPlaying('music');
-        
-        // Reset and play
-        audioRef.current.currentTime = 0;
         
           const playPromise = audioRef.current.play();
           
         if (playPromise) {
             playPromise
               .then(() => {
+            console.log("Audio play promise resolved"); // --- CONSOLE LOG --- //
                 setIsPlaying(true);
+            // --- DEBUG ---
+            setDebugDot1Color("lime");
+            // --- END DEBUG ---
               })
               .catch(err => {
           console.error("Failed to play audio:", err);
                 setError("Failed to play audio. Please try again.");
-            });
-        }
+            setIsPlaying(false); 
+            // --- DEBUG ---
+            setDebugDot1Color("red");
+            // --- END DEBUG ---
+          });
+      } else {
+        // If play() doesn't return a promise (older browsers?)
+        setIsPlaying(true);
+        // --- DEBUG ---
+        setDebugDot1Color("lime");
+        // --- END DEBUG ---
       }
-    } catch (err) {
-      console.error("Exception in play handler:", err);
-      setError("Failed to play audio. Please try again.");
     }
   };
 
   return (
     <div className="relative w-full py-24 overflow-hidden music-section clearfix" ref={sectionRef}>
+      {/* --- CONSOLE LOG --- */} 
       <div className="absolute inset-0 bg-black/95 backdrop-blur-xl z-0"></div>
       
       <div className="relative z-10 flex flex-col items-center">
@@ -394,6 +360,7 @@ export default function EnhancedMusicPlayer() {
                   }}></div>
                 
                 <Image 
+                  ref={imageRef}
                   src={track.image}
                   alt={track.title}
                   fill
@@ -406,6 +373,11 @@ export default function EnhancedMusicPlayer() {
                     mixBlendMode: 'lighten'
                   }}
                   priority
+                  onLoad={() => setImageLoaded(true)}
+                  onError={(e) => {
+                    console.error('Image failed to load:', track.image, e);
+                    setError("Disc image failed to load.");
+                  }}
                 />
                 </div>
               </motion.div>
@@ -498,25 +470,27 @@ export default function EnhancedMusicPlayer() {
         </div>
         </div>
         
-      {/* Fixed fallback minibar - redesigned for better mobile appearance */}
+      {/* Mini Player with AnimatePresence */}
+      <AnimatePresence>
       {isPlaying && showMiniPlayer && (
-          <div 
-          id="fixed-fallback-minibar"
-          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between gap-3 px-5 py-3 bg-black/95 rounded-full shadow-lg"
+            <motion.div 
+              id="fixed-fallback-minibar" // Keep ID if needed, though direct manipulation is removed
+              className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between gap-1.5 px-2.5 py-1 bg-black/95 rounded-full shadow-lg" // Further reduced padding & gap
             style={{ 
             boxShadow: '0 4px 15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(200, 169, 126, 0.2)',
               maxWidth: '90%',
-            width: '180px',
-            animation: 'fadeInMiniPlayer 0.4s ease-out',
-            transition: 'opacity 0.3s ease, transform 0.3s ease',
+                width: '220px',
             isolation: 'isolate',
             contain: 'layout style paint',
               backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
             willChange: 'transform, opacity',
-            transform: 'translate3d(-50%, 0, 0)',
             zIndex: 9900
           }}
+              initial={{ opacity: 0, y: 20 }} // Start hidden and slightly down
+              animate={{ opacity: 1, y: 0 }}   // Animate to visible and original position
+              exit={{ opacity: 0, y: 20 }}      // Animate out hidden and down
+              transition={{ duration: 0.3, ease: "easeOut" }} // Animation timing
           onClick={() => sectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
         >
           <div className="flex-1 text-white text-sm font-medium truncate text-center">{track.title}</div>
@@ -533,17 +507,21 @@ export default function EnhancedMusicPlayer() {
               handlePlay();
             }}
           >
+                {/* Pause/Play icon logic - Restoring pause icon wrapper */}
             {isPlaying ? (
-              <div className="flex gap-1.5">
+                  // Pause Icon - Centered with flex wrapper
+                  <div className="flex items-center justify-center gap-1"> 
                 <div className="w-[3px] h-3 bg-black rounded-[1px]"></div>
                 <div className="w-[3px] h-3 bg-black rounded-[1px]"></div>
               </div>
             ) : (
-              <div className="w-0 h-0 ml-0.5 border-t-[6px] border-t-transparent border-l-[9px] border-l-black border-b-[6px] border-b-transparent" />
+                  // Play Icon - Centered by button flex (removed ml-0.5)
+                  <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[9px] border-l-black border-b-[6px] border-b-transparent" /> 
             )}
           </button>
-          </div>
+            </motion.div>
         )}
+      </AnimatePresence>
       
       {/* Error message */}
       {error && (
@@ -552,7 +530,7 @@ export default function EnhancedMusicPlayer() {
         </div>
       )}
       
-      {/* Animation keyframes */}
+      {/* Animation keyframes (Only spin needed now) */}
       <style jsx global>{`
         @keyframes spin {
           to { transform: rotate(360deg); }
@@ -561,3 +539,5 @@ export default function EnhancedMusicPlayer() {
     </div>
   );
 } 
+
+export default EnhancedMusicPlayer;

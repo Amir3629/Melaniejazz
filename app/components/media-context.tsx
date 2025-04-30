@@ -12,7 +12,7 @@ interface MediaContextType {
 
 const MediaContext = createContext<MediaContextType | undefined>(undefined)
 
-export function MediaProvider({ children }: { children: React.ReactNode }) {
+export const MediaProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentlyPlaying, setCurrentlyPlaying] = useState<MediaType>(null)
 
   const stopAllMedia = () => {
@@ -30,7 +30,7 @@ export function MediaProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function useMedia() {
+export const useMedia = () => {
   const context = useContext(MediaContext)
   if (context === undefined) {
     throw new Error('useMedia must be used within a MediaProvider')

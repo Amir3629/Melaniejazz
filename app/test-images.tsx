@@ -78,6 +78,46 @@ export default function TestImages() {
           }, null, 2)}
         </pre>
       </section>
+
+      <div className="image-test">
+        <h2>Regular Image Test</h2>
+        <img 
+          src="images/gallery/performance1.jpg" 
+          alt="Test image" 
+          width={200} 
+          height={150} 
+        />
+      </div>
+      
+      <div className="image-test">
+        <h2>Next.js Image Test</h2>
+        <Image 
+          src="images/gallery/performance1.jpg" 
+          alt="Next.js Image" 
+          width={200} 
+          height={150} 
+        />
+      </div>
+
+      <div className="image-test">
+        <h2>SVG Test</h2>
+        <img 
+          src="images/collaborations/bflat.svg" 
+          alt="SVG Test" 
+          width={200} 
+          height={150} 
+        />
+      </div>
+
+      <div className="image-test">
+        <h2>Next.js SVG Test</h2>
+        <Image 
+          src="images/collaborations/bflat.svg" 
+          alt="Next.js SVG" 
+          width={200} 
+          height={150} 
+        />
+      </div>
     </div>
   )
 } 

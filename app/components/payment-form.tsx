@@ -1,12 +1,13 @@
 "use client"
 
 import { useState } from 'react'
+import React from 'react'
 
 interface PaymentFormProps {
   orderId: string | null
 }
 
-export default function PaymentForm({ orderId }: PaymentFormProps) {
+const PaymentForm = ({ orderId }: PaymentFormProps) => {
   const [isProcessing, setIsProcessing] = useState(false)
 
   return (
@@ -32,3 +33,5 @@ export default function PaymentForm({ orderId }: PaymentFormProps) {
     </div>
   )
 } 
+
+export default PaymentForm;

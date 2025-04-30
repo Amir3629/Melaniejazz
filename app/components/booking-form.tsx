@@ -58,7 +58,7 @@ interface BookingFormProps {
   onClose?: () => void;
 }
 
-export default function BookingForm({ isOpen: externalIsOpen, onClose }: BookingFormProps) {
+const BookingForm = ({ isOpen: externalIsOpen, onClose }: BookingFormProps) => {
   const { currentLang } = useLanguage()
   const { t } = useTranslation()
   
@@ -382,3 +382,5 @@ export default function BookingForm({ isOpen: externalIsOpen, onClose }: Booking
     </AnimatePresence>
   )
 }
+
+export default BookingForm;

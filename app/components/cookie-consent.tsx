@@ -1,27 +1,31 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
+import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { X } from "lucide-react"
 
-export default function CookieConsent() {
+const CookieConsent = () => {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     // Check if user has already accepted cookies
-    const hasAccepted = localStorage.getItem("cookiesAccepted")
+    const hasAccepted = localStorage.getItem("cookieConsent")
     if (!hasAccepted) {
-      setIsVisible(true)
+      // Show cookie banner after a short delay
+      const timer = setTimeout(() => {
+        setIsVisible(true)
+      }, 1000)
+      return () => clearTimeout(timer)
     }
   }, [])
 
-  const handleAccept = () => {
-    localStorage.setItem("cookiesAccepted", "true")
+  const acceptCookies = () => {
+    localStorage.setItem("cookieConsent", "true")
     setIsVisible(false)
   }
 
-  const handleDecline = () => {
-    localStorage.setItem("cookiesDeclined", "true")
+  const dismissCookies = () => {
     setIsVisible(false)
   }
 
@@ -29,44 +33,36 @@ export default function CookieConsent() {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 50 }}
-          transition={{ duration: 0.5 }}
-          className="fixed bottom-0 left-0 right-0 z-50 p-2 sm:p-4"
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-[#0A0A0A] border-t border-gray-800"
         >
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-[#0A0A0A] border border-[#C8A97E]/20 rounded-xl p-3 sm:p-6 shadow-2xl backdrop-blur-md w-full">
-              <div className="relative w-full">
-                <div className="pr-8 w-full">
-                  <h3 className="text-lg font-medium text-[#C8A97E] mb-2">Cookie-Einstellungen</h3>
-                  <p className="text-sm text-gray-300 mb-3 w-full">
-                    Wir verwenden Cookies, um Ihnen die bestmögliche Erfahrung auf unserer Website zu bieten. 
-                    Diese helfen uns zu verstehen, wie Sie unsere Website nutzen und ermöglichen es uns, 
-                    unseren Service kontinuierlich zu verbessern.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      onClick={handleAccept}
-                      className="px-6 py-2 bg-[#C8A97E] hover:bg-[#B69A6E] text-black rounded-lg transition-colors text-sm font-medium"
-                    >
-                      Alle akzeptieren
-                    </button>
-                    <button
-                      onClick={handleDecline}
-                      className="px-6 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors text-sm"
-                    >
-                      Nur notwendige
-                    </button>
-                  </div>
-                </div>
-                <button
-                  onClick={handleDecline}
-                  className="absolute top-0 right-0 p-2 hover:bg-white/5 rounded-lg transition-colors"
-                >
-                  <X className="w-5 h-5 text-gray-400" />
-                </button>
-              </div>
+          <div className="container mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex-1">
+              <p className="text-gray-300 text-sm md:text-base">
+                Diese Website verwendet Cookies, um Ihr Browsererlebnis zu verbessern. Durch die Nutzung unserer Website stimmen Sie allen Cookies gemäß unserer{" "}
+                <Link href="/legal/datenschutz" className="text-[#C8A97E] underline">
+                  Datenschutzrichtlinie
+                </Link>{" "}
+                zu.
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={acceptCookies}
+                className="px-4 py-2 text-sm bg-[#C8A97E] text-black rounded hover:bg-[#D4AF37] transition-colors"
+              >
+                Akzeptieren
+              </button>
+              <button
+                onClick={dismissCookies}
+                className="p-2 text-gray-400 hover:text-white"
+                aria-label="Dismiss"
+              >
+                <X size={20} />
+              </button>
             </div>
           </div>
         </motion.div>
@@ -74,3 +70,5 @@ export default function CookieConsent() {
     </AnimatePresence>
   )
 }
+
+export default CookieConsent

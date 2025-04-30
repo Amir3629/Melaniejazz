@@ -1,6 +1,7 @@
 "use client"
 
 import { Music, Mic, Users2, Theater } from "lucide-react"
+import React from 'react'
 import ServiceCard from "./service-card"
 import { motion } from "framer-motion"
 import { useLanguage } from "./language-switcher"
@@ -23,7 +24,7 @@ interface ServiceTranslation {
   details: ServiceDetails;
 }
 
-export default function ServicesSection() {
+const ServicesSection = () => {
   const { currentLang } = useLanguage()
   const { t } = useTranslation()
   const ref = useRef<HTMLDivElement>(null)
@@ -151,3 +152,5 @@ export default function ServicesSection() {
     </section>
   )
 } 
+
+export default ServicesSection;

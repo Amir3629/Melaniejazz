@@ -1,9 +1,10 @@
 "use client"
 
 import { usePathname } from 'next/navigation'
+import React from 'react'
 import Navigation from "@/app/components/navigation"
 
-export default function AGBClientContent() {
+const AGBClientContent = () => {
   const pathname = usePathname()
   const isModal = pathname !== '/agb'
 
@@ -32,3 +33,5 @@ export default function AGBClientContent() {
     </div>
   )
 } 
+
+export default AGBClientContent;

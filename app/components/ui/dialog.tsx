@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import React from 'react'
 import { cn } from "@/lib/utils"
 
 interface DialogProps {
@@ -10,7 +11,7 @@ interface DialogProps {
   className?: string
 }
 
-export function Dialog({
+export const Dialog = ({
   open,
   onOpenChange,
   children,

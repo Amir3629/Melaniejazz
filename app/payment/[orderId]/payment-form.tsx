@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import React from 'react'
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"
 import { useRouter } from "next/navigation"
 
@@ -8,7 +9,7 @@ interface PaymentFormProps {
   orderId: string
 }
 
-export default function PaymentForm({ orderId }: PaymentFormProps) {
+const PaymentForm = ({ orderId }: PaymentFormProps) => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
 
@@ -82,3 +83,5 @@ export default function PaymentForm({ orderId }: PaymentFormProps) {
     </div>
   )
 } 
+
+export default PaymentForm;

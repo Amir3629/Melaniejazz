@@ -592,6 +592,25 @@ video {
   .legal-document-content span,
   .legal-document-content div {
     color: white !important;
+    opacity: 1 !important;
+  }
+
+  .legal-document-content main {
+    padding: 0 !important;
+    margin: 0 !important; 
+    background: transparent !important;
+  }
+
+  .legal-document-content section {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+  }
+
+  .legal-document-content article {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
   .legal-document-content ul, 
@@ -1041,26 +1060,26 @@ video {
 
   /* Custom scrollbar */
   .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
+    width: 5px;
   }
   
   .custom-scrollbar::-webkit-scrollbar-track {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
+    background: #1a1a1a;
+    border-radius: 5px;
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgba(200, 169, 126, 0.3);
-    border-radius: 10px;
+    background: #C8A97E;
+    border-radius: 5px;
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(200, 169, 126, 0.5);
+    background: #d1b78d;
   }
   
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: #C8A97E #1A1A1A;
+    scrollbar-color: #C8A97E #1a1a1a;
   }
 }
 
@@ -1526,4 +1545,139 @@ body.modal-open {
 #booking-success-modal .lucide-check {
   display: inline-block !important; /* Ensure it's not 'none' */
 }
+
+/* Fix for social icons scrollbar issue */
+a[aria-label="Facebook"], 
+a[aria-label="Instagram"], 
+a[aria-label="YouTube"],
+a[aria-label="Spotify"] {
+  overflow: hidden !important;
+}
+
+/* START: Copied Footer Styles from melvocal-coaching-main */
+
+/* Ensure booking success notification is always on top */
+#booking-success-modal {
+  z-index: 9999 !important; /* Use a very high z-index and !important to override */
+}
+
+/* Ensure the check icon within the success notification is always visible */
+#booking-success-modal .lucide-check {
+  display: inline-block !important; /* Ensure it's not 'none' */
+}
+
+/* Fix for social icons scrollbar issue */
+a[aria-label="Facebook"], 
+a[aria-label="Instagram"], 
+a[aria-label="YouTube"],
+a[aria-label="Spotify"] {
+  overflow: hidden !important;
+}
+
+/* Modal open styles */
+html.modal-open body {
+  overflow: hidden;
+  touch-action: none;
+}
+
+.modal-open .backdrop {
+  --tw-backdrop-blur: blur(2px);
+  backdrop-filter: var(--tw-backdrop-blur);
+}
+
+/* Custom scrollbar for modal content */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background-color: rgba(200, 169, 126, 0.2);
+  border-radius: 3px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(200, 169, 126, 0.4);
+}
+
+/* Modal Root Styles */
+.modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.modal-root ~ * {
+  pointer-events: none;
+}
+
+/* When modal is open */
+body:has(.modal-root) {
+  overflow: hidden !important;
+  padding-right: var(--scrollbar-width, 15px);
+}
+
+/* Prevent background content interaction when modal is open */
+body:has(.modal-root) > *:not(.modal-root) {
+  filter: none;
+  pointer-events: none;
+}
+
+/* Copied Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(200, 169, 126, 0.3);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(200, 169, 126, 0.5);
+}
+
+/* Legal document specific styles */
+.legal-datenschutz {
+  padding-top: 0 !important;
+}
+
+.legal-agb, 
+.legal-impressum {
+  padding-top: 1rem !important;
+}
+
+/* Legal document content styling */
+.legal-document-content h1,
+.legal-document-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.legal-document-content h2:first-of-type {
+  margin-top: 1.5rem;
+}
+
+.legal-document-content p {
+  color: rgb(209 213 219);
+  margin-bottom: 1.5rem;
+}
+
+/* Specific spacing for Datenschutz and AGB titles */
+.legal-datenschutz h2:first-of-type,
+.legal-agb h2:first-of-type {
+  margin-top: 1.75rem !important;
+}
+
+/* END: Copied Footer Styles from melvocal-coaching-main */
 

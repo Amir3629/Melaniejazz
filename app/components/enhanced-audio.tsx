@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useState, useEffect } from "react"
+import React from 'react'
 import { getAssetPath } from "@/app/utils/paths"
 
 interface EnhancedAudioProps {
@@ -21,7 +22,7 @@ interface EnhancedAudioProps {
  * @param props Component props
  * @returns Enhanced audio component
  */
-export default function EnhancedAudio({
+const EnhancedAudio = ({
   src,
   formats = ["mp3", "ogg"],
   onEnded,
@@ -31,7 +32,7 @@ export default function EnhancedAudio({
   autoPlay = false,
   loop = false,
   className
-}: EnhancedAudioProps) {
+}: EnhancedAudioProps) => {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [error, setError] = useState<string | null>(null)
   const [isBlocked, setIsBlocked] = useState(false)
@@ -121,7 +122,7 @@ export default function EnhancedAudio({
 }
 
 // Export public methods
-export function useAudio() {
+export const useAudio = () => {
   const audioRef = useRef<HTMLAudioElement>(null)
   
   return {
@@ -141,3 +142,5 @@ export function useAudio() {
     getRef: () => audioRef
   }
 } 
+
+export default EnhancedAudio;

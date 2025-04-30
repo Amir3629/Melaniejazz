@@ -100,7 +100,7 @@
 
 /* Fix SVG visibility within buttons - MORE AGGRESSIVE */
 #fixed-fallback-minibar button svg,
-button svg,
+/* button svg, */ /* Commented out problematic rule */
 .w-8.h-8.rounded-full.bg-\[\#C8A97E\].flex.items-center.justify-center svg {
   display: none !important;
 }
@@ -195,18 +195,10 @@ html.mobile-menu-open body {
 @media (max-width: 640px) {
   #fixed-fallback-minibar {
     bottom: 16px !important;
-    padding: 10px 16px !important;
   }
-  
-  /* Force larger play button on mobile */
   #fixed-fallback-minibar button {
-    width: 36px !important;
-    height: 36px !important;
   }
-  
-  /* Ensure pause bars are visibly separate on mobile */
   #fixed-fallback-minibar button > div {
-    min-width: 18px !important;
   }
 }
 

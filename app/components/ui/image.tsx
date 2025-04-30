@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, memo } from "react"
+import React from 'react'
 import { getImagePath } from "@/app/utils/image-path"
 import Image from "next/image"
 

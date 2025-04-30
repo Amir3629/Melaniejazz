@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import React from 'react'
 import { motion } from "framer-motion";
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Music } from "lucide-react";
 import { getAudioPath } from "@/app/utils/paths";
@@ -37,7 +38,7 @@ const defaultTracks: Track[] = [
   }
 ];
 
-export default function SimpleMusicPlayer() {
+const SimpleMusicPlayer = () => {
   const [tracks] = useState<Track[]>(defaultTracks);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -249,3 +250,5 @@ export default function SimpleMusicPlayer() {
     </div>
   );
 } 
+
+export default SimpleMusicPlayer;

@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { LanguageProvider } from './language-switcher'
 import '../../lib/i18n'
 
-export default function ClientProvider({ children }: { children: React.ReactNode }) {
+const ClientProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     // Force initial language detection
     const savedLang = localStorage.getItem('language')
@@ -13,9 +13,7 @@ export default function ClientProvider({ children }: { children: React.ReactNode
     }
   }, [])
 
-  return (
-    <LanguageProvider>
-      {children}
-    </LanguageProvider>
-  )
-} 
+  return <LanguageProvider>{children}</LanguageProvider>
+}
+
+export default ClientProvider 

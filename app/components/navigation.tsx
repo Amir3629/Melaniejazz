@@ -12,7 +12,7 @@ import '../../lib/i18n'
 import { Menu, X } from 'lucide-react'
 import '../styles/header-scroll.css'
 
-export default function Navigation() {
+const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
@@ -581,11 +581,11 @@ export default function Navigation() {
     const duration = 500; // Faster duration
     const startTime = performance.now();
 
-    function easeInOutQuad(t: number): number {
+    const easeInOutQuad = (t: number): number => {
       return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
     }
 
-    function animate(currentTime: number) {
+    const animate = (currentTime: number) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
 
@@ -958,3 +958,6 @@ export default function Navigation() {
     </>
   )
 }
+
+
+export default Navigation;

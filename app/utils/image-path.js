@@ -1,8 +1,18 @@
-"use client"
+// Removing "use client" directive to make it work in server components
+// Removing React import as it's not needed
+// This version works in both client and server components
 
-export function getImagePath(imagePath) {
+export const getImagePath = (imagePath) => {
   if (!imagePath) return '';
   
+  // For server components, just normalize the path
+  if (typeof window === 'undefined') {
+    // Fix missing slash
+    const normalizedPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+    return normalizedPath;
+  }
+  
+  // For client components, do the full processing
   // Development environment detection
   const isDevelopment = typeof window !== 'undefined' && 
     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');

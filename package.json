@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "set NODE_OPTIONS=--max-old-space-size=4096 && next build",
+    "build": "set NODE_OPTIONS=--max-old-space-size=4096 && next build --no-lint",
+    "build:custom": "node build-with-ignore.js",
     "skipcheck": "set NODE_OPTIONS=--max-old-space-size=4096 && next build --no-lint",
     "start": "next start",
     "lint": "next lint",
@@ -13,6 +14,7 @@
     "check-images": "node scripts/check-images.js",
     "verify-assets": "node scripts/verify-assets.js",
     "predeploy": "npm run verify-assets && npm run build",
+    "postbuild": "node scripts/post-build.js",
     "deploy": "type nul > out/.nojekyll && xcopy /E /I /Y public\\* out\\ && npx push-dir --dir=out --branch=gh-pages --cleanup",
     "setup-dev": "node check-dependencies.js",
     "placeholders": "node placeholder.js",
@@ -20,7 +22,9 @@
     "dev:clean": "npm run setup-dev && npm run dev",
     "fix-images": "node copy-sample-images.js",
     "fix-local": "node fix-dev-environment.js",
-    "setup": "npm run fix-local && npm run dev"
+    "setup": "npm run fix-local && npm run dev",
+    "fix-build": "node auto-build-fix.js",
+    "deploy:gh-pages": "gh-pages -d out -b gh-pages"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

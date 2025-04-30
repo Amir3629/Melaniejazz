@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useEffect, useState } from "react"
+import React from 'react'
 import { motion, useScroll, useTransform } from "framer-motion"
 import Image from "next/image"
 import { getImagePath, debugImagePath } from "@/utils/image-path"
@@ -11,11 +12,11 @@ interface ParallaxBackgroundProps {
   speed?: number
 }
 
-export default function ParallaxBackground({
+const ParallaxBackground = ({
   imageUrl,
   opacity = 0.5,
   speed = 0.5
-}: ParallaxBackgroundProps) {
+}: ParallaxBackgroundProps) => {
   const ref = useRef<HTMLDivElement>(null)
   const [imageError, setImageError] = useState(false)
   
@@ -71,3 +72,5 @@ export default function ParallaxBackground({
     </motion.div>
   )
 } 
+
+export default ParallaxBackground;

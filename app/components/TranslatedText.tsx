@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from './language-switcher';
 
 interface TranslatedTextProps {
-  text: string;
+  text?: string;
   as?: 'div' | 'span' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   className?: string;
   html?: boolean;
@@ -14,6 +15,8 @@ interface TranslatedTextProps {
     en: string;
   };
   letterAnimation?: boolean;
+  en?: string;
+  de?: string;
 }
 
 // Letter animation variants
@@ -70,20 +73,25 @@ const motionProps = {
   },
 };
 
-export default function TranslatedText({ 
-  text, 
+const TranslatedText = ({ 
+  text = "", 
   as = 'div', 
   className = '', 
   html = false,
   translations,
-  letterAnimation = false
-}: TranslatedTextProps) {
+  letterAnimation = false,
+  en,
+  de
+}: TranslatedTextProps) => {
   const { currentLang } = useLanguage();
   const [translatedText, setTranslatedText] = useState(text);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [key, setKey] = useState(Date.now());
   const prevLangRef = useRef(currentLang);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Convert en/de props to translations if provided
+  const finalTranslations = translations || (en && de ? { en, de } : undefined);
 
   // Clear any existing timeouts when component unmounts
   useEffect(() => {
@@ -97,7 +105,7 @@ export default function TranslatedText({
   useEffect(() => {
     // Only trigger transition if language actually changed
     if (prevLangRef.current !== currentLang) {
-      if (translations) {
+      if (finalTranslations) {
         setIsTransitioning(true);
         
         // Clear any existing timeout
@@ -109,7 +117,7 @@ export default function TranslatedText({
         setKey(Date.now());
         
         // Set the translated text based on current language
-        const newText = currentLang === 'de' ? translations.de : translations.en;
+        const newText = currentLang === 'de' ? finalTranslations.de : finalTranslations.en;
         setTranslatedText(newText);
         
         // Set a timeout to end the transition state
@@ -123,23 +131,23 @@ export default function TranslatedText({
         setTranslatedText(text);
       }
     }
-  }, [text, currentLang, translations, letterAnimation]);
+  }, [text, currentLang, finalTranslations, letterAnimation]);
 
   // Force update when translations prop changes
   useEffect(() => {
-    if (translations) {
-      const newText = currentLang === 'de' ? translations.de : translations.en;
+    if (finalTranslations) {
+      const newText = currentLang === 'de' ? finalTranslations.de : finalTranslations.en;
       setTranslatedText(newText);
     } else {
       setTranslatedText(text);
     }
-  }, [translations, text, currentLang]);
+  }, [finalTranslations, text, currentLang]);
 
   const combinedClassName = `${className} ${isTransitioning ? 'opacity-90' : ''}`;
 
   const commonProps = {
     key: `${key}-${translatedText}`,
-    ...(translations 
+    ...(finalTranslations 
       ? { 'data-notranslate': 'true', className: `${combinedClassName} notranslate` } 
       : { className: combinedClassName }),
   };
@@ -251,3 +259,5 @@ export default function TranslatedText({
     </AnimatePresence>
   );
 } 
+
+export default TranslatedText;

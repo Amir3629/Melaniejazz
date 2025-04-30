@@ -1,6 +1,7 @@
 "use client"
 
 import { memo } from "react"
+import React from 'react'
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { useState } from "react"
@@ -94,7 +95,7 @@ const CollaborationLogo = memo(({ collab, isHovered, index, isMobile }: {
 
 CollaborationLogo.displayName = 'CollaborationLogo';
 
-function Collaborations() {
+const Collaborations = () => {
   const { currentLang } = useLanguage()
   const { t } = useTranslation()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)

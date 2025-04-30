@@ -171,7 +171,7 @@ const calendarContainerStyles = `
   }
   
   /* Responsive adjustments */
-  @media (max-width: 640px) {
+  @media (max-width: 640px) => {
     .calendar-container .rdp-caption,
     .calendar-container .rdp-nav {
       padding: 0 4px;
@@ -215,7 +215,7 @@ const getCalendarStyles = (disableWeekends: boolean) => `
   }
 `;
 
-export default function GoogleCalendarPicker({
+const GoogleCalendarPicker = ({
   onChange,
   value,
   placeholder = "Datum auswählen",
@@ -223,7 +223,7 @@ export default function GoogleCalendarPicker({
   showTimeSelector = true,
   disablePastDates = true,
   disableWeekends = false
-}: GoogleCalendarPickerProps) {
+}: GoogleCalendarPickerProps) => {
   const { t } = useTranslation();
   const [date, setDate] = useState<Date | undefined>(value);
   const [isOpen, setIsOpen] = useState(false);
@@ -520,3 +520,5 @@ export default function GoogleCalendarPicker({
     </div>
   );
 } 
+
+export default GoogleCalendarPicker;

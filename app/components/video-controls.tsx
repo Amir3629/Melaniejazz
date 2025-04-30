@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import React from 'react'
 import { motion } from "framer-motion"
 import { Play, Pause, Volume2, VolumeX, Maximize2, SkipBack, SkipForward } from "lucide-react"
 
@@ -15,7 +16,7 @@ interface VideoControlsProps {
   onFullScreen: () => void
 }
 
-export default function VideoControls({
+const VideoControls = ({
   isPlaying,
   isMuted,
   currentTime,
@@ -24,7 +25,7 @@ export default function VideoControls({
   onMuteToggle,
   onSeek,
   onFullScreen
-}: VideoControlsProps) {
+}: VideoControlsProps) => {
   const [isHovered, setIsHovered] = useState(false)
   const [showControls, setShowControls] = useState(true)
 
@@ -115,3 +116,5 @@ export default function VideoControls({
     </motion.div>
   )
 } 
+
+export default VideoControls;

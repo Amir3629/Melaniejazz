@@ -1,10 +1,11 @@
 "use client"
 
 import { useState, useEffect, useRef } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from 'lucide-react'
 
-export default function TestEnhancedMusicPlayer() {
+const TestEnhancedMusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [rotation, setRotation] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
@@ -110,14 +111,14 @@ export default function TestEnhancedMusicPlayer() {
           style={{ transform: `rotate(${rotation}deg)` }}
         >
           <Image 
-            src="/images/album-cover.jpg" 
+            src="images/album-cover.jpg"
             alt="Album Cover" 
             fill
             priority
             className="object-cover"
             onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='24' text-anchor='middle' fill='%23888' dominant-baseline='middle'%3EAlbum Cover%3C/text%3E%3C/svg%3E";
+              // Fallback for missing image
+              e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMzRjNGNDYiLz48cGF0aCBkPSJNNjYuNTQ4MyA1NC40MDI2QzcwLjgwODkgNTQuNDAyNiA3NC4yNjA5IDUwLjk4NzggNzQuMjYwOSA0Ni43NzE3Qzc0LjI2MDkgNDIuNTU1NiA3MC44MDg5IDM5LjE0MDggNjYuNTQ4MyAzOS4xNDA4QzYyLjI4NzYgMzkuMTQwOCA1OC44MzU2IDQyLjU1NTYgNTguODM1NiA0Ni43NzE3QzU4LjgzNTYgNTAuOTg3OCA2Mi4yODc2IDU0LjQwMjYgNjYuNTQ4MyA1NC40MDI2WiIgZmlsbD0iIzUxNTE1QSIvPjxwYXRoIGQ9Ik0zOC43Mjk4IDU5Ljk4MTJDNDIuOTkwNSA1OS45ODEyIDQ2LjQ0MjQgNTYuNTY2NCA0Ni40NDI0IDUyLjM1MDNDNDYuNDQyNCA0OC4xMzQyIDQyLjk5MDUgNDQuNzE5NCAzOC43Mjk4IDQ0LjcxOTRDMzQuNDY5MSA0NC43MTk0IDMxLjAxNzIgNDguMTM0MiAzMS4wMTcyIDUyLjM1MDNDMzEuMDE3MiA1Ni41NjY0IDM0LjQ2OTEgNTkuOTgxMiAzOC43Mjk4IDU5Ljk4MTJaIiBmaWxsPSIjNTE1MTVBIi8+PHBhdGggZD0iTTgxLjAxMTUgNzYuODg5N0M4MS4wMTE1IDc2Ljg4OTcgNzkuMjE3NCA2Ni41NDQ0IDc2LjkzMDYgNjEuNzIwMUM3NS4wODEgNTcuOTMxIDcwLjU4ODYgNTQuOTkwMSA2Ni41NTgxIDU0Ljk5MDFDNjEuNjkyMiA1NC45OTAxIDU4Ljc5NjEgNTguMDU0OCA1Mi41NzE2IDU4LjA1NDhDNDYuMzM3OCA1OC4wNTQ4IDQzLjQ0MTcgNTQuOTkwMSAzOC41ODUgNTQuOTkwMUMzNC41NDQ0IDU0Ljk5MDEgMzAuMDUyIDU3LjkzMSAyOC4yMDI0IDYxLjcyMDFDMjUuOTE1NiA2Ni41NDQ0IDI0LjEyMTUgNzYuODg5NyAyNC4xMjE1IDc2Ljg4OTdDMjMuNzA1OCA3OC44NjkgMjUuMjkxMyA4MC43MzkxIDI3LjM0MjUgODAuNzM5MUg3Ny43OTAzQzc5Ljg0MTYgODAuNzM5MSA4MS40MzcyIDc4Ljg2OSA4MS4wMTE1IDc2Ljg4OTdaIiBmaWxsPSIjNTE1MTVBIi8+PC9zdmc+';
             }}
           />
           <div className="absolute top-1/2 left-1/2 w-10 h-10 bg-black rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-gray-700"></div>
@@ -186,3 +187,5 @@ export default function TestEnhancedMusicPlayer() {
     </div>
   )
 } 
+
+export default TestEnhancedMusicPlayer;

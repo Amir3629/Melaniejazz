@@ -44,7 +44,7 @@ interface FormData {
   privacyAccepted: boolean;
 }
 
-export default function BookingForm() {
+const BookingForm = () => {
   const { t } = useTranslation()
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
@@ -103,7 +103,7 @@ export default function BookingForm() {
   
   // Get step title
   const getStepTitle = () => {
-    switch (currentStep) {
+    switch (currentStep) => {
       case 0:
         return t('booking.selectService', 'Dienst auswählen')
       case 1:
@@ -119,7 +119,7 @@ export default function BookingForm() {
   
   // Render the current step
   const renderStep = () => {
-    switch (currentStep) {
+    switch (currentStep) => {
       case 0:
         return (
           <ServiceSelection 
@@ -229,7 +229,7 @@ export default function BookingForm() {
   
   // Check if the current step is valid
   const isStepValid = () => {
-    switch (currentStep) {
+    switch (currentStep) => {
       case 0:
         return !!selectedService
       case 1:
@@ -311,3 +311,5 @@ export default function BookingForm() {
     </div>
   )
 } 
+
+export default BookingForm;

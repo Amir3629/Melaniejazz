@@ -1,10 +1,13 @@
+import React from 'react'
+"use client"
+
 // Mini player implementation that creates a player that scrolls with the page
 // This bypasses React entirely for greater reliability
 
 let miniPlayerInstance = null;
 
 // Create or update the mini player
-export function updateMiniPlayer({ 
+export const updateMiniPlayer = ({ 
   isPlaying, 
   shouldShow, 
   title, 
@@ -148,7 +151,7 @@ export function updateMiniPlayer({
 }
 
 // Remove mini player
-export function removeMiniPlayer() {
+export const removeMiniPlayer = () {
   const miniPlayer = document.getElementById('fixed-mini-player');
   if (miniPlayer && miniPlayer.parentNode) {
     miniPlayer.parentNode.removeChild(miniPlayer);

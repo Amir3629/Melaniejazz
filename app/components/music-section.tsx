@@ -28,7 +28,7 @@ interface MusicTrack {
   youtubeId: string
 }
 
-export default function MusicSection() {
+const MusicSection = () => {
   const { t } = useTranslation()
   const [currentTrack, setCurrentTrack] = useState<MusicTrack | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -383,3 +383,5 @@ export default function MusicSection() {
     </section>
   )
 } 
+
+export default MusicSection;

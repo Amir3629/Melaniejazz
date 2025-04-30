@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
+import React from 'react'
 import { Suspense } from 'react'
 import Image from "next/image"
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
@@ -30,7 +31,7 @@ import MusicSection from '@/app/components/music-section'
 import { getImagePath } from './utils/image-path'
 import { useSearchParams } from "next/navigation"
 
-function HomeContent() {
+const HomeContent = () => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const heroRef = useRef<HTMLDivElement>(null)
@@ -57,6 +58,14 @@ function HomeContent() {
   })
 
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false)
+
+  const openBookingModal = () => {
+    setIsBookingModalOpen(true)
+  }
+  
+  const closeBookingModal = () => {
+    setIsBookingModalOpen(false)
+  }
 
   const levels = [
     { value: "beginner", label: "Anfänger" },
@@ -141,7 +150,7 @@ function HomeContent() {
       <section id="hero" ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <RegularImg
-            src="/images/backgrounds/hero-bg.jpg"
+            src="images/backgrounds/hero-bg.jpg"
             alt="Background"
             className="w-full h-full object-cover"
           />
@@ -227,17 +236,10 @@ function HomeContent() {
       {/* Services Section */}
       <section id="services" className="relative w-full py-10 bg-[#040202] overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
-          <AppImage
-            src="/images/backgrounds/services-bg.jpg"
+          <RegularImg
+            src="images/backgrounds/services-bg.jpg"
             alt="Services Background"
-            fill
-            className="object-cover opacity-50" 
-            style={{
-              transition: 'transform 5s ease-in-out, opacity 5s ease-in-out',
-              transform: 'scale(1.05)', // Scale to cover edges
-              objectPosition: 'center center',
-              maxWidth: 'none' // Override max-width constraints
-            }}
+            className="object-cover w-full h-full"
           />
           {/* Multiple gradient layers for better edge coverage */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#040202]/90 via-[#040202]/60 to-[#040202]/90" 
@@ -401,7 +403,7 @@ function HomeContent() {
             <Button 
               size="lg"
               className="bg-[#C8A97E] hover:bg-[#B89A6F] text-black rounded-full px-8 sm:w-auto w-[160px] mx-auto border-2 border-[#C8A97E] hover:border-[#B89A6F] transition-all duration-300"
-              onClick={() => setIsBookingModalOpen(true)}
+              onClick={openBookingModal}
             >
               Jetzt Buchen
             </Button>
@@ -452,19 +454,11 @@ function HomeContent() {
       </section>
 
       <div className="w-full max-w-4xl mx-auto">
-        <Suspense fallback={<div>Loading booking form...</div>}>
-          <BookingForm />
-        </Suspense>
+        <BookingForm isOpen={isBookingModalOpen} onClose={closeBookingModal} />
       </div>
     </main>
   )
 }
 
-export default function Home() {
-  return (
-    <Suspense fallback={<div className="text-center text-white">Loading...</div>}>
-      <HomeContent />
-    </Suspense>
-  )
-}
+export default HomeContent
 

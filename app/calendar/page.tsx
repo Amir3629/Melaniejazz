@@ -1,10 +1,10 @@
 "use client"
 
-import { Suspense } from 'react'
+import React, { Suspense } from 'react'
 import Link from 'next/link'
 import { Calendar, Clock, ArrowRight, Music, Mic, Users } from 'lucide-react'
 
-function CalendarContent() {
+const CalendarContent = () => {
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
       <div className="container mx-auto px-4 py-16">
@@ -94,10 +94,12 @@ function CalendarContent() {
   )
 }
 
-export default function CalendarPage() {
+const CalendarPage = () => {
   return (
     <Suspense fallback={<div className="text-center text-white">Loading calendar...</div>}>
       <CalendarContent />
     </Suspense>
   )
-} 
+}
+
+export default CalendarPage 
