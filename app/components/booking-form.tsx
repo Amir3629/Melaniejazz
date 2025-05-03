@@ -99,10 +99,21 @@ const BookingForm = ({ isOpen: externalIsOpen, onClose }: BookingFormProps) => {
     }
   }, [externalIsOpen])
   
+  // Helper function to scroll to the top of the form content
+  const scrollToFormTop = () => {
+    setTimeout(() => {
+      const contentContainer = document.querySelector('.max-h-\\[50vh\\].overflow-y-auto');
+      if (contentContainer) {
+        contentContainer.scrollTop = 0;
+      }
+    }, 10);
+  }
+
   // Handle service selection
   const handleServiceSelect = (service: ServiceType) => {
     setServiceType(service)
     setCurrentStep('details')
+    scrollToFormTop();
   }
   
   // Handle form data changes
@@ -114,8 +125,10 @@ const BookingForm = ({ isOpen: externalIsOpen, onClose }: BookingFormProps) => {
   const goToNextStep = () => {
     if (currentStep === 'service') {
       setCurrentStep('details')
+      scrollToFormTop();
     } else if (currentStep === 'details') {
       setCurrentStep('confirm')
+      scrollToFormTop();
     }
   }
   
@@ -123,8 +136,10 @@ const BookingForm = ({ isOpen: externalIsOpen, onClose }: BookingFormProps) => {
   const goToPrevStep = () => {
     if (currentStep === 'details') {
       setCurrentStep('service')
+      scrollToFormTop();
     } else if (currentStep === 'confirm') {
       setCurrentStep('details')
+      scrollToFormTop();
     }
   }
   

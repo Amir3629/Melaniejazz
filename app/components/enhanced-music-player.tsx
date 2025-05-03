@@ -475,11 +475,11 @@ const EnhancedMusicPlayer = () => {
       {isPlaying && showMiniPlayer && (
             <motion.div 
               id="fixed-fallback-minibar" // Keep ID if needed, though direct manipulation is removed
-              className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between gap-1.5 px-2.5 py-1 bg-black/95 rounded-full shadow-lg" // Further reduced padding & gap
+              className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between gap-1 px-2 py-1 bg-black/95 rounded-full shadow-lg" // Further reduced padding & gap
             style={{ 
             boxShadow: '0 4px 15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(200, 169, 126, 0.2)',
-              maxWidth: '90%',
-                width: '220px',
+              maxWidth: '85%',
+                width: '200px',
             isolation: 'isolate',
             contain: 'layout style paint',
               backdropFilter: 'blur(10px)',
@@ -495,7 +495,7 @@ const EnhancedMusicPlayer = () => {
         >
           <div className="flex-1 text-white text-sm font-medium truncate text-center">{track.title}</div>
           <button
-            className="w-8 h-8 rounded-full bg-[#C8A97E] shrink-0 relative flex items-center justify-center"
+            className="w-7 h-7 rounded-full bg-[#C8A97E] shrink-0 relative flex items-center justify-center"
             style={{
               transition: 'transform 0.2s ease',
               boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
@@ -509,13 +509,13 @@ const EnhancedMusicPlayer = () => {
           >
                 {/* Pause/Play icon logic - Restoring pause icon wrapper */}
             {isPlaying ? (
-                  // Pause Icon - Centered with flex wrapper
-                  <div className="flex items-center justify-center gap-1"> 
-                <div className="w-[3px] h-3 bg-black rounded-[1px]"></div>
-                <div className="w-[3px] h-3 bg-black rounded-[1px]"></div>
+                  // Pause Icon - Using absolute positioning for precise centering
+                  <div className="relative w-4 h-4 flex items-center justify-center"> 
+                    <div className="absolute h-3 bg-black rounded-[1px] w-[3px]" style={{left: "calc(50% - 4px)"}}></div>
+                    <div className="absolute h-3 bg-black rounded-[1px] w-[3px]" style={{left: "calc(50% + 1px)"}}></div>
               </div>
             ) : (
-                  // Play Icon - Centered by button flex (removed ml-0.5)
+                  // Play Icon - Centered by button flex
                   <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[9px] border-l-black border-b-[6px] border-b-transparent" /> 
             )}
           </button>

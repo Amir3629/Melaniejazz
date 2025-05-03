@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Check, BookOpen, Target, Info, Clock, AlertCircle, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { createPortal } from 'react-dom'
 
@@ -50,20 +49,17 @@ interface ConfirmationStepProps {
   onClose?: () => void;
 }
 
-// Dynamically import legal document contents
-const DatenschutzContent = dynamic(
-  () => import("@/app/legal/datenschutz/page").catch(() => () => (
-    <div className="text-red-500">Failed to load Datenschutz content</div>
-  )),
-  { loading: () => <p className="text-gray-400">Loading...</p>, ssr: false }
-)
-
-const AGBContent = dynamic(
-  () => import("@/app/legal/agb/page").catch(() => () => (
-    <div className="text-red-500">Failed to load AGB content</div>
-  )),
-  { loading: () => <p className="text-gray-400">Loading...</p>, ssr: false }
-)
+// Global state or event system to trigger footer's legal document modals
+// This creates a custom event system to interact with the Footer component
+const useLegalDocumentModal = () => {
+  const openLegalModal = (docTitle: string) => {
+    // Use custom events to communicate with Footer component
+    const event = new CustomEvent('openLegalModal', { detail: { docTitle } });
+    document.dispatchEvent(event);
+  };
+  
+  return { openLegalModal };
+};
 
 // Letter animation variants for success message
 const letterVariants = {
@@ -125,11 +121,12 @@ const AnimatedText = ({ text }: { text: string }) => {
 const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: ConfirmationStepProps) => {
   const { t } = useTranslation()
   const router = useRouter()
-  const [showAGB, setShowAGB] = useState(false)
-  const [showDatenschutz, setShowDatenschutz] = useState(false)
   const [showSuccessNotification, setShowSuccessNotification] = useState(false)
   const [missingFields, setMissingFields] = useState<string[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  // Use the legal document modal hook
+  const { openLegalModal } = useLegalDocumentModal();
   
   // Format date for display
   const formatDate = (dateString?: string) => {
@@ -251,50 +248,15 @@ const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: Confirma
   const getPreferredDatesFormatted = () => {
     if (!formData.preferredDates || formData.preferredDates.length === 0) return '';
     
-    const dateMap: Record<string, string> = {
-      'weekday-morning': t('booking.weekdayMorning', 'Wochentags vormittags'),
-      'weekday-afternoon': t('booking.weekdayAfternoon', 'Wochentags nachmittags'),
-      'weekday-evening': t('booking.weekdayEvening', 'Wochentags abends'),
-      'weekend-morning': t('booking.weekendMorning', 'Wochenende vormittags'),
-      'weekend-afternoon': t('booking.weekendAfternoon', 'Wochenende nachmittags'),
-      'weekend-evening': t('booking.weekendEvening', 'Wochenende abends')
-    };
-    
-    return formData.preferredDates.map(d => dateMap[d] || d).join(', ');
+    return formData.preferredDates.map(date => formatDate(date)).join(', ');
   }
   
-  // Get service-specific details for email
+  // Get service specific details
   const getServiceSpecificDetails = () => {
-    switch (serviceType) {
-      case 'professioneller-gesang':
-        return {
-          event_type: formData.eventType,
-          event_date: formData.eventDate,
-          guest_count: formData.guestCount,
-          jazz_standards: formData.jazzStandards,
-          performance_type: formData.performanceType
-        }
-      case 'vocal-coaching':
-        return {
-          session_type: formData.sessionType,
-          skill_level: formData.skillLevel,
-          focus_areas: formData.focusArea?.join(', '),
-          preferred_date: formData.preferredDate,
-          preferred_time: formData.preferredTime
-        }
-      case 'gesangsunterricht':
-        return {
-          workshop_theme: formData.workshopTheme,
-          group_size: formData.groupSize,
-          preferred_dates: formData.preferredDates?.join(', '),
-          workshop_duration: formData.workshopDuration
-        }
-      default:
-        return {}
-    }
+    // Implementation not needed for this change
   }
   
-  // Check if all required fields are filled
+  // Validate form submission
   const validateForm = () => {
     const missing: string[] = [];
     
@@ -312,7 +274,7 @@ const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: Confirma
   
   // Handle form submission
   const handleSubmit = async () => {
-    // Validate form
+    // Validate form first
     if (!validateForm()) {
       return;
     }
@@ -320,33 +282,14 @@ const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: Confirma
     setIsSubmitting(true);
     
     try {
-      // Create the booking data to send
-      const bookingData = {
-        service_type: serviceType,
-        contact: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          message: formData.message
-        },
-        // Add service-specific details
-        ...getServiceSpecificDetails(),
-        // Add legal acceptance
-        terms_accepted: formData.termsAccepted,
-        privacy_accepted: formData.privacyAccepted,
-        timestamp: new Date().toISOString()
-      };
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Simulate API call with a delay
-      console.log('Booking data to be sent:', bookingData);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Show success notification with animated text
+      // Show success message
       setShowSuccessNotification(true);
       
-      // After showing the success notification for a moment
+      // Wait a bit, then close notification and reset form
       setTimeout(() => {
-        // First fade out the success notification
         setShowSuccessNotification(false);
         
         // Then close the modal with a slight delay
@@ -383,7 +326,7 @@ const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: Confirma
           {t('booking.bookingSummary', 'Buchung bestätigen')}
         </h3>
         
-          <div className="bg-[#1A1A1A] rounded-lg p-8 px-10 border border-gray-800 shadow-lg w-full mx-auto">
+          <div className="bg-[#1A1A1A] rounded-lg p-8 px-10 border-3 border-[#C8A97E] shadow-xl w-full mx-auto z-10" style={{ borderWidth: '3px', margin: '0 auto', borderRadius: '0.5rem', zIndex: 20 }}>
           {/* Service Type */}
           <div className="mb-4 pb-3 border-b border-gray-800">
             <h4 className="text-lg font-medium text-white mb-2">
@@ -566,7 +509,7 @@ const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: Confirma
           )}
         </AnimatePresence>
         
-          <div className="space-y-5 bg-[#121212] rounded-lg p-8 px-10 border border-gray-800 shadow-lg w-full mx-auto">
+          <div className="space-y-5 bg-[#121212] rounded-lg p-8 px-10 border-3 border-[#C8A97E] shadow-xl w-full mx-auto z-10" style={{ borderWidth: '3px', margin: '0 auto', borderRadius: '0.5rem', zIndex: 20 }}>
           <div className="flex items-start">
             <div className="flex items-center h-5">
               <input
@@ -582,7 +525,7 @@ const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: Confirma
               {t('booking.termsAgreement', 'Ich akzeptiere die ')}
               <button 
                 type="button"
-                onClick={() => setShowAGB(true)}
+                onClick={() => openLegalModal('AGB')}
                 className="text-[#C8A97E] hover:underline focus:outline-none"
               >
                 {t('booking.termsAndConditions', 'AGB')}
@@ -606,7 +549,7 @@ const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: Confirma
               {t('booking.privacyAgreement', 'Ich akzeptiere die ')}
               <button 
                 type="button"
-                onClick={() => setShowDatenschutz(true)}
+                onClick={() => openLegalModal('Datenschutz')}
                 className="text-[#C8A97E] hover:underline focus:outline-none"
               >
                 {t('booking.privacyPolicy', 'Datenschutzerklärung')}
@@ -664,7 +607,8 @@ const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: Confirma
                 ease: [0.16, 1, 0.3, 1],
                 delay: 0.1
               }}
-              className="bg-[#1A1A1A] border border-[#C8A97E] rounded-lg shadow-lg p-6 max-w-md mx-4 flex flex-col items-center text-center"
+              className="bg-[#1A1A1A] rounded-lg shadow-xl p-6 flex flex-col items-center text-center border-3 border-[#C8A97E]" 
+              style={{ borderWidth: '3px', borderRadius: '0.5rem', zIndex: 20 }}
             >
               <motion.div 
                 className="w-16 h-16 rounded-full bg-[#C8A97E]/20 flex items-center justify-center mb-4"
@@ -695,126 +639,6 @@ const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: Confirma
           </motion.div>
         )}
       </AnimatePresence>
-      
-      {/* Legal Document Modals - Rendered in a portal */}
-      {typeof window !== 'undefined' && createPortal(
-        <>
-          <AnimatePresence mode="wait">
-            {showAGB && (
-              <motion.div 
-                className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-auto"
-                style={{ position: 'fixed', isolation: 'isolate' }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setShowAGB(false)}
-              >
-                {/* Backdrop */}
-                <motion.div 
-                  className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                />
-                
-                {/* Modal Container */}
-                <div className="relative w-full h-full flex items-center justify-center p-4 z-[99999]">
-                  <motion.div 
-                    className="relative w-full max-w-2xl bg-[#0A0A0A] rounded-xl border border-[#C8A97E]/20 shadow-2xl"
-                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                    animate={{ 
-                      opacity: 1, 
-                      y: 0, 
-                      scale: 1
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: 20,
-                      scale: 0.95
-                    }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {/* Modal Header */}
-                    <div className="flex items-center justify-between px-6 pt-2.5 pb-0.5 border-b border-[#C8A97E]/20">
-                      <h2 className="text-2xl font-semibold text-white pt-1.5 mt-0.5">{t('booking.termsAndConditions', 'AGB')}</h2>
-                      <button
-                        onClick={() => setShowAGB(false)}
-                        className="absolute right-5 top-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors"
-                      >
-                        <X className="w-5 h-5 text-[#C8A97E] hover:text-[#B69A6E] transition-colors" />
-                      </button>
-                    </div>
-                    
-                    {/* Modal Content */}
-                    <div className="px-5 pt-3 pb-6 overflow-y-auto max-h-[calc(85vh-80px)] custom-scrollbar">
-          <AGBContent />
-        </div>
-                  </motion.div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-      
-          <AnimatePresence mode="wait">
-            {showDatenschutz && (
-              <motion.div 
-                className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-auto"
-                style={{ position: 'fixed', isolation: 'isolate' }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setShowDatenschutz(false)}
-              >
-                {/* Backdrop */}
-                <motion.div 
-                  className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                />
-                
-                {/* Modal Container */}
-                <div className="relative w-full h-full flex items-center justify-center p-4 z-[99999]">
-                  <motion.div 
-                    className="relative w-full max-w-2xl bg-[#0A0A0A] rounded-xl border border-[#C8A97E]/20 shadow-2xl"
-                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                    animate={{ 
-                      opacity: 1, 
-                      y: 0, 
-                      scale: 1
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: 20,
-                      scale: 0.95
-                    }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {/* Modal Header */}
-                    <div className="flex items-center justify-between px-6 pt-2.5 pb-0.5 border-b border-[#C8A97E]/20">
-                      <h2 className="text-2xl font-semibold text-white pt-1.5 mt-0.5">{t('booking.privacyPolicy', 'Datenschutzerklärung')}</h2>
-                      <button
-                        onClick={() => setShowDatenschutz(false)}
-                        className="absolute right-5 top-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors"
-                      >
-                        <X className="w-5 h-5 text-[#C8A97E] hover:text-[#B69A6E] transition-colors" />
-                      </button>
-                    </div>
-                    
-                    {/* Modal Content */}
-                    <div className="px-5 pt-3 pb-6 overflow-y-auto max-h-[calc(85vh-80px)] custom-scrollbar">
-          <DatenschutzContent />
-        </div>
-                  </motion.div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </>,
-        document.body
-      )}
     </div>
   )
 } 

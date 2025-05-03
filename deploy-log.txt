@@ -1,0 +1,47 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20250503112848
+Username: DESKTOP-SRUCQJN\Amirh
+RunAs User: DESKTOP-SRUCQJN\Amirh
+Configuration Name: 
+Machine: DESKTOP-SRUCQJN (Microsoft Windows NT 10.0.19045.0)
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -noexit -command try { . "c:\Users\Amirh\AppData\Local\Programs\cursor\resources\app\out\vs\workbench\contrib\terminal\common\scripts\shellIntegration.ps1" } catch {}
+Process ID: 5140
+PSVersion: 5.1.19041.5737
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.19041.5737
+BuildVersion: 10.0.19041.5737
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is deploy-log.txt
+Starting deployment to Melaniejazz repository's gh-pages branch...
+Creating temporary directory: temp-deploy-1751023926
+Cloning gh-pages branch from Melaniejazz repository...
+remote: Enumerating objects: 6478, done.
+remote: Counting objects: 100% (3092/3092), done.
+remote: Compressing objects: 100% (1269/1269), done.
+Rremote: Total 6478 (delta 1934), reused 2865 (delta 1727), pack-reused 3386 (from 1)
+Receiving objects: 100% (6478/6478), 16.97 MiB | 526.00 KiB/s, done.
+Resolving deltas: 100% (3960/3960), done.
+Updating files: 100% (296/296), done.
+Copying content from out directory...
+Creating .nojekyll file...
+Staging files...
+hes it
+warning: in the working copy of 'test/music-disc/player/3/index.html', LF will be replaced by CRLF the next time Git tou
+ches it
+warning: in the working copy of 'test/music-disc/player/3/index.txt', LF will be replaced by CRLF the next time Git touc
+hes it
+Committing changes...
+
+Pushing to gh-pages branch...
+
+Deployment successful!
+Cleaning up temporary directory...
+**********************
+Windows PowerShell transcript end
+End time: 20250503112934
+**********************

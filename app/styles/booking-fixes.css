@@ -1,0 +1,50 @@
+/* Booking confirmation modal fixes */
+
+#booking-success-modal {
+  z-index: 99999 !important;
+  position: fixed !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(2px) !important;
+  padding: 40px !important; /* INCREASED padding on the overlay slightly more */
+  box-sizing: border-box !important; /* Ensure padding is included in dimensions */
+}
+
+#booking-success-modal > div {
+  background-color: #1A1A1A !important;
+  border: 1px solid #C8A97E !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+  padding: 1.5rem !important; /* Reset padding */
+  width: 100% !important; /* Fill the padded overlay */
+  max-width: 400px !important; /* Keep max-width for the card itself */
+  margin: 0 auto !important; /* Center the card within the overlay */
+  box-sizing: border-box !important;
+  position: relative !important;
+  z-index: 100000 !important;
+}
+
+/* Ensure check icon is visible */
+#booking-success-modal .lucide-check {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  color: #C8A97E !important;
+  display: inline-block !important;
+}
+
+/* Remove decorative lines */
+#booking-success-modal > div:before,
+#booking-success-modal > div:after {
+  content: none !important;
+}
+
+/* Subtle glow on desktop */
+@media (min-width: 768px) {
+  #booking-success-modal > div {
+    /* Keep max-width at 400px for desktop too */
+    box-shadow: 0 0 15px 2px rgba(200, 169, 126, 0.3), 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+  }
+} 

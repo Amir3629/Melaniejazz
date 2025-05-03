@@ -45,7 +45,7 @@ const SuccessMessage = ({ isOpen, onClose, title, message }: SuccessMessageProps
     if (isOpen) {
       const timer = setTimeout(() => {
         onClose()
-      }, 6000)
+      }, 4000)
       return () => clearTimeout(timer)
     }
   }, [isOpen, onClose])
@@ -84,7 +84,7 @@ const SuccessMessage = ({ isOpen, onClose, title, message }: SuccessMessageProps
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center contact-success-modal">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -102,7 +102,8 @@ const SuccessMessage = ({ isOpen, onClose, title, message }: SuccessMessageProps
             }}
             className="relative w-[90%] max-w-md z-[61]"
           >
-            <div className="bg-[#0A0A0A] rounded-xl p-6 border border-[#C8A97E]/20">
+            <div className="bg-[#0A0A0A] rounded-xl p-6 border border-[#C8A97E]/20" 
+                 style={{ border: "1px solid #C8A97E", boxShadow: "0 4px 30px rgba(200, 169, 126, 0.25)" }}>
               <div className="flex flex-col items-center text-center">
                 <motion.div 
                   className="w-16 h-16 rounded-full bg-[#C8A97E]/20 flex items-center justify-center mb-4"

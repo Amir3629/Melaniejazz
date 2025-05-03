@@ -42,6 +42,23 @@ export default function Footer() {
     };
   }, []);
 
+  // Add listener for custom events from the booking form to open legal documents
+  useEffect(() => {
+    const handleOpenLegalModalEvent = (event: CustomEvent) => {
+      if (event.detail && event.detail.docTitle) {
+        handleOpenModal(event.detail.docTitle);
+      }
+    };
+    
+    // Add event listener for custom event
+    document.addEventListener('openLegalModal', handleOpenLegalModalEvent as EventListener);
+    
+    // Cleanup event listener on unmount
+    return () => {
+      document.removeEventListener('openLegalModal', handleOpenLegalModalEvent as EventListener);
+    };
+  }, []);
+
   const handleOpenModal = (docTitle: string) => {
     setSelectedDoc(docTitle);
     // Use a class instead of inline style for better cleanup
@@ -115,7 +132,7 @@ export default function Footer() {
     },
     {
       name: "Spotify",
-      href: "https://open.spotify.com/artist/jazzamell",
+      href: "https://open.spotify.com/artist/0RwGDeJpFEtr9JytXpWQrv?si=7dz60N0gQj-_oKia6VFyVA",
       icon: (props: any) => (
         <motion.svg
           whileHover={{ scale: 1.2, rotate: -5 }}
@@ -146,16 +163,11 @@ export default function Footer() {
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#C8A97E] hover:text-[#B69A6E] transition-colors"
+                    className="text-[#C8A97E] hover:text-[#B69A6E] transition-colors block"
+                    aria-label={item.name}
                   >
                     <span className="sr-only">{item.name}</span>
-                    {typeof item.icon === 'function' ? (
-                      item.icon({})
-                    ) : (
-                      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path fillRule="evenodd" d={item.icon} clipRule="evenodd" />
-                      </svg>
-                    )}
+                    {item.icon({})}
                   </Link>
                 ))}
             </div>
@@ -172,7 +184,7 @@ export default function Footer() {
 
             {/* Right Column - Legal Links & Image - centered on mobile */}
             <div className="flex flex-col justify-start items-center md:items-end w-full">
-              <div className="flex items-center justify-center md:justify-end gap-3 md:gap-6 mb-2 md:mb-4 w-full legal-links flex-wrap">
+              <div className="flex items-center justify-center md:justify-end gap-6 md:gap-6 mb-2 md:mb-4 w-full legal-links">
                 {legalDocs.map((doc) => (
                 <button 
                     key={doc.title}
@@ -185,7 +197,7 @@ export default function Footer() {
               </div>
               <div className="w-32 md:w-48 h-16 md:h-24 relative flex justify-center md:justify-end mt-1 md:mt-0">
                 <Image
-                  src={process.env.NODE_ENV === 'production' ? '/vocal-coaching/images/footer/footer.png' : '/images/footer/footer.png'}
+                  src={process.env.NODE_ENV === 'production' ? '/Melaniejazz/images/footer/footer.png' : '/images/footer/footer.png'}
                   alt="Footer decoration"
                   width={192}
                   height={96}
@@ -200,7 +212,7 @@ export default function Footer() {
         {/* Legal Document Modal */}
         {selectedDoc && (
           <motion.div 
-            className="fixed inset-0 z-[100] flex items-center justify-center"
+            className="fixed inset-0 z-[9999] flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

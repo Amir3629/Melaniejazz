@@ -99,16 +99,16 @@ const TestimonialSlider = () => {
   }
 
   return (
-    <section className="py-2 bg-[#040202]">
+    <section className="py-1 bg-[#040202]">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-2"
+          className="text-center mb-1"
         >
-          <h2 className="section-heading mb-1 text-white">
+          <h2 className="section-heading mb-0 text-white">
             Was meine Schüler sagen
           </h2>
           <div className="w-20 h-0.5 bg-[#C8A97E] mx-auto"></div>
@@ -126,28 +126,47 @@ const TestimonialSlider = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
-              className="bg-black/30 rounded-xl p-4 sm:p-6 backdrop-blur-sm h-[360px] flex items-center"
+              className="bg-black/30 rounded-xl p-3 sm:p-4 backdrop-blur-sm h-[330px] flex items-center"
             >
                 <div className="flex flex-col items-center justify-between text-center w-full h-full">
-                <div className="relative w-16 h-16 sm:w-14 sm:h-14 rounded-full overflow-hidden mb-4 sm:mb-2 border-2 border-[#C8A97E]/20 shrink-0">
-                  <Image
+                <div className="mx-auto mb-3 sm:mb-2 shrink-0" style={{
+                  width: '76px',
+                  height: '76px',
+                  position: 'relative',
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  border: '2px solid rgba(200, 169, 126, 0.2)',
+                  margin: '0 auto',
+                  backgroundColor: '#000'
+                }}>
+                  <img
                     src={getImagePath(testimonials[page].image)}
                     alt={testimonials[page].name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 64px, 56px"
-                    priority
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-49.5%, -50%)',
+                      width: '130%',
+                      height: '130%',
+                      objectFit: 'cover',
+                      objectPosition: 'center',
+                      margin: '0',
+                      padding: '0',
+                      minWidth: '100%',
+                      minHeight: '100%'
+                    }}
                     onError={() => setImageError(true)}
                   />
                 </div>
-                <div className="max-w-2xl mx-auto mb-4 sm:mb-3 flex-1 flex items-center justify-center h-[180px] px-1 sm:px-4">
-                  <p className="text-gray-300 text-base sm:text-lg italic w-full" style={{ textAlign: 'center' }}>"{testimonials[page].content}"</p>
+                <div className="max-w-2xl mx-auto mb-3 sm:mb-2 flex-1 flex items-center justify-center h-[160px] px-1 sm:px-3">
+                  <p className="text-gray-300 text-sm sm:text-base italic w-full" style={{ textAlign: 'center' }}>"{testimonials[page].content}"</p>
                 </div>
-                <div className="flex flex-col items-center mt-auto pt-2 shrink-0 w-full">
-                  <cite className="text-[#C8A97E] font-medium not-italic text-base sm:text-lg">
+                <div className="flex flex-col items-center mt-auto pt-1 shrink-0 w-full">
+                  <cite className="text-[#C8A97E] font-medium not-italic text-sm sm:text-base">
                     {testimonials[page].name}
                   </cite>
-                  <span className="text-gray-400 text-xs sm:text-sm">
+                  <span className="text-gray-400 text-xs">
                     {testimonials[page].role}
                   </span>
                 </div>
@@ -155,19 +174,7 @@ const TestimonialSlider = () => {
             </motion.div>
           </AnimatePresence>
 
-          <button
-            onClick={handlePrevious}
-            className="absolute -left-2 sm:left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/70 text-[#C8A97E] hover:bg-black hover:text-white transition-all z-10"
-          >
-            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
-
-          <button
-            onClick={handleNext}
-            className="absolute -right-2 sm:right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/70 text-[#C8A97E] hover:bg-black hover:text-white transition-all z-10"
-          >
-            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
+          {/* Navigation buttons completely removed */}
         </div>
       </div>
     </section>

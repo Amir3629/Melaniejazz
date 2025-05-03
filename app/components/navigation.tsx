@@ -523,11 +523,46 @@ const Navigation = () => {
   }, [pathname, router]);
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(prev => !prev)
+    if (!isOpen) {
+      document.body.classList.add('menu-open')
+      // Apply blur effect to main content and footer when menu opens
+      document.querySelectorAll('main, footer').forEach(el => {
+        el.classList.add('blur-overlay')
+        // Direct style application to footer
+        if (el.tagName.toLowerCase() === 'footer' && el instanceof HTMLElement) {
+          el.style.filter = 'blur(5px) brightness(0.5)';
+          el.style.pointerEvents = 'none';
+          el.style.position = 'relative';
+          el.style.zIndex = '1';
+        }
+      })
+    } else {
+      document.body.classList.remove('menu-open')
+      // Remove blur effect from main content and footer when menu closes
+      document.querySelectorAll('main, footer').forEach(el => {
+        el.classList.remove('blur-overlay')
+        // Reset direct styles
+        if (el.tagName.toLowerCase() === 'footer' && el instanceof HTMLElement) {
+          el.style.filter = '';
+          el.style.pointerEvents = '';
+        }
+      })
+    }
   }
 
   const closeMenu = () => {
-    setIsOpen(false);
+    setIsOpen(false)
+    document.body.classList.remove('menu-open')
+    // Remove blur effect from main content and footer when menu closes
+    document.querySelectorAll('main, footer').forEach(el => {
+      el.classList.remove('blur-overlay')
+      // Reset direct styles
+      if (el.tagName.toLowerCase() === 'footer' && el instanceof HTMLElement) {
+        el.style.filter = '';
+        el.style.pointerEvents = '';
+      }
+    })
   }
 
   const handleLogoClick = (e: React.MouseEvent) => {
@@ -622,6 +657,16 @@ const Navigation = () => {
     e.stopPropagation();
     handleNavClick(href);
   };
+
+  // Clean up any overlay effect on component unmount
+  useEffect(() => {
+    return () => {
+      document.body.classList.remove('menu-open');
+      document.querySelectorAll('main, footer').forEach(el => {
+        el.classList.remove('blur-overlay');
+      });
+    };
+  }, []);
 
   return (
     <>
@@ -900,10 +945,29 @@ const Navigation = () => {
               }}
               onAnimationStart={() => {
                 document.body.classList.add('menu-open');
+                // Apply blur to footer immediately when animation starts
+                document.querySelectorAll('footer').forEach(el => {
+                  el.classList.add('blur-overlay');
+                  // Force style application directly
+                  if (el instanceof HTMLElement) {
+                    el.style.filter = 'blur(5px) brightness(0.5)';
+                    el.style.pointerEvents = 'none';
+                    el.style.position = 'relative';
+                    el.style.zIndex = '1';
+                  }
+                });
               }}
               onAnimationComplete={() => {
                 if (!isOpen) {
                   document.body.classList.remove('menu-open');
+                  // Remove blur from footer when animation completes
+                  document.querySelectorAll('footer').forEach(el => {
+                    el.classList.remove('blur-overlay');
+                    if (el instanceof HTMLElement) {
+                      el.style.filter = '';
+                      el.style.pointerEvents = '';
+                    }
+                  });
                 }
               }}
               id="mobile-navigation-menu"

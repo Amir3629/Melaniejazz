@@ -340,7 +340,7 @@ const ServiceCard = ({
                     href={link} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-block text-[#C8A97E] text-sm hover:text-[#D4B88F] transition-colors"
+                    className="inline-block text-[#F5EDD7] text-sm hover:text-white transition-colors"
                     onClick={(e) => e.stopPropagation()}
                   >
                     Für mehr erfahren →

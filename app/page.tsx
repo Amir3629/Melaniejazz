@@ -202,10 +202,10 @@ const HomeContent = () => {
       </section>
 
       {/* Music Player Section */}
-      <section className="py-6 px-4 bg-[#040202]">
+      <section className="py-2 px-4 bg-[#040202]">
         <div className="max-w-7xl mx-auto">
           <motion.div 
-            className="text-center mb-4"
+            className="text-center mb-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -217,24 +217,24 @@ const HomeContent = () => {
       </section>
 
       {/* Video Preview Section */}
-      <section className="pt-2 pb-8 px-4 bg-[#040202]">
+      <section className="pt-0 pb-3 px-4 bg-[#040202]">
         <div className="max-w-7xl mx-auto">
           <motion.div 
-            className="text-center mb-6"
+            className="text-center mb-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <h2 className="section-heading mb-2 text-white">Video Preview</h2>
-            <div className="w-24 h-0.5 bg-[#C8A97E] mx-auto opacity-80 mt-2"></div>
+            <h2 className="section-heading mb-1 text-white">Video Preview</h2>
+            <div className="w-24 h-0.5 bg-[#C8A97E] mx-auto opacity-80 mt-1"></div>
           </motion.div>
           <VideoPreview />
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="relative w-full py-10 bg-[#040202] overflow-hidden">
+      <section id="services" className="relative w-full py-4 bg-[#040202] overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
           <RegularImg
             src="images/backgrounds/services-bg.jpg"
@@ -253,16 +253,16 @@ const HomeContent = () => {
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-8">
+          <div className="text-center mb-4">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="text-center mb-6"
+              className="text-center mb-3"
             >
-              <h2 className="section-heading mb-2 text-white">Vocal Excellence</h2>
-              <div className="w-24 h-0.5 bg-[#C8A97E] mx-auto opacity-80 mt-2"></div>
+              <h2 className="section-heading mb-1 text-white">Vocal Excellence</h2>
+              <div className="w-24 h-0.5 bg-[#C8A97E] mx-auto opacity-80 mt-1"></div>
             </motion.div>
           </div>
 
@@ -394,7 +394,7 @@ const HomeContent = () => {
           </div>
 
           <motion.div 
-            className="text-center mt-8"
+            className="text-center mt-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -425,13 +425,13 @@ const HomeContent = () => {
       `}</style>
 
       {/* References Section */}
-      <section id="references" className="py-4 bg-[#040202]">
+      <section id="references" className="py-2 bg-[#040202]">
         <GallerySection />
         <Collaborations />
       </section>
 
       {/* Expertise Cards Section */}
-      <section className="bg-black py-2 pb-0">
+      <section className="bg-black py-0 pb-0">
         <div className="container mx-auto px-4">
           <div className="text-center mb-2">
             <h2 className="section-heading mb-1 text-white">Faszinierend <span className="amp">&</span> Musikalisch</h2>
@@ -449,7 +449,7 @@ const HomeContent = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="relative py-8 bg-[#040202]">
+      <section id="contact" className="relative py-3 bg-[#040202]">
         <ContactForm />
       </section>
 

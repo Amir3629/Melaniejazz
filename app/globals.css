@@ -1541,6 +1541,16 @@ body.modal-open {
   z-index: 9999 !important; /* Use a very high z-index and !important to override */
 }
 
+/* Fix for booking success modal border being cut off on mobile */
+#booking-success-modal > div {
+  margin: 0 16px !important; 
+  max-width: calc(100% - 32px) !important;
+  width: 400px !important;
+  box-sizing: border-box !important;
+  border: 2px solid #C8A97E !important; /* Make the border thicker and force it */
+  border-radius: 0.5rem !important;
+}
+
 /* Ensure the check icon within the success notification is always visible */
 #booking-success-modal .lucide-check {
   display: inline-block !important; /* Ensure it's not 'none' */

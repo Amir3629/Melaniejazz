@@ -226,7 +226,7 @@ export default function CalendarIntegration({ onDateSelect, selectedDate, select
           className={`p-2 text-center rounded-md transition-all duration-200 ${
             available ? "cursor-pointer hover:bg-[#1A1A1A]" : "text-gray-500 opacity-50"
           } ${
-            selected ? "bg-[#C8A97E] text-black font-medium" : today ? "border border-[#C8A97E] text-[#C8A97E]" : ""
+            selected ? "text-[#C8A97E] font-medium" : today ? "border border-[#C8A97E] text-[#C8A97E]" : ""
           } ${booked && !selected ? "bg-[#2A2A2A] text-gray-300 relative overflow-hidden" : ""}`}
           onClick={() => available && handleDateClick(date)}
         >

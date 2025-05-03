@@ -391,21 +391,6 @@ const GoogleCalendarPicker = ({
             <span className="ml-2 text-[#C8A97E]">({timeSlot})</span>
           )}
         </div>
-        {date && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setDate(undefined);
-              setTimeSlot(undefined);
-              setIsConfirmed(false);
-              setIsOpen(false); // Close calendar when date is cleared
-            }}
-            className="text-gray-400 hover:text-white"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        )}
       </div>
       
       <AnimatePresence>
@@ -504,10 +489,21 @@ const GoogleCalendarPicker = ({
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       className="absolute inset-0 flex items-center justify-center"
+                      style={{
+                        position: 'absolute',
+                        top: '0',
+                        left: '0',
+                        right: '0',
+                        bottom: '0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 100
+                      }}
                     >
-                      <div className="flex items-center space-x-2 z-50">
+                      <div className="flex items-center justify-center space-x-2 z-50 bg-black/40 px-4 py-2 rounded-md backdrop-blur-sm" style={{ minWidth: '140px', textAlign: 'center' }}>
                         <Check className="w-5 h-5 text-[#C8A97E]" />
-                        <span className="text-white">{t('Confirming...')}</span>
+                        <span className="text-white font-medium text-base">{t('Confirming...')}</span>
                       </div>
                   </motion.div>
                 )}
