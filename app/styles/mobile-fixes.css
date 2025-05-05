@@ -113,6 +113,56 @@
   }
 }
 
+/* Mobile menu overlay fixes - ensure blur effect applies to footer */
+/* Apply the blur effect to ALL content including footer with maximum specificity */
+html body.menu-open #__next > *,
+html body.menu-open #__next > footer, 
+html body.menu-open footer,
+html body.menu-open #__next > div:last-child {
+  filter: blur(8px) !important;
+  transition: filter 0.3s ease-out !important;
+  opacity: 0.7 !important;
+}
+
+/* Then un-blur the header explicitly with higher specificity */
+html body.menu-open #__next > header,
+html body.menu-open header.main-header {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Ensure the mobile menu container itself is not blurred with highest specificity */
+html body.menu-open #mobile-navigation-menu,
+html body.menu-open .mobile-menu-container,
+html body.menu-open [id="mobile-navigation-menu"] {
+  filter: none !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  opacity: 1 !important;
+  z-index: 9800 !important;
+}
+
+/* Force footer to obey the blur effect */
+html body.menu-open footer {
+  position: relative !important;
+  z-index: auto !important;
+  opacity: 0.7 !important;
+  filter: blur(8px) !important;
+}
+
+/* Scroll to top when menu is open on small viewports */
+@media (max-height: 700px) {
+  body.menu-open {
+    scroll-behavior: smooth !important;
+    scroll-padding-top: 0 !important;
+  }
+  
+  body.menu-open #__next {
+    transform: translateY(-100vh) !important;
+    transition: transform 0.3s ease-out !important;
+  }
+}
+
 /* Gallery mobile optimizations */
 @media (max-width: 767px) {
   /* Grid sizing for gallery images */

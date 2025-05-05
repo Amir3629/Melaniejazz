@@ -20,6 +20,81 @@ const Navigation = () => {
   const { currentLang } = useLanguage()
   const { t } = useTranslation()
   const menuButtonRef = React.useRef<HTMLButtonElement>(null)
+  const footerStorageRef = React.useRef<HTMLElement | null>(null)
+
+  // Add this new useEffect hook to handle footer visibility based on menu state
+  useEffect(() => {
+    // Function to hide footer
+    const hideFooter = () => {
+      const footerElement = document.querySelector('footer');
+      if (footerElement && !footerStorageRef.current) {
+        // First save a reference to the footer
+        footerStorageRef.current = footerElement as HTMLElement;
+        
+        // Remember where it was in the DOM
+        const footerParent = footerElement.parentNode;
+        
+        if (footerParent) {
+          // Create a placeholder to mark the position
+          const placeholder = document.createElement('div');
+          placeholder.id = 'footer-placeholder';
+          placeholder.style.display = 'none';
+          
+          // Replace footer with placeholder
+          footerParent.replaceChild(placeholder, footerElement);
+          
+          // Store the footer in a hidden div
+          const storageDiv = document.createElement('div');
+          storageDiv.id = 'footer-storage';
+          storageDiv.style.display = 'none';
+          storageDiv.appendChild(footerElement);
+          document.body.appendChild(storageDiv);
+          
+          // Set menu-open class for other effects
+          document.body.classList.add('menu-open');
+        }
+      }
+    };
+    
+    // Function to show footer
+    const showFooter = () => {
+      const footerStorage = document.getElementById('footer-storage');
+      const footerPlaceholder = document.getElementById('footer-placeholder');
+      
+      if (footerStorage && footerPlaceholder) {
+        const footerElement = footerStorage.querySelector('footer');
+        const footerParent = footerPlaceholder.parentNode;
+        
+        if (footerElement && footerParent) {
+          // Restore the footer to its original position
+          footerParent.replaceChild(footerElement, footerPlaceholder);
+          
+          // Remove the storage div
+          document.body.removeChild(footerStorage);
+          
+          // Clear our reference
+          footerStorageRef.current = null;
+          
+          // Remove menu-open class
+          document.body.classList.remove('menu-open');
+        }
+      }
+    };
+    
+    // Apply based on isOpen state
+    if (isOpen) {
+      hideFooter();
+    } else {
+      showFooter();
+    }
+    
+    // Clean up function
+    return () => {
+      if (!isOpen) {
+        showFooter();
+      }
+    };
+  }, [isOpen]); // Only re-run when isOpen changes
 
   // Force re-render when language changes
   useEffect(() => {
@@ -523,46 +598,11 @@ const Navigation = () => {
   }, [pathname, router]);
 
   const toggleMenu = () => {
-    setIsOpen(prev => !prev)
-    if (!isOpen) {
-      document.body.classList.add('menu-open')
-      // Apply blur effect to main content and footer when menu opens
-      document.querySelectorAll('main, footer').forEach(el => {
-        el.classList.add('blur-overlay')
-        // Direct style application to footer
-        if (el.tagName.toLowerCase() === 'footer' && el instanceof HTMLElement) {
-          el.style.filter = 'blur(5px) brightness(0.5)';
-          el.style.pointerEvents = 'none';
-          el.style.position = 'relative';
-          el.style.zIndex = '1';
-        }
-      })
-    } else {
-      document.body.classList.remove('menu-open')
-      // Remove blur effect from main content and footer when menu closes
-      document.querySelectorAll('main, footer').forEach(el => {
-        el.classList.remove('blur-overlay')
-        // Reset direct styles
-        if (el.tagName.toLowerCase() === 'footer' && el instanceof HTMLElement) {
-          el.style.filter = '';
-          el.style.pointerEvents = '';
-        }
-      })
-    }
+    setIsOpen(!isOpen);
   }
 
   const closeMenu = () => {
-    setIsOpen(false)
-    document.body.classList.remove('menu-open')
-    // Remove blur effect from main content and footer when menu closes
-    document.querySelectorAll('main, footer').forEach(el => {
-      el.classList.remove('blur-overlay')
-      // Reset direct styles
-      if (el.tagName.toLowerCase() === 'footer' && el instanceof HTMLElement) {
-        el.style.filter = '';
-        el.style.pointerEvents = '';
-      }
-    })
+    setIsOpen(false);
   }
 
   const handleLogoClick = (e: React.MouseEvent) => {
@@ -657,16 +697,6 @@ const Navigation = () => {
     e.stopPropagation();
     handleNavClick(href);
   };
-
-  // Clean up any overlay effect on component unmount
-  useEffect(() => {
-    return () => {
-      document.body.classList.remove('menu-open');
-      document.querySelectorAll('main, footer').forEach(el => {
-        el.classList.remove('blur-overlay');
-      });
-    };
-  }, []);
 
   return (
     <>
@@ -944,30 +974,24 @@ const Navigation = () => {
                 justifyContent: 'center'
               }}
               onAnimationStart={() => {
-                document.body.classList.add('menu-open');
-                // Apply blur to footer immediately when animation starts
-                document.querySelectorAll('footer').forEach(el => {
-                  el.classList.add('blur-overlay');
-                  // Force style application directly
-                  if (el instanceof HTMLElement) {
-                    el.style.filter = 'blur(5px) brightness(0.5)';
-                    el.style.pointerEvents = 'none';
-                    el.style.position = 'relative';
-                    el.style.zIndex = '1';
-                  }
-                });
+                // Save the current scroll position for restoration when menu closes
+                document.body.setAttribute('data-scroll-y', window.scrollY.toString());
+                
+                // On small screens, scroll up to hide footer completely when menu opens
+                if (window.innerHeight < 700) {
+                  window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                  });
+                }
               }}
               onAnimationComplete={() => {
                 if (!isOpen) {
-                  document.body.classList.remove('menu-open');
-                  // Remove blur from footer when animation completes
-                  document.querySelectorAll('footer').forEach(el => {
-                    el.classList.remove('blur-overlay');
-                    if (el instanceof HTMLElement) {
-                      el.style.filter = '';
-                      el.style.pointerEvents = '';
-                    }
-                  });
+                  // Restore scroll position when menu closes
+                  const scrollY = document.body.getAttribute('data-scroll-y');
+                  if (scrollY) {
+                    restoreScrollPosition(scrollY);
+                  }
                 }
               }}
               id="mobile-navigation-menu"

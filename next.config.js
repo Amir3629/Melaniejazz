@@ -21,8 +21,6 @@ const nextConfig = {
       }
     ],
   },
-  basePath: '/Melaniejazz',
-  assetPrefix: '/Melaniejazz/',
   trailingSlash: true,
   webpack: (config) => {
     config.module.rules.push({
