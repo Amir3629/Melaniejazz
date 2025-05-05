@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 
+const isVercel = process.env.VERCEL === "1";
+
 const nextConfig = {
   output: 'export',
   images: {
@@ -21,6 +23,10 @@ const nextConfig = {
       }
     ],
   },
+  ...(isVercel ? {} : {
+    basePath: '/Melaniejazz',
+    assetPrefix: '/Melaniejazz/',
+  }),
   trailingSlash: true,
   webpack: (config) => {
     config.module.rules.push({
@@ -35,7 +41,7 @@ const nextConfig = {
     return config
   },
   publicRuntimeConfig: {
-    basePath: '',
+    basePath: isVercel ? '' : '/Melaniejazz',
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
