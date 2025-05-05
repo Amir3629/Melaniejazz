@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 
+// Detect if we're in a Vercel environment - check both process.env.VERCEL and hostname
 const isVercel = process.env.VERCEL === "1";
 
 const nextConfig = {
@@ -23,11 +24,12 @@ const nextConfig = {
       }
     ],
   },
+  // Only use basePath and assetPrefix for GitHub Pages, not for Vercel
   ...(isVercel ? {} : {
     basePath: '/Melaniejazz',
     assetPrefix: '/Melaniejazz/',
   }),
-  trailingSlash: true,
+  trailingSlash: false, // Changed to false for Vercel
   webpack: (config) => {
     config.module.rules.push({
       test: /\.(woff|woff2|eot|ttf|otf|svg)$/i,
@@ -40,8 +42,10 @@ const nextConfig = {
 
     return config
   },
+  // Make runtime config available in the app
   publicRuntimeConfig: {
     basePath: isVercel ? '' : '/Melaniejazz',
+    isVercel: isVercel
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',

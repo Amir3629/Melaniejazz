@@ -4,10 +4,12 @@
  */
 
 export function getImagePath(path) {
-  // Check if we're in a Vercel environment
-  const isVercel = typeof window !== 'undefined' 
-    ? window.location.hostname.includes('vercel.app') 
-    : process.env.VERCEL === '1';
+  // Check if we're in a client environment
+  const isClient = typeof window !== 'undefined';
+  
+  // Detect Vercel environment - this will be true when deployed to Vercel
+  const isVercel = process.env.VERCEL === "1" || 
+                   (isClient && window.location.hostname.includes('vercel.app'));
   
   // Check if we're in production mode
   const isProd = process.env.NODE_ENV === 'production';
@@ -20,8 +22,29 @@ export function getImagePath(path) {
     basePath = '/Melaniejazz';
   }
   
-  // Clean the path to ensure no double slashes
+  // Ensure path starts with a slash
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   
+  // Debug the path construction
+  if (isClient && localStorage.getItem('debug') === 'true') {
+    console.log(`[getImagePath] Original: ${path}`);
+    console.log(`[getImagePath] Clean: ${cleanPath}`);
+    console.log(`[getImagePath] Base: ${basePath}`);
+    console.log(`[getImagePath] Result: ${basePath}${cleanPath}`);
+    console.log(`[getImagePath] isVercel: ${isVercel}`);
+  }
+  
   return `${basePath}${cleanPath}`;
+}
+
+// Debug function to troubleshoot path issues
+export function debugImagePath() {
+  if (typeof window === 'undefined') return;
+  
+  console.log('==== Image Path Debug Info ====');
+  console.log(`Hostname: ${window.location.hostname}`);
+  console.log(`Path: ${window.location.pathname}`);
+  console.log(`Vercel: ${process.env.VERCEL === "1"}`);
+  console.log(`isVercelHost: ${window.location.hostname.includes('vercel.app')}`);
+  console.log('=============================');
 } 

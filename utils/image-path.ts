@@ -11,8 +11,10 @@ export function getImagePath(path: string): string {
   // Remove leading slash if present
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
   
-  // For Vercel deployment, we don't need a prefix anymore
-  return `/${cleanPath}`;
+  // Add the production prefix if in production
+  return process.env.NODE_ENV === 'production'
+    ? `/vocal-coaching/${cleanPath}`
+    : `/${cleanPath}`;
 }
 
 // Debug function to log image path resolution

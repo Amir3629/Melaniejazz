@@ -18,6 +18,7 @@ import RootClient from "./components/root-client"
 import { MediaProvider } from "./components/media-context"
 import { getImagePath } from './utils/image-path'
 import HtmlMeta from "./components/html-meta"
+import DebugHelper from './components/debug-helper'
 
 // Optimize font loading with display swap
 const inter = Inter({ 
@@ -170,6 +171,7 @@ export default function RootLayout({
           <RootClient className={`dark-theme-black ${playfair.variable} ${cormorant.variable} ${montserrat.variable} ${roboto.variable} ${inter.className} antialiased`}>
             <HtmlMeta />
             {children}
+            <DebugHelper />
           </RootClient>
         </MediaProvider>
       </body>

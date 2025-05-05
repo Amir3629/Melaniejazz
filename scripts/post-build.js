@@ -1,12 +1,15 @@
 /**
- * Post-build script for GitHub Pages deployment
- * This script runs after the Next.js build to prepare the output for GitHub Pages
+ * Post-build script for static site deployment
+ * This script runs after the Next.js build to prepare the output for deployment
  */
 
 const fs = require('fs');
 const path = require('path');
 
 const outDir = path.join(__dirname, '..', 'out');
+const isVercel = process.env.VERCEL === "1";
+
+console.log(`Running post-build script. Vercel environment: ${isVercel ? 'Yes' : 'No'}`);
 
 // Ensure the out directory exists
 if (!fs.existsSync(outDir)) {
@@ -87,15 +90,16 @@ if (!fs.existsSync(notFoundPath)) {
 //   console.log('✅ Created CNAME file');
 // }
 
-// SPA redirect for GitHub Pages in index.html
-const indexHtmlPath = path.join(outDir, 'index.html');
-if (fs.existsSync(indexHtmlPath)) {
-  let indexContent = fs.readFileSync(indexHtmlPath, 'utf8');
-  
-  // Check if SPA redirect is already in the head
-  if (!indexContent.includes('Single Page Apps for GitHub Pages')) {
-    // Add SPA redirect script to the head
-    indexContent = indexContent.replace('</head>', `  <!-- Start Single Page Apps for GitHub Pages -->
+// SPA redirect for GitHub Pages in index.html - only needed for GitHub Pages deployment
+if (!isVercel) {
+  const indexHtmlPath = path.join(outDir, 'index.html');
+  if (fs.existsSync(indexHtmlPath)) {
+    let indexContent = fs.readFileSync(indexHtmlPath, 'utf8');
+    
+    // Check if SPA redirect is already in the head
+    if (!indexContent.includes('Single Page Apps for GitHub Pages')) {
+      // Add SPA redirect script to the head
+      indexContent = indexContent.replace('</head>', `  <!-- Start Single Page Apps for GitHub Pages -->
   <script type="text/javascript">
     // Single Page Apps for GitHub Pages
     // MIT License
@@ -113,10 +117,19 @@ if (fs.existsSync(indexHtmlPath)) {
   </script>
   <!-- End Single Page Apps for GitHub Pages -->
 </head>`);
-    
-    fs.writeFileSync(indexHtmlPath, indexContent);
-    console.log('✅ Added SPA redirect to index.html');
+      
+      fs.writeFileSync(indexHtmlPath, indexContent);
+      console.log('✅ Added SPA redirect to index.html');
+    }
   }
+} else {
+  console.log('ℹ️ Skipping GitHub Pages SPA redirect for Vercel deployment');
+}
+
+// For Vercel deployment, add a specific indicator file
+if (isVercel) {
+  fs.writeFileSync(path.join(outDir, 'vercel-deployment.txt'), 'This site is deployed on Vercel');
+  console.log('✅ Added Vercel deployment indicator file');
 }
 
 console.log('✅ Post-build completed successfully!'); 
