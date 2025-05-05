@@ -4,34 +4,18 @@
  */
 
 export function getImagePath(path) {
-  // Check if we're in a client environment
-  const isClient = typeof window !== 'undefined';
-  
-  // Detect Vercel environment - this will be true when deployed to Vercel
-  const isVercel = process.env.VERCEL === "1" || 
-                   (isClient && window.location.hostname.includes('vercel.app'));
-  
-  // Check if we're in production mode
-  const isProd = process.env.NODE_ENV === 'production';
+  // Simple check for Vercel environment
+  const isVercel = process.env.VERCEL === "1";
   
   // Base path depends on deployment environment
-  let basePath = '';
-  
-  // For GitHub Pages in production
-  if (isProd && !isVercel) {
-    basePath = '/Melaniejazz';
-  }
+  const basePath = isVercel ? '' : '/Melaniejazz';
   
   // Ensure path starts with a slash
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   
-  // Debug the path construction
-  if (isClient && localStorage.getItem('debug') === 'true') {
-    console.log(`[getImagePath] Original: ${path}`);
-    console.log(`[getImagePath] Clean: ${cleanPath}`);
-    console.log(`[getImagePath] Base: ${basePath}`);
-    console.log(`[getImagePath] Result: ${basePath}${cleanPath}`);
-    console.log(`[getImagePath] isVercel: ${isVercel}`);
+  // Debug info to console in development
+  if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+    console.log(`[getImagePath] ${basePath}${cleanPath}`);
   }
   
   return `${basePath}${cleanPath}`;

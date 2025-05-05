@@ -24,7 +24,10 @@
     "fix-local": "node fix-dev-environment.js",
     "setup": "npm run fix-local && npm run dev",
     "fix-build": "node auto-build-fix.js",
-    "deploy:gh-pages": "gh-pages -d out -b gh-pages"
+    "deploy:gh-pages": "gh-pages -d out -b gh-pages",
+    "vercel-build": "cross-env VERCEL=1 next build",
+    "vercel-dev": "cross-env VERCEL=1 next dev",
+    "deploy:vercel": "vercel --prod"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -108,6 +111,7 @@
     "@types/react-dom": "^18",
     "concurrently": "^9.1.2",
     "critters": "^0.0.23",
+    "cross-env": "^7.0.3",
     "eslint": "8.57.1",
     "eslint-config-next": "15.3.0",
     "gh-pages": "^6.3.0",
