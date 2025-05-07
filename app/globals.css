@@ -153,7 +153,6 @@ video {
     font-size: 1.1rem;
     line-height: 1.6;
     font-weight: 300;
-    color: #4A4A4A;
   }
 
   @supports (-webkit-touch-callout: none) {
@@ -1547,7 +1546,7 @@ body.modal-open {
   max-width: calc(100% - 32px) !important;
   width: 400px !important;
   box-sizing: border-box !important;
-  border: 2px solid #C8A97E !important; /* Make the border thicker and force it */
+  /* border: 2px solid #C8A97E !important; */ /* Remove this line */
   border-radius: 0.5rem !important;
 }
 

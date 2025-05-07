@@ -1,0 +1,20 @@
+﻿{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "out",
+  "routes": [
+    { "src": "/_next/static/(.*)", "dest": "/_next/static/" },
+    { "src": "/images/(.*)", "dest": "/images/" },
+    { "src": "/api/(.*)", "dest": "/api/" },
+    { "src": "/favicon.ico", "dest": "/favicon.ico" },
+    { "src": "/debug.html", "dest": "/debug.html" },
+    { "src": "/test.html", "dest": "/test.html" },
+    { "src": "/404.html", "dest": "/404.html" },
+    { "src": "/(.+)\\.(.+)", "dest": "/." },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "env": {
+    "VERCEL": "1"
+  }
+}

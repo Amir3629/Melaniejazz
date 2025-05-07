@@ -99,11 +99,12 @@
 }
 
 /* Fix SVG visibility within buttons - MORE AGGRESSIVE */
+/* 
 #fixed-fallback-minibar button svg,
-/* button svg, */ /* Commented out problematic rule */
 .w-8.h-8.rounded-full.bg-\[\#C8A97E\].flex.items-center.justify-center svg {
   display: none !important;
-}
+} 
+*/
 
 /* Ensure music section has proper spacing */
 .music-section {
@@ -258,4 +259,32 @@ html.mobile-menu-open body {
 /* Add transition for mute button visibility */
 .video-preview button {
   transition: opacity 0.3s ease !important;
+}
+
+/* Styles for Mini Music Player Button and Icons */
+.mini-player-button {
+    display: inline-flex !important; /* Use flex to center icon */
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.5rem !important; /* Ensure consistent padding */
+    width: 40px !important; /* Explicit size */
+    height: 40px !important; /* Explicit size */
+    border-radius: 50% !important; /* Ensure it's circular */
+    overflow: hidden; /* Hide any overflow */
+}
+
+.mini-player-button svg {
+    display: block !important; /* Ensure SVG is treated as a block */
+    visibility: visible !important; /* Override any visibility: hidden */
+    opacity: 1 !important; /* Ensure full opacity */
+    width: 20px !important; /* Match the size prop */
+    height: 20px !important; /* Match the size prop */
+    color: white !important; /* Default color */
+    margin: auto !important; /* Center within button */
+    pointer-events: none; /* Prevent SVG from capturing clicks meant for button */
+}
+
+/* Hover effect for icon color */
+.mini-player-button:hover svg {
+    color: #fbbf24 !important; /* Tailwind yellow-400 */
 } 

@@ -1,0 +1,70 @@
+/* Mobile footer fixes */
+@media screen and (max-width: 767px) {
+  /* Ensures social media icons display properly */
+  footer .social-links svg {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 28px !important;
+    height: 28px !important;
+  }
+  
+  /* Force perfect centering for legal links with no offsets */
+  footer .legal-links {
+    width: 100%;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    gap: 24px !important;
+    text-align: center !important;
+  }
+  
+  /* Reset any potential offset on the buttons themselves */
+  footer .legal-links button {
+    font-size: 13px !important;
+    padding: 6px 0 !important;
+    margin: 0 !important;
+    text-align: center !important;
+  }
+
+  /* Fix for legal document modals on mobile */
+  body > div[style*="position: fixed"] {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 9999 !important;
+    width: 100% !important;
+    height: 100% !important;
+    position: fixed !important;
+    inset: 0 !important;
+    padding: 16px !important;
+  }
+
+  /* Fix for making X icon visible without circle frame */
+  body > div[style*="position: fixed"] .lucide-x {
+    display: inline-block !important;
+    visibility: visible !important;
+    color: #C8A97E !important;
+    width: 24px !important;
+    height: 24px !important;
+    position: absolute !important;
+    right: 16px !important;
+    top: 16px !important;
+    opacity: 1 !important;
+    stroke-width: 2px !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+  }
+
+  /* Ensure modal content is visible */
+  body > div[style*="position: fixed"] > div > div > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    border: 1px solid rgba(200, 169, 126, 0.3) !important;
+    background-color: #0A0A0A !important;
+    max-height: 90vh !important;
+    border-radius: 8px !important;
+  }
+} 

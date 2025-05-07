@@ -1,0 +1,81 @@
+/* Legal document modal fixes */
+
+/* General modal styles */
+.modal-open {
+  overflow: hidden !important;
+}
+
+/* Ensure the close button is visible on all devices */
+button:has(.lucide-x),
+button:has(svg[class*="lucide-x"]) {
+  position: absolute !important;
+  right: 12px !important;
+  top: 12px !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: transparent !important;
+  z-index: 100000 !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: transform 0.2s ease !important;
+}
+
+button:has(.lucide-x):hover,
+button:has(svg[class*="lucide-x"]):hover {
+  transform: scale(1.1) !important;
+}
+
+/* Special styling for the X icon itself */
+.lucide-x,
+svg[class*="lucide-x"] {
+  color: #C8A97E !important;
+  width: 24px !important;
+  height: 24px !important;
+  stroke-width: 2px !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Mobile specific styles */
+@media screen and (max-width: 767px) {
+  /* Make the X larger and more noticeable on mobile */
+  button:has(.lucide-x),
+  button:has(svg[class*="lucide-x"]) {
+    width: 40px !important;
+    height: 40px !important;
+    right: 10px !important;
+    top: 10px !important;
+    box-shadow: none !important;
+  }
+
+  .lucide-x,
+  svg[class*="lucide-x"] {
+    width: 28px !important;
+    height: 28px !important;
+    stroke-width: 2.5px !important;
+  }
+  
+  /* Ensure the modal container is properly sized and positioned */
+  div[style*="position: fixed"] {
+    position: fixed !important;
+    inset: 0 !important;
+    padding: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 9999 !important;
+  }
+  
+  /* Style for the modal content */
+  div[style*="position: fixed"] > div > div > div {
+    max-width: 100% !important;
+    width: 100% !important;
+    border-radius: 8px !important;
+    max-height: 90vh !important;
+    overflow: hidden !important;
+  }
+} 

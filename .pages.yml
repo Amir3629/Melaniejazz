@@ -1,0 +1,64 @@
+media:
+  input: public/images
+  output: /Melaniejazz/images
+
+content:
+  - name: homepage
+    label: Homepage
+    type: file
+    path: content/pages/home.md
+    format: yaml-frontmatter
+    fields:
+      - { name: title, label: "Title", type: string }
+      - { name: subtitle, label: "Subtitle", type: string }
+      - { name: heroImage, label: "Hero Image", type: image }
+      - { name: description, label: "Description", type: markdown }
+      - { name: sampleAudio, label: "Audio Sample", type: file }
+  
+  - name: services
+    label: Services
+    type: folder
+    path: content/services
+    extension: md
+    format: yaml-frontmatter
+    fields:
+      - { name: title, label: "Service Title", type: string }
+      - { name: icon, label: "Service Icon", type: string }
+      - { name: description, label: "Description", type: markdown }
+      - { name: image, label: "Service Image", type: image }
+      - { name: featured, label: "Featured Service", type: boolean }
+  
+  - name: testimonials
+    label: Testimonials
+    type: folder
+    path: content/testimonials
+    extension: md
+    format: yaml-frontmatter
+    fields:
+      - { name: author, label: "Author Name", type: string }
+      - { name: role, label: "Author Role", type: string }
+      - { name: quote, label: "Quote", type: markdown }
+      - { name: avatar, label: "Avatar", type: image }
+      - { name: featured, label: "Featured Testimonial", type: boolean }
+  
+  - name: about
+    label: About
+    type: file
+    path: content/pages/about.md
+    format: yaml-frontmatter
+    fields:
+      - { name: title, label: "Title", type: string }
+      - { name: image, label: "Profile Image", type: image }
+      - { name: content, label: "Content", type: markdown }
+      
+  - name: contact
+    label: Contact
+    type: file
+    path: content/pages/contact.md
+    format: yaml-frontmatter
+    fields:
+      - { name: title, label: "Title", type: string }
+      - { name: email, label: "Email", type: string }
+      - { name: phone, label: "Phone", type: string }
+      - { name: address, label: "Address", type: string }
+      - { name: backgroundImage, label: "Background Image", type: image } 

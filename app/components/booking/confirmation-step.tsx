@@ -326,7 +326,7 @@ const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: Confirma
           {t('booking.bookingSummary', 'Buchung bestätigen')}
         </h3>
         
-          <div className="bg-[#1A1A1A] rounded-lg p-8 px-10 border-3 border-[#C8A97E] shadow-xl w-full mx-auto z-10" style={{ borderWidth: '3px', margin: '0 auto', borderRadius: '0.5rem', zIndex: 20 }}>
+          <div className="bg-[#1A1A1A] rounded-lg p-8 px-10 border border-gray-800 shadow-xl w-full mx-auto z-10" style={{ margin: '0 auto', borderRadius: '0.5rem', zIndex: 20 }}>
           {/* Service Type */}
           <div className="mb-4 pb-3 border-b border-gray-800">
             <h4 className="text-lg font-medium text-white mb-2">
@@ -509,7 +509,7 @@ const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: Confirma
           )}
         </AnimatePresence>
         
-          <div className="space-y-5 bg-[#121212] rounded-lg p-8 px-10 border-3 border-[#C8A97E] shadow-xl w-full mx-auto z-10" style={{ borderWidth: '3px', margin: '0 auto', borderRadius: '0.5rem', zIndex: 20 }}>
+          <div className="space-y-5 bg-[#121212] rounded-lg p-8 px-10 border border-gray-800 shadow-xl w-full mx-auto z-10" style={{ margin: '0 auto', borderRadius: '0.5rem', zIndex: 20 }}>
           <div className="flex items-start">
             <div className="flex items-center h-5">
               <input
@@ -607,8 +607,8 @@ const ConfirmationStep = ({ formData, serviceType, onChange, onClose }: Confirma
                 ease: [0.16, 1, 0.3, 1],
                 delay: 0.1
               }}
-              className="bg-[#1A1A1A] rounded-lg shadow-xl p-6 flex flex-col items-center text-center border-3 border-[#C8A97E]" 
-              style={{ borderWidth: '3px', borderRadius: '0.5rem', zIndex: 20 }}
+              className="bg-[#1A1A1A] rounded-lg shadow-xl p-6 flex flex-col items-center text-center border border-gray-800" 
+              style={{ borderRadius: '0.5rem', zIndex: 20 }}
             >
               <motion.div 
                 className="w-16 h-16 rounded-full bg-[#C8A97E]/20 flex items-center justify-center mb-4"

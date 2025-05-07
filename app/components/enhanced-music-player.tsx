@@ -8,6 +8,7 @@ import { Play, Pause } from "lucide-react";
 import { getAudioPath } from "@/app/utils/paths";
 import "./direct-fix.css";
 import { useMedia } from "./media-context";
+import { useTranslation } from 'react-i18next';
 // import getConfig from 'next/config';
 
 // Add event system for media coordination
@@ -24,6 +25,7 @@ const EnhancedMusicPlayer = () => {
   const [error, setError] = useState<string | null>(null);
   const [showMiniPlayer, setShowMiniPlayer] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const { t } = useTranslation();
   
   // --- DEBUG STATE ---
   const [debugDot1Color, setDebugDot1Color] = useState("red"); // isPlaying
@@ -495,29 +497,27 @@ const EnhancedMusicPlayer = () => {
         >
           <div className="flex-1 text-white text-sm font-medium truncate text-center">{track.title}</div>
           <button
-            className="w-7 h-7 rounded-full bg-[#C8A97E] shrink-0 relative flex items-center justify-center"
-            style={{
-              transition: 'transform 0.2s ease',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-            onClick={(e) => {
-              e.stopPropagation();
-              handlePlay();
-            }}
+            onClick={handlePlay}
+            className="mini-player-button p-2 rounded-full bg-black/50 hover:bg-black/70 group transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75"
+            aria-label={isPlaying ? t('player.pause', "Pause") : t('player.play', "Play")}
           >
-                {/* Pause/Play icon logic - Restoring pause icon wrapper */}
-            {isPlaying ? (
-                  // Pause Icon - Using absolute positioning for precise centering
-                  <div className="relative w-4 h-4 flex items-center justify-center"> 
-                    <div className="absolute h-3 bg-black rounded-[1px] w-[3px]" style={{left: "calc(50% - 4px)"}}></div>
-                    <div className="absolute h-3 bg-black rounded-[1px] w-[3px]" style={{left: "calc(50% + 1px)"}}></div>
-              </div>
-            ) : (
-                  // Play Icon - Centered by button flex
-                  <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[9px] border-l-black border-b-[6px] border-b-transparent" /> 
-            )}
+            <AnimatePresence mode="wait">
+              {isPlaying ? (
+                <motion.div key="pause" initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }}>
+                  <Pause
+                    size={20} // Smaller icon for mini player
+                    className="text-white group-hover:text-yellow-400 transition-colors duration-200"
+                  />
+                </motion.div>
+              ) : (
+                <motion.div key="play" initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }}>
+                  <Play
+                    size={20} // Smaller icon for mini player
+                    className="text-white group-hover:text-yellow-400 transition-colors duration-200"
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </button>
             </motion.div>
         )}

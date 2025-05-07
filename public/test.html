@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Test Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+      background-color: #f9fafb;
+    }
+    h1 {
+      color: #0070f3;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 16px;
+    }
+    .success {
+      background-color: #d1fae5;
+      border-left: 4px solid #10b981;
+      padding: 12px;
+      border-radius: 4px;
+    }
+    a {
+      color: #0070f3;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Static Test Page</h1>
+    <p class="success">If you can see this page, static HTML files are being served correctly from the 'out' directory.</p>
+    <p>This is a simple test page created directly in the output directory to verify static file serving.</p>
+    <p>Page loaded at: <span id="time"></span></p>
+  </div>
+  
+  <div class="card">
+    <h2>Navigation</h2>
+    <ul>
+      <li><a href="/">Go to homepage</a></li>
+      <li><a href="/debug.html">View debug page</a></li>
+      <li><a href="/api/test-data.json">View API test data</a></li>
+    </ul>
+  </div>
+  
+  <div class="card">
+    <h2>Current URL Info</h2>
+    <ul>
+      <li>Pathname: <code id="pathname"></code></li>
+      <li>Hostname: <code id="hostname"></code></li>
+      <li>Protocol: <code id="protocol"></code></li>
+    </ul>
+  </div>
+  
+  <script>
+    // Update dynamic content
+    document.getElementById('time').textContent = new Date().toISOString();
+    document.getElementById('pathname').textContent = window.location.pathname;
+    document.getElementById('hostname').textContent = window.location.hostname;
+    document.getElementById('protocol').textContent = window.location.protocol;
+  </script>
+</body>
+</html>

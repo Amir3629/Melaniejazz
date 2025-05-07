@@ -1,0 +1,37 @@
+/* Ensure contact form success message has correct border and styling */
+.contact-success-modal .bg-\[\#0A0A0A\] {
+  border: 1px solid #C8A97E !important;
+  border-width: 1px !important;
+  border-color: #C8A97E !important;
+  margin: 0 auto !important;
+  box-shadow: 0 4px 30px rgba(200, 169, 126, 0.25) !important;
+}
+
+/* Ensure the check icon is visible */
+.contact-success-modal .text-\[\#C8A97E\] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #C8A97E !important;
+}
+
+/* Ensure background overlay appears correctly */
+.contact-success-modal .bg-black\/80 {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(3px) !important;
+}
+
+/* Fix centering issues */
+.contact-success-modal {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.contact-success-modal .relative {
+  left: 0 !important;
+  right: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  transform: none !important;
+} 
