@@ -1,0 +1,38 @@
+{
+  "title": "Home",
+  "heroImage": "/images/backgrounds/hero-bg.jpg",
+  "heroHeading": "Melanie Jazz",
+  "heroSubheading": "Professional Vocal Coach and Jazz Singer",
+  "content": {
+    "type": "root",
+    "children": [
+      {
+        "type": "h2",
+        "children": [
+          {
+            "type": "text",
+            "text": "Welcome to my Vocal Coaching Studio"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "With over 15 years of professional experience as a singer and vocal coach, I am passionate about helping singers of all levels improve their technique and discover their unique voice."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "children": [
+          {
+            "type": "text",
+            "text": "Whether you're a beginner looking to build a solid foundation or an experienced performer aiming to refine your skills, I offer personalized coaching sessions tailored to your specific goals."
+          }
+        ]
+      }
+    ]
+  }
+} 

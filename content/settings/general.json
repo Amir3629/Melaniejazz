@@ -1,0 +1,22 @@
+{
+  "siteTitle": "Melanie Jazz - Vocal Coaching",
+  "siteDescription": "Professional vocal coaching services in Berlin. Learn to sing with confidence and develop your unique sound with expert instruction.",
+  "logo": "/images/logo/ml-logo.PNG",
+  "contactEmail": "contact@melaniejazz.de",
+  "contactPhone": "+49 123 456789",
+  "address": "Berlin, Germany",
+  "socialMedia": [
+    {
+      "platform": "Instagram",
+      "url": "https://instagram.com/melaniejazz"
+    },
+    {
+      "platform": "Facebook",
+      "url": "https://facebook.com/melaniejazz"
+    },
+    {
+      "platform": "YouTube",
+      "url": "https://youtube.com/melaniejazz"
+    }
+  ]
+} 

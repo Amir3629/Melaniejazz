@@ -1,13 +1,14 @@
 import { defineConfig } from "tinacms";
 
 // Your hosting provider likely exposes this as an environment variable
-const branch = "backup-before-tina-cms";
+const branch = process.env.NEXT_PUBLIC_TINA_BRANCH || "backup-before-tina-cms";
 
 export default defineConfig({
   branch,
 
   // Client ID from your Tina Cloud project
-  clientId: "391cdcc3-31b1-4b98-893b-f505de0faf7d",
+  clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID || "adc5bb99-664c-49e1-9761-b23bc62ec5f9",
+  token: process.env.TINA_TOKEN,
   
   build: {
     outputFolder: "admin",

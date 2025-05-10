@@ -191,7 +191,7 @@ export default function Footer() {
                     {item.icon({})}
                   </Link>
                 ))}
-              </div>
+            </div>
             </div>
 
             {/* Middle Column - Subtitle and Copyright */}
@@ -207,13 +207,13 @@ export default function Footer() {
             <div className="flex flex-col justify-center items-center md:items-end w-full space-y-3 md:space-y-4">
               <div className="flex items-center justify-center md:justify-end gap-6 w-full legal-links">
                 {legalDocs.map((doc) => (
-                  <button 
+                <button 
                     key={doc.title}
                     onClick={() => handleOpenModal(doc.title)}
                     className="text-gray-400 hover:text-[#C8A97E] transition-colors text-xs md:text-sm"
-                  >
+                >
                     {doc.title}
-                  </button>
+                </button>
                 ))}
               </div>
               <div className="w-24 md:w-36 h-12 md:h-16 relative flex justify-center md:justify-end">
@@ -263,10 +263,10 @@ export default function Footer() {
                 {/* Modal Header */}
                 <div className="flex items-center justify-between px-5 pt-2.5 pb-0.5 border-b border-[#C8A97E]/20">
                   <h2 className="text-xl md:text-2xl font-semibold text-white pt-1.5 mt-0.5">{selectedDoc}</h2>
-                  <button 
+              <button 
                     onClick={handleCloseModal}
                     className="absolute right-4 top-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors"
-                  >
+              >
                     <X className="w-5 h-5 text-[#C8A97E] hover:text-[#B69A6E] transition-colors" />
                   </button>
                 </div>
