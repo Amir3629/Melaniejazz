@@ -11,6 +11,10 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
+  TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,6 +32,9 @@ jobs:
         
       - name: Build TinaCMS
         run: npx tinacms build
+        env:
+          NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
+          TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
         
       - name: Build Next.js
         run: npm run build
