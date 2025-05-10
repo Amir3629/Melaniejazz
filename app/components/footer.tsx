@@ -34,6 +34,21 @@ const ImpressumContent = dynamic(
 export default function Footer() {
   const [selectedDoc, setSelectedDoc] = useState<string | null>(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if we're on mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -89,7 +104,7 @@ export default function Footer() {
         <motion.svg 
           whileHover={{ scale: 1.2, rotate: 5 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          className="w-8 h-8" 
+          className="w-6 h-6 md:w-7 md:h-7" 
           fill="#C8A97E" 
           viewBox="0 0 24 24" 
           aria-hidden="true"
@@ -105,7 +120,7 @@ export default function Footer() {
         <motion.svg 
           whileHover={{ scale: 1.2, rotate: -5 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          className="w-8 h-8" 
+          className="w-6 h-6 md:w-7 md:h-7" 
           fill="#C8A97E" 
           viewBox="0 0 24 24" 
           aria-hidden="true"
@@ -121,7 +136,7 @@ export default function Footer() {
         <motion.svg 
           whileHover={{ scale: 1.2, rotate: 5 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          className="w-8 h-8" 
+          className="w-6 h-6 md:w-7 md:h-7" 
           fill="#C8A97E" 
           viewBox="0 0 24 24" 
           aria-hidden="true"
@@ -137,7 +152,7 @@ export default function Footer() {
         <motion.svg
           whileHover={{ scale: 1.2, rotate: -5 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          className="w-8 h-8"
+          className="w-6 h-6 md:w-7 md:h-7"
           fill="#C8A97E"
           viewBox="0 0 24 24"
           aria-hidden="true"
@@ -148,15 +163,21 @@ export default function Footer() {
     }
   ];
 
+  // Get the appropriate image path based on environment and platform
+  const getImagePath = (path: string) => {
+    const basePath = process.env.NODE_ENV === 'production' ? '/Melaniejazz' : '';
+    return `${basePath}${path}`;
+  };
+
   return (
     <footer className="bg-black border-t border-white/10 text-sm md:text-base">
       <div className="container mx-auto px-4 py-6 md:py-8">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {/* Left Column - Brand & Social Links - centered on mobile */}
-            <div className="flex flex-col items-center md:items-start space-y-3 md:space-y-4">
+            <div className="flex flex-col items-center md:items-start space-y-3 md:space-y-4 justify-center">
               <h3 className="text-lg md:text-xl text-white mb-1 md:mb-2">Mel jazz</h3>
-              <div className="flex gap-5 md:gap-6 social-links justify-center md:justify-start">
+              <div className="flex gap-6 social-links justify-center md:justify-start">
                 {socialLinks.map((item) => (
                   <Link
                     key={item.name}
@@ -170,11 +191,11 @@ export default function Footer() {
                     {item.icon({})}
                   </Link>
                 ))}
-            </div>
+              </div>
             </div>
 
             {/* Middle Column - Subtitle and Copyright */}
-            <div className="flex flex-col items-center justify-start space-y-2 md:space-y-4 my-4 md:my-0">
+            <div className="flex flex-col items-center justify-center space-y-2 md:space-y-4">
               <p className="text-gray-400 text-sm md:text-base">Vocal Coaching in Berlin</p>
               <div className="text-xs md:text-sm text-gray-400 text-center">
                 © 2025 Mel jazz.<br />
@@ -183,25 +204,25 @@ export default function Footer() {
             </div>
 
             {/* Right Column - Legal Links & Image - centered on mobile */}
-            <div className="flex flex-col justify-start items-center md:items-end w-full">
-              <div className="flex items-center justify-center md:justify-end gap-6 md:gap-6 mb-2 md:mb-4 w-full legal-links">
+            <div className="flex flex-col justify-center items-center md:items-end w-full space-y-3 md:space-y-4">
+              <div className="flex items-center justify-center md:justify-end gap-6 w-full legal-links">
                 {legalDocs.map((doc) => (
-                <button 
+                  <button 
                     key={doc.title}
                     onClick={() => handleOpenModal(doc.title)}
-                    className="text-gray-400 hover:text-[#C8A97E] transition-colors text-xs md:text-sm px-2 py-1 md:p-0"
-                >
+                    className="text-gray-400 hover:text-[#C8A97E] transition-colors text-xs md:text-sm"
+                  >
                     {doc.title}
-                </button>
+                  </button>
                 ))}
               </div>
-              <div className="w-32 md:w-48 h-16 md:h-24 relative flex justify-center md:justify-end mt-1 md:mt-0">
+              <div className="w-24 md:w-36 h-12 md:h-16 relative flex justify-center md:justify-end">
                 <Image
-                  src={process.env.NODE_ENV === 'production' ? '/Melaniejazz/images/footer/footer.png' : '/images/footer/footer.png'}
+                  src={getImagePath('/images/footer/footer.png')}
                   alt="Footer decoration"
-                  width={192}
-                  height={96}
-                  className="object-contain filter brightness-0 invert transform md:-translate-x-4 md:translate-y-2"
+                  width={144}
+                  height={72}
+                  className="object-contain filter brightness-0 invert"
                   priority
                 />
               </div>
@@ -229,7 +250,7 @@ export default function Footer() {
             {/* Modal Container */}
             <div className="relative w-full h-full flex items-center justify-center p-4">
               <motion.div 
-                className="relative w-full max-w-2xl bg-[#0A0A0A] rounded-xl border border-[#C8A97E]/20 shadow-2xl"
+                className="relative w-full max-w-2xl bg-[#0A0A0A] rounded-xl border border-[#C8A97E]/20 shadow-2xl max-h-[90vh] overflow-hidden"
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ 
                   opacity: isClosing ? 0 : 1, 
@@ -240,27 +261,50 @@ export default function Footer() {
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Modal Header */}
-                <div className="flex items-center justify-between px-6 pt-2.5 pb-0.5 border-b border-[#C8A97E]/20">
-                  <h2 className="text-2xl font-semibold text-white pt-1.5 mt-0.5">{selectedDoc}</h2>
-              <button 
+                <div className="flex items-center justify-between px-5 pt-2.5 pb-0.5 border-b border-[#C8A97E]/20">
+                  <h2 className="text-xl md:text-2xl font-semibold text-white pt-1.5 mt-0.5">{selectedDoc}</h2>
+                  <button 
                     onClick={handleCloseModal}
-                    className="absolute right-5 top-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors"
-              >
+                    className="absolute right-4 top-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors"
+                  >
                     <X className="w-5 h-5 text-[#C8A97E] hover:text-[#B69A6E] transition-colors" />
                   </button>
                 </div>
                 
                 {/* Modal Content */}
-                <div className="px-5 pt-3 pb-6 overflow-y-auto max-h-[calc(85vh-80px)] custom-scrollbar">
-                  {legalDocs.find(doc => doc.title === selectedDoc)?.component && 
-                    createElement(legalDocs.find(doc => doc.title === selectedDoc)?.component!)
-                  }
+                <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
+                  {selectedDoc === "Datenschutz" && <DatenschutzContent />}
+                  {selectedDoc === "AGB" && <AGBContent />}
+                  {selectedDoc === "Impressum" && <ImpressumContent />}
                 </div>
               </motion.div>
             </div>
           </motion.div>
         )}
+        
+        <style jsx global>{`
+          /* Ensure social media icons display properly on mobile */
+          .social-links {
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+          }
+          
+          @media (max-width: 767px) {
+            .social-links svg {
+              width: 24px;
+              height: 24px;
+            }
+          }
+          
+          /* Center legal links on mobile */
+          @media (max-width: 767px) {
+            .legal-links {
+              justify-content: center !important;
+            }
+          }
+        `}</style>
       </div>
     </footer>
-  )
+  );
 }

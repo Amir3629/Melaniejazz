@@ -3,9 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redirecting...</title>
+  <title>Page Not Found</title>
   <script>
-    window.location.href = 'https://amir3629.github.io/';
+    // Get the repository name from the URL
+    var pathSegmentsToKeep = 1;
+    var l = window.location;
+    var segmentCount = 0;
+    var repo = '/Melaniejazz';
+
+    // Redirect to the correct page
+    var redirectUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + repo;
+    
+    // For admin routes, always go to the admin page
+    if (l.pathname.includes('/admin')) {
+      window.location.href = redirectUrl + '/admin/';
+    } else {
+      // For other pages, redirect to home
+      window.location.href = redirectUrl;
+    }
   </script>
   <style>
     body {
@@ -27,8 +42,8 @@
 </head>
 <body>
   <div>
-    <h1>Redirecting...</h1>
-    <p>If you're not automatically redirected, <a href="https://amir3629.github.io/">click here</a>.</p>
+    <h1>Page Not Found</h1>
+    <p>If you're not automatically redirected, <a href="/">click here</a> to go to the homepage.</p>
   </div>
 </body>
 </html> 

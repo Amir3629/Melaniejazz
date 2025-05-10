@@ -2,9 +2,10 @@
 
 // Check if we're on Vercel
 const isVercel = process.env.VERCEL === "1";
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 const nextConfig = {
-  output: 'export',
+  output: isDevelopment ? undefined : 'export',
   images: {
     unoptimized: true,
     formats: ['image/webp', 'image/avif'],

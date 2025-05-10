@@ -502,14 +502,14 @@ const EnhancedMusicPlayer = () => {
             aria-label={isPlaying ? t('player.pause', "Pause") : t('player.play', "Play")}
           >
             <AnimatePresence mode="wait">
-              {isPlaying ? (
+            {isPlaying ? (
                 <motion.div key="pause" initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }}>
                   <Pause
                     size={20} // Smaller icon for mini player
                     className="text-white group-hover:text-yellow-400 transition-colors duration-200"
                   />
                 </motion.div>
-              ) : (
+            ) : (
                 <motion.div key="play" initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }}>
                   <Play
                     size={20} // Smaller icon for mini player
