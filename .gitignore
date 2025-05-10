@@ -2,7 +2,6 @@
 /node_modules
 /.pnp
 .pnp.js
-.pnp.loader.mjs
 
 # Testing
 /coverage
@@ -26,7 +25,6 @@ yarn-error.log*
 
 # Local env files
 .env*.local
-.env
 
 # Vercel
 .vercel
@@ -35,22 +33,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Sanity
-san.*.js
-san.*.json
-
-# Editor directories and files
-.vscode*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-*.sublime-workspace
-
-# Temp files
-*.log
-.temp
-.cache
-
 # Cache files
 .next/cache/ 
+node_modules
+.env
