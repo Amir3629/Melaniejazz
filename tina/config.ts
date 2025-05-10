@@ -1,7 +1,7 @@
 import { defineConfig } from "tinacms";
 
 // Your hosting provider likely exposes this as an environment variable
-const branch = process.env.NEXT_PUBLIC_TINA_BRANCH || "backup-before-tina-cms";
+const branch = process.env.NEXT_PUBLIC_TINA_BRANCH || process.env.HEAD || "backup-before-tina-cms";
 
 export default defineConfig({
   branch,
@@ -13,6 +13,7 @@ export default defineConfig({
   build: {
     outputFolder: "admin",
     publicFolder: "public",
+    basePath: process.env.NODE_ENV === 'production' ? '/Melaniejazz' : '',
   },
   media: {
     tina: {
