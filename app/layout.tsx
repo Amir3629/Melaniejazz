@@ -19,7 +19,7 @@ import { MediaProvider } from "./components/media-context"
 import { getImagePath } from './utils/image-path'
 import HtmlMeta from "./components/html-meta"
 import DebugHelper from './components/debug-helper'
-import { TinaCMSProvider } from "./components/tina-cms-provider"
+import { TinaCMSProvider } from "@/app/components/tina-cms-provider"
 
 // Optimize font loading with display swap
 const inter = Inter({ 
