@@ -1,0 +1,65 @@
+backend:
+  name: github
+  repo: Amir3629/Melaniejazz
+  branch: main # Branch to update
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+# These lines should be adjusted based on your site structure
+media_folder: "public/uploads" # Media files will be stored in the repo under public/uploads
+public_folder: "/uploads" # The src attribute for uploaded media
+
+# Content Collections
+collections:
+  - name: "services"
+    label: "Services"
+    folder: "content/services"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Description", name: "description", widget: "markdown"}
+      - {label: "Image", name: "image", widget: "image", required: false}
+      - {label: "Price", name: "price", widget: "number", required: false}
+      
+  - name: "testimonials"
+    label: "Testimonials"
+    folder: "content/testimonials"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Name", name: "name", widget: "string"}
+      - {label: "Testimonial", name: "testimonial", widget: "markdown"}
+      - {label: "Client Image", name: "clientImage", widget: "image", required: false}
+      
+  - name: "gallery"
+    label: "Gallery"
+    folder: "content/gallery"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Image", name: "image", widget: "image"}
+      - {label: "Description", name: "description", widget: "text", required: false}
+      
+  - name: "posts"
+    label: "Blog Posts"
+    folder: "content/posts"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Featured Image", name: "thumbnail", widget: "image", required: false}
+      - {label: "Body", name: "body", widget: "markdown"}
+      
+  - name: "settings"
+    label: "Settings"
+    files:
+      - file: "content/settings/general.md"
+        label: "General Settings"
+        name: "general"
+        fields:
+          - {label: "Site Title", name: "siteTitle", widget: "string"}
+          - {label: "Description", name: "description", widget: "text"}
+          - {label: "Logo", name: "logo", widget: "image", required: false} 
