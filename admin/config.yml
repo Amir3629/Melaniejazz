@@ -6,6 +6,7 @@ backend:
   auth_endpoint: auth
 
 # These lines should be adjusted based on your site structure
+# Updated for deployment on: 2023-06-14
 media_folder: "public/uploads" # Media files will be stored in the repo under public/uploads
 public_folder: "/uploads" # The src attribute for uploaded media
 
