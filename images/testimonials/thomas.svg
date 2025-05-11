@@ -1,0 +1,6 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="100" r="100" fill="#7A95E4" fill-opacity="0.2"/>
+      <circle cx="100" cy="85" r="45" fill="#7A95E4" fill-opacity="0.8"/>
+      <path d="M60 175V200H140V175C140 155 125 140 100 140C75 140 60 155 60 175Z" fill="#7A95E4" fill-opacity="0.8"/>
+      <text x="100" y="90" font-family="Arial" font-size="40" font-weight="bold" text-anchor="middle" fill="white">T</text>
+    </svg>
