@@ -1,14 +1,12 @@
 backend:
   name: github
   repo: Amir3629/Melaniejazz
-  branch: main # Branch to update
+  branch: main
   base_url: https://api.netlify.com
   auth_endpoint: auth
 
-# These lines should be adjusted based on your site structure
-# Updated for deployment on: 2023-06-14
-media_folder: "public/uploads" # Media files will be stored in the repo under public/uploads
-public_folder: "/uploads" # The src attribute for uploaded media
+media_folder: "public/uploads"
+public_folder: "/uploads"
 
 # Content Collections
 collections:
