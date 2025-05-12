@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="refresh" content="0; url=./netlify/" />
+  <meta http-equiv="refresh" content="2; url=./netlify/">
+  <script>
+    // Fallback in case redirect fails
+    setTimeout(function() {
+      window.location.href = "./netlify/";
+    }, 2000);
+  </script>
 </head>
-<body></body>
-</html> 
+<body>
+  <p>Redirecting to CMS... <a href="./netlify/">Click here if not redirected</a></p>
+</body>
+</html>

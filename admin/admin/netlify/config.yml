@@ -1,10 +1,7 @@
 backend:
-  name: github
+  name: git-gateway
   repo: amir3629/Melaniejazz
   branch: main
-  auth_type: implicit
-  app_id: "Ov23li5WQOVXICF1OHho"
-  site_domain: "amir3629.github.io"
 
 media_folder: "public/uploads"
 public_folder: "/uploads"

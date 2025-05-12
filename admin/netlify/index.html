@@ -2,10 +2,29 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MelanieJazz CMS</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+  <script src="https://unpkg.com/netlify-cms@^2.10.0/dist/netlify-cms.js"></script>
+  <style>
+    #nc-root {
+      position: relative;
+      min-height: 100vh;
+    }
+  </style>
 </head>
-<body></body>
-</html> 
+<body>
+  <!-- Critical: This div MUST exist for CMS to mount -->
+  <div id="nc-root"></div>
+  
+  <script>
+    // Double-check CMS initialization
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.CMS) {
+        CMS.init();
+      } else {
+        console.error('Netlify CMS script failed to load');
+      }
+    });
+  </script>
+</body>
+</html>
