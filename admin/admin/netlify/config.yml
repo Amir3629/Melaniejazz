@@ -1,19 +1,11 @@
 backend:
   name: git-gateway
-  repo: amir3629/Melaniejazz  # Your GitHub repo
-  branch: main                # Your branch
-  commit_messages:
-    create: "Create {{collection}} “{{slug}}”"
-    update: "Update {{collection}} “{{slug}}”"
-    delete: "Delete {{collection}} “{{slug}}”"
-    uploadMedia: "[skip ci] Upload “{{path}}”"
-    deleteMedia: "[skip ci] Delete “{{path}}”"
+  repo: amir3629/Melaniejazz
+  branch: main
 
-# Media storage (same as before)
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
-# Content collections (same as before)
 collections:
   - name: "pages"
     label: "Pages"
