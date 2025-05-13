@@ -7,13 +7,18 @@ const branch =
   process.env.HEAD ||
   "main";
 
+// For local development, use the hardcoded values
+// For production, use environment variables 
+const clientId = process.env.NEXT_PUBLIC_TINA_CLIENT_ID || "cb9f95e2-759f-482c-a863-7ed5bc3309cb";
+const token = process.env.TINA_TOKEN || "7d2c087b403f429bf72ddfbcdfe5bda2331f655f";
+
 export default defineConfig({
   branch,
 
   // Get this from tina.io
-  clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID,
+  clientId: clientId,
   // Get this from tina.io
-  token: process.env.TINA_TOKEN,
+  token: token,
 
   build: {
     outputFolder: "admin",
