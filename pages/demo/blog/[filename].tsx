@@ -3,9 +3,16 @@
 // This is a demo file once you have tina setup feel free to delete this file
 
 import Head from 'next/head'
-import { useTina } from 'tinacms/dist/react'
 import { TinaMarkdown } from 'tinacms/dist/rich-text'
-import client from '../../../tina/__generated__/client'
+
+// Import client conditionally to avoid build errors
+let client = null;
+try {
+  client = require('../../../tina/__generated__/client').default;
+} catch (error) {
+  console.error('TinaCMS client not available:', error.message);
+  // Continue without the client
+}
 
 const BlogPage = (props) => {
   // If there was an error fetching data, show a simple message
@@ -49,12 +56,39 @@ const BlogPage = (props) => {
     )
   }
 
+  // During the static build, we might not have real data
+  // We'll show a dummy placeholder in that case
+  if (!props.data || !props.query || props.staticBuild) {
+    return (
+      <>
+        <Head>
+          <title>TinaCMS Demo Blog</title>
+          <link
+            rel='stylesheet'
+            href='https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.7/tailwind.min.css'
+            integrity='sha512-y6ZMKFUQrn+UUEVoqYe8ApScqbjuhjqzTuwUMEGMDuhS2niI8KA3vhH2LenreqJXQS+iIXVTRL2iaNfJbDNA1Q=='
+            crossOrigin='anonymous'
+            referrerPolicy='no-referrer'
+          />
+        </Head>
+        <div className="text-center p-8">
+          <h1 className='text-3xl m-8 text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl'>
+            Static Build Demo
+          </h1>
+          <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow">
+            <p className="mb-4 text-lg">This is a sample blog post built without TinaCMS connectivity.</p>
+            <div className="prose mx-auto">
+              <p>The real content would normally be managed through TinaCMS.</p>
+              <p>Visit the <a href="/demo-no-tina" className="text-blue-500 underline">demo page</a> to see a page that works without TinaCMS.</p>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
   // If data was successfully fetched, render the actual content
-  const { data } = useTina({
-    query: props.query,
-    variables: props.variables,
-    data: props.data,
-  })
+  const { data } = props;
 
   return (
     <>
@@ -100,12 +134,35 @@ export const getStaticProps = async ({ params }) => {
   let query = {}
   let variables = { relativePath: `${params.filename}.md` }
   let error = false
+  let staticBuild = false
   
   try {
-    const res = await client.queries.post(variables)
-    query = res.query
-    data = res.data
-    variables = res.variables
+    // Only try to use the client if it's available
+    if (client) {
+      const res = await client.queries.post(variables)
+      query = res.query
+      data = res.data
+      variables = res.variables
+    } else {
+      staticBuild = true;
+      // Provide dummy data for static build
+      data = {
+        post: {
+          title: 'Static Demo Post',
+          body: {
+            type: 'root',
+            children: [
+              {
+                type: 'p',
+                children: [
+                  { type: 'text', text: 'This is a static demo post with placeholder content. TinaCMS is not connected for this build.' }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
   } catch (err) {
     console.error('Error connecting to TinaCMS:', err.message)
     error = true
@@ -133,19 +190,29 @@ export const getStaticProps = async ({ params }) => {
       variables: variables,
       data: data,
       query: query,
-      error: error
+      error: error,
+      staticBuild: staticBuild
     },
   }
 }
 
 export const getStaticPaths = async () => {
   try {
-    const postsListData = await client.queries.postConnection()
-    return {
-      paths: postsListData.data.postConnection.edges.map((post) => ({
-        params: { filename: post.node._sys.filename },
-      })),
-      fallback: false,
+    // Only try to use the client if it's available
+    if (client) {
+      const postsListData = await client.queries.postConnection()
+      return {
+        paths: postsListData.data.postConnection.edges.map((post) => ({
+          params: { filename: post.node._sys.filename },
+        })),
+        fallback: false,
+      }
+    } else {
+      // For static builds without TinaCMS, provide a default path
+      return {
+        paths: [{ params: { filename: 'hello-world' } }],
+        fallback: false,
+      }
     }
   } catch (err) {
     console.error('Error fetching post paths:', err.message)

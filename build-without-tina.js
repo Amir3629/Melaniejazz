@@ -65,9 +65,70 @@ export default defineConfig({
 });
 `;
 
+// Create necessary Tina directories
+console.log('Creating Tina directory structure...');
+const generatedDir = path.join(__dirname, 'tina', '__generated__');
+if (!fs.existsSync(generatedDir)) {
+  fs.mkdirSync(generatedDir, { recursive: true });
+}
+
+// Create a dummy client file
+const dummyClientContent = `
+export default {
+  queries: {
+    // Placeholder functions
+    post: async () => {
+      return {
+        data: null,
+        query: '',
+        variables: {}
+      };
+    },
+    postConnection: async () => {
+      return {
+        data: {
+          postConnection: {
+            edges: [
+              {
+                node: {
+                  _sys: {
+                    filename: 'hello-world'
+                  }
+                }
+              }
+            ]
+          }
+        }
+      };
+    }
+  }
+};
+`;
+
+// Write the dummy client file
+fs.writeFileSync(path.join(generatedDir, 'client.js'), dummyClientContent);
+
 // Modify pages that depend on TinaCMS to handle disconnection gracefully
 console.log('Modifying TinaCMS configuration to skip authentication...');
 fs.writeFileSync(tinaConfigPath, modifiedTinaConfig);
+
+// Make sure we have a content directory with a sample post
+console.log('Creating sample content...');
+const postsDir = path.join(__dirname, 'content', 'posts');
+if (!fs.existsSync(postsDir)) {
+  fs.mkdirSync(postsDir, { recursive: true });
+}
+
+const samplePost = `---
+title: Hello World
+---
+
+This is a sample blog post created during the static build.
+
+You can edit this content using TinaCMS when it's properly connected.
+`;
+
+fs.writeFileSync(path.join(postsDir, 'hello-world.md'), samplePost);
 
 try {
   console.log('Building site...');
@@ -78,7 +139,9 @@ try {
   execSync('next build', { stdio: 'inherit' });
   
   console.log('Exporting static files...');
-  execSync('mkdir -p out', { stdio: 'inherit' });
+  if (!fs.existsSync('out')) {
+    fs.mkdirSync('out', { recursive: true });
+  }
   
   // Create a placeholder index.html
   if (!fs.existsSync('out/index.html')) {
