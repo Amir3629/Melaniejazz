@@ -54,3 +54,5 @@ san.*.json
 
 # Cache files
 .next/cache/ 
+node_modules
+.env

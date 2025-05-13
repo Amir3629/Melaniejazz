@@ -4,8 +4,8 @@
   "description": "Professional vocal coaching website with booking system and gallery",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "set NODE_OPTIONS=--max-old-space-size=4096 && next build --no-lint",
+    "dev": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"next dev\"",
+    "build": "tinacms build && set NODE_OPTIONS=--max-old-space-size=4096 && next build --no-lint",
     "build:custom": "node build-with-ignore.js",
     "skipcheck": "set NODE_OPTIONS=--max-old-space-size=4096 && next build --no-lint",
     "start": "next start",
@@ -107,11 +107,13 @@
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "tinacms": "^2.7.7",
     "vaul": "^0.9.6",
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@types/node": "^22",
+    "@tinacms/cli": "^1.9.7",
+    "@types/node": "^22.15.17",
     "@types/nodemailer": "^6.4.17",
     "@types/react": "^18",
     "@types/react-dom": "^18",
