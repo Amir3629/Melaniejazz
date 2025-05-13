@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 
-// Check if we're on Vercel
-const isVercel = process.env.VERCEL === "1";
-
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
@@ -37,13 +34,6 @@ const nextConfig = {
     })
 
     return config
-  },
-  // Simplified config with clear environment detection
-  publicRuntimeConfig: {
-    basePath: isVercel ? '' : '/Melaniejazz',
-    isVercel: isVercel,
-    // Add a debug flag to help troubleshoot
-    debug: true
   },
   experimental: {
     optimizeCss: true,

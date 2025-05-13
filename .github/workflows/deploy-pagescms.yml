@@ -1,14 +1,14 @@
 name: Deploy Static Site
-on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'content/**'
-      - 'public/**'
-      - 'tina/**'
-      - 'pages/**'
-      - 'components/**'
-      - 'styles/**'
+# on:
+#   push:
+#     branches: [ main ]
+#     paths:
+#       - 'content/**'
+#       - 'public/**'
+#       - 'tina/**'
+#       - 'pages/**'
+#       - 'components/**'
+#       - 'styles/**'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
