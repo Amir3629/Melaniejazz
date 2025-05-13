@@ -1,13 +1,20 @@
-
 import { defineConfig } from "tinacms";
 
-// Modified config that will not cause build failures
-const branch = "main";
+// Your hosting provider likely exposes this as an environment variable
+const branch =
+  process.env.GITHUB_BRANCH ||
+  process.env.VERCEL_GIT_COMMIT_REF ||
+  process.env.HEAD ||
+  "main";
 
 export default defineConfig({
   branch,
+
+  // Get this from tina.io
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID || "cb9f95e2-759f-482c-a863-7ed5bc3309cb",
-  token: process.env.TINA_TOKEN || "dummy-token", // This doesn't need to be valid for build
+  
+  // Get this from tina.io
+  token: process.env.TINA_TOKEN || "7d2c087b403f429bf72ddfbcdfe5bda2331f655f",
 
   build: {
     outputFolder: "admin",
@@ -19,6 +26,7 @@ export default defineConfig({
       publicFolder: "public",
     },
   },
+  // See docs on content modeling for more info on how to setup new content models: https://tina.io/docs/schema/
   schema: {
     collections: [
       {
@@ -41,6 +49,7 @@ export default defineConfig({
           },
         ],
         ui: {
+          // This is an DEMO router. You can remove this to fit your site
           router: ({ document }) => `/demo/blog/${document._sys.filename}`,
         },
       },

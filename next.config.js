@@ -4,6 +4,7 @@
 const isVercel = process.env.VERCEL === "1";
 
 const nextConfig = {
+  reactStrictMode: true,
   output: 'export',
   images: {
     unoptimized: true,
@@ -24,11 +25,9 @@ const nextConfig = {
       }
     ],
   },
-  // Only use these for GitHub Pages, not for Vercel
-  ...(isVercel ? {} : {
-    basePath: '/Melaniejazz',
-    assetPrefix: '/Melaniejazz/',
-  }),
+  // Needed to handle GitHub Pages paths
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/Melaniejazz' : '',
+  basePath: process.env.NODE_ENV === 'production' ? '/Melaniejazz' : '',
   trailingSlash: false,
   distDir: 'out',
   webpack: (config) => {

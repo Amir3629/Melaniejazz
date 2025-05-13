@@ -56,3 +56,7 @@ san.*.json
 .next/cache/ 
 node_modules
 .env
+
+# Temporary deployment folders
+temp-deploy-*/
+vercel-deploy-*/

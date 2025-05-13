@@ -1,4 +1,4 @@
-name: Deploy with PagesCMS
+name: Deploy Static Site
 on:
   push:
     branches: [ main ]
@@ -7,6 +7,8 @@ on:
       - 'public/**'
       - 'tina/**'
       - 'pages/**'
+      - 'components/**'
+      - 'styles/**'
 
 jobs:
   build:
@@ -23,11 +25,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
         
-      - name: Build with TinaCMS (with fallback)
-        env:
-          NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
-          TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
-        run: npm run build:fallback
+      - name: Build site (without TinaCMS dependency)
+        run: npm run build:no-tina
         
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
