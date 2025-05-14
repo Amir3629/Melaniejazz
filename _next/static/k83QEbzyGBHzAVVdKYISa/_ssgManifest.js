@@ -1,1 +1,0 @@
-self.__SSG_MANIFEST=new Set(["\u002Fdemo-no-tina","\u002Fdemo\u002Fblog\u002F[filename]","\u002Fpayment\u002F[orderId]","\u002Ftest\u002Fmusic-disc\u002Fplayer\u002F[id]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
